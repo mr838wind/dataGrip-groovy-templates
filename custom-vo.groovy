@@ -11,6 +11,8 @@ import com.intellij.database.util.DasUtil
 /** 사용자별 schema 위치 */
 CUSTOM_DIR_SCHEMA = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema"
 
+TEMPLATE_FILE = "$CUSTOM_DIR_SCHEMA/template/custom-sql-mapper.template"
+
 packageName = "com.sample;"
 typeMapping = [
   (~/(?i)int/)                      : "long",
@@ -39,7 +41,7 @@ def generate(out, className, fields) {
     binding.fields = fields;
 
     //== template:
-    def f = new File("$CUSTOM_DIR_SCHEMA/template/custom-vo.template")
+    def f = new File("$TEMPLATE_FILE")
     def engine = new groovy.text.GStringTemplateEngine()
     def template = engine.createTemplate(f).make(binding)
     //
