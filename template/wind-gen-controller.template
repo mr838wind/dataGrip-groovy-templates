@@ -1,18 +1,18 @@
-package $packageName
+package $packageNameVO
 
 import lombok.Data;
 
 /**
- * 
+ * ${className}VO
  */
 
 @Data
-public class $className {
+public class ${className}VO {
 
     <%fields.each() {%>
     /**
-     * ${it.comment}"
-     * ${it.annos}
+     * ${it.comment}
+     * column: ${it.dbName}
      */
      private ${it.type} ${it.name};
     <%}%>
