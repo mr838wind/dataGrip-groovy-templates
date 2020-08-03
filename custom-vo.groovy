@@ -13,6 +13,8 @@ CUSTOM_DIR_SCHEMA = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/c
 
 TEMPLATE_FILE = "$CUSTOM_DIR_SCHEMA/template/custom-vo.template"
 
+FILE_SUFFIX = "DTO.java"
+
 packageName = "com.sample;"
 typeMapping = [
   (~/(?i)int/)                      : "long",
@@ -29,7 +31,7 @@ FILES.chooseDirectoryAndSave("Choose directory", "Choose where to store generate
 def generate(table, dir) {
   def className = javaName(table.getName(), true)
   def fields = calcFields(table)
-  new File(dir, className + ".java").withPrintWriter { out -> generate(out, className, fields) }
+  new File(dir, className + "$FILE_SUFFIX").withPrintWriter { out -> generate(out, className, fields) }
 }
 
 def generate(out, className, fields) {
