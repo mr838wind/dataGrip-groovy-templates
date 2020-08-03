@@ -1,0 +1,20 @@
+package $packageName
+
+import lombok.Data;
+
+/**
+ * 
+ */
+
+@Data
+public class $className {
+
+    <%fields.each() {%>
+    /**
+     * ${it.comment}"
+     * ${it.annos}
+     */
+     private ${it.type} ${it.name};
+    <%}%>
+
+}
