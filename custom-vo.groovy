@@ -11,7 +11,7 @@ import com.intellij.database.util.DasUtil
 /** 사용자별 schema 위치 */
 CUSTOM_DIR_SCHEMA = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema"
 
-TEMPLATE_FILE = "$CUSTOM_DIR_SCHEMA/template/custom-sql-mapper.template"
+TEMPLATE_FILE = "$CUSTOM_DIR_SCHEMA/template/custom-vo.template"
 
 packageName = "com.sample;"
 typeMapping = [
