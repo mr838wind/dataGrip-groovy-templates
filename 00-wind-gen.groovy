@@ -14,16 +14,18 @@ import com.intellij.database.util.DasUtil
 
 //=============== [s] vars ===============
 packageNameBase = "com.test"
-packageNameVO = packageNameBase + ".dto"
+packageNameDTO = packageNameBase + ".dto"
 packageNameDAO = packageNameBase + ".dao"
 packageNameService = packageNameBase + ".service"
 packageNameController = packageNameBase + ".controller"
 
 schemeName = "test"  //db name
+REMOVE_TABLE_PREFIX = true  //== table 이름 t_ 제거
 
 /** 사용자별 schema 위치 */
-TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
-TEMPLATE_VO = TEMPLATE_BASE + "/wind-gen-vo.template"
+//TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
+TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+TEMPLATE_DTO = TEMPLATE_BASE + "/wind-gen-dto.template"
 TEMPLATE_MYBATIS = TEMPLATE_BASE + "/wind-gen-mybatis.template"
 TEMPLATE_DAO = TEMPLATE_BASE + "/wind-gen-dao.template"
 TEMPLATE_SERVICE = TEMPLATE_BASE + "/wind-gen-service.template"
@@ -53,14 +55,14 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
         }
         //== vo
         allTables.each { className, table ->
-            new File(dir, className + ".java").withPrintWriter { out ->
+            new File(dir, className + "DTO.java").withPrintWriter { out ->
                 def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$TEMPLATE_VO" )
+                _generateItem(out, className, fields, table, "$TEMPLATE_DTO" )
             }
         }
         //== mybatis
         allTables.each { className, table ->
-            new File(dir, className + ".xml").withPrintWriter { out ->
+            new File(dir, "sql-" + className + ".xml").withPrintWriter { out ->
                 def fields = allFields[className];
                 _generateItem(out, className, fields, table, "$TEMPLATE_MYBATIS" )
             }
@@ -101,7 +103,7 @@ def fetchAllDbInfo(table, dir) {
 def getDefaultBinding(className, fields, table) {
     //== template binding:
     def binding = [:]
-    binding.packageNameVO = packageNameVO
+    binding.packageNameDTO = packageNameDTO
     binding.packageNameDAO = packageNameDAO
     binding.packageNameService = packageNameService
     binding.packageNameController = packageNameController
@@ -163,11 +165,19 @@ def calcFields(table, javaName) {
 
 
 def javaName(str, capitalize) {
-    def s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
+    def s = ''
+    if(REMOVE_TABLE_PREFIX) {
+        s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
             .collect { Case.LOWER.apply(it).capitalize() }
             .subList(1, 2) // remove prefix like t_
             .join("")
             .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
+    } else {
+        s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
+            .collect { Case.LOWER.apply(it).capitalize() }
+            .join("")
+            .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
+    }
     capitalize || s.length() == 1 ? s : Case.LOWER.apply(s[0]) + s[1..-1]
 }
 

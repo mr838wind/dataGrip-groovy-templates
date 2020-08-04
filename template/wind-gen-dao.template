@@ -1,4 +1,4 @@
-package $packageNameVO
+package $packageNameDTO
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  */
 
 @Data
-public class ${className}VO {
+public class ${className}DAO {
 
     <%fields.each() {%>
     /**

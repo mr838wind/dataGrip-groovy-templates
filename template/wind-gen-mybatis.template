@@ -1,20 +1,94 @@
-package $packageNameVO
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-import lombok.Data;
 
-/**
- * ${className}VO
- */
+<mapper namespace="sql-${className}">
 
-@Data
-public class ${className}VO {
+    <%
+        def fullDTO = "${packageNameDTO}.${className}DTO"
+    %>
+	<!--/** ====================================   관리  ==================================== */-->
+	<!-- 목록 검색 조건 -->
+	<sql id="criteria${className}">
+		<trim prefix="WHERE" prefixOverrides="AND |OR ">
+			<if test='selectedCompxCd != null and selectedCompxCd != ""'>
+				AND compx_cd = #{selectedCompxCd}
+			</if>
+		</trim>
+	</sql>
 
-    <%fields.each() {%>
-    /**
-     * ${it.comment}
-     * column: ${it.dbName}
-     */
-     private ${it.type} ${it.name};
-    <%}%>
+	<!-- 목록 조회 -->
+	<select id="select${className}list"  parameterType="searchCriteria" resultType="${fullDTO}">
+		SELECT
+        <%fields.eachWithIndex { it,index -> %>
+         <%= index != 0 ? "," : "" %> <%=it.dbName%>
+        <%}%>
+		FROM
+		${table.name}
+		<include refid="criteria${className}"></include>
+		ORDER BY seq DESC
+		LIMIT
+		#{pageStart}, #{perPageNum}
+	</select>
 
-}
+	<!-- 시설물 관리 전체 개수 조회 -->
+	<select id="select${className}TotalCount"  parameterType="searchCriteria" resultType="int">
+		SELECT
+		COUNT(*)
+		FROM
+		${table.name}
+		<include refid="criteria${className}"></include>
+	</select>
+
+	<!-- 단건 -->
+	<select id="select${className}" parameterType="${className}" resultType="${fullDTO}" >
+		SELECT
+        <%fields.eachWithIndex { it,index -> %>
+         <%= index != 0 ? "," : "" %> <%=it.dbName%>
+        <%}%>
+		FROM
+		CS_FACILITY
+		where seq = #{seq}
+	</select>
+
+
+	<!-- 등록 -->
+	<insert id="insert${className}" parameterType="${fullDTO}">
+		<selectKey resultType="string" keyProperty="seq" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT INTO
+		${table.name} (
+            <%fields.eachWithIndex { it,index -> %>
+             <%= index != 0 ? "," : "" %> <%=it.dbName%>
+            <%}%>
+		) VALUES (
+            <%fields.eachWithIndex { it,index -> %>
+             <%= index != 0 ? "," : "" %> #{ <%=it.name%> }
+            <%}%>
+		)
+	</insert>
+
+	<!-- 수정 -->
+	<update id="update${className}" parameterType="${fullDTO}">
+		UPDATE
+		${table.name}
+		SET
+            <%fields.eachWithIndex { it,index -> %>
+             <%= index != 0 ? "," : "" %> <%=it.dbName%> = #{ <%=it.name%> }
+            <%}%>
+		WHERE
+		seq = #{ seq }
+	</update>
+
+	<!-- 삭제 -->
+	<delete id="delete${className}" parameterType="${fullDTO}">
+		DELETE FROM
+			${table.name}
+		WHERE
+			seq = #{seq}
+	</delete>
+
+
+
+</mapper>
