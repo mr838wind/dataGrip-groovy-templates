@@ -1,20 +1,269 @@
-package $packageNameDTO
+package $packageNameController
 
-import lombok.Data;
+package kr.co.ondongne.cmm.services.facility.controller;
+
+import kr.co.ondongne.cmm.common.RequestResult;
+import kr.co.ondongne.cmm.common.ResultCode;
+import kr.co.ondongne.cmm.common.annotations.AuthChecking;
+import kr.co.ondongne.cmm.common.code.CodeManager;
+import kr.co.ondongne.cmm.common.code.dto.CodeDTO;
+import kr.co.ondongne.cmm.common.code.enums.CodeEnums;
+import kr.co.ondongne.cmm.common.pagination.PageMaker;
+import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
+import kr.co.ondongne.cmm.common.upload.dto.UploadResult;
+import kr.co.ondongne.cmm.common.upload.handler.FileUploadHandler;
+import kr.co.ondongne.cmm.common.upload.service.FileUploadService;
+import kr.co.ondongne.cmm.services.facility.dto.FacilityDTO;
+import kr.co.ondongne.cmm.services.facility.dto.FacilitySvcDTO;
+import kr.co.ondongne.cmm.services.facility.service.FacilityService;
+import kr.co.ondongne.cmm.utils.CMSUtil;
+import kr.co.ondongne.cmm.utils.StringUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.beans.PropertyEditorSupport;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * ${className}VO
+ * 시설물 관리
  */
+@Slf4j
+@Controller
+@RequestMapping(value = "/facility_manager")
+public class FacilityManagerController {
 
-@Data
-public class ${className}Controller {
+    @Autowired
+    FacilityService service;
 
-    <%fields.each() {%>
+    @Autowired
+    FileUploadService fileUploadService;
+
     /**
-     * ${it.comment}
-     * column: ${it.dbName}
+     * 시설물관리 리스트 페이지 이동
+     * @return
      */
-     private ${it.type} ${it.name};
-    <%}%>
+    @RequestMapping(value = "")
+    @AuthChecking(value = AuthChecking.AuthType.ALL)
+    public ModelAndView listPage(HttpServletRequest request) {
+    	log.debug("move to facility list page");
 
+        ModelAndView mv = new ModelAndView("services/facility_manager/list");
+
+        return mv;
+    }
+
+
+    /**
+     * 시설물관리 리스트 페이지 조회
+     * @param criteria
+     */
+    @AuthChecking(value = AuthChecking.AuthType.ALL)
+    @ResponseBody
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public Map<String, Object> list(@RequestBody SearchCriteria criteria) {
+
+    	log.debug("facility_manager list Search!");
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        List<FacilityDTO> list = service.selectFacilityManagerlist(criteria);
+
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(criteria);
+
+        pageMaker.setTotalCount(service.selectFacilityManagerTotalCount(criteria));
+
+        criteria.setPage(criteria.getPage());
+
+        resultMap.put("list", list);
+        resultMap.put("pageMaker", pageMaker);
+
+        return resultMap;
+    }
+
+
+
+    /**
+     * 시설물관리 등록 페이지 이동
+     * @param request
+     * @return
+     */
+    @AuthChecking(value = AuthChecking.AuthType.ALL)
+    @ResponseBody
+    @RequestMapping(value = "/info")
+    public ModelAndView register(HttpServletRequest request) {
+
+        log.debug("move to facility_manager register page");
+        ModelAndView mv = new ModelAndView("services/facility_manager/info");
+
+        // 장소코드 코드리스트
+        List<CodeDTO> spotCdList = CodeManager.getInstance().getSubCodeList(CodeEnums.SPOT_CD);
+        mv.addObject("spotCdList", spotCdList);
+
+        /* 검색조건 유지를 위한 리스트 파라미터 전달 */
+        mv.addObject("listParam", StringUtil.queryStringt2Map(request.getQueryString()));
+
+        return mv;
+    }
+
+    /**
+     * 시설물관리 상세 페이지 이동
+     * @param request
+     * @param seq
+     * @return
+     */
+    @AuthChecking(value = AuthChecking.AuthType.ALL)
+    @ResponseBody
+    @RequestMapping(value = "/info/{seq}")
+    public ModelAndView view(HttpServletRequest request, @PathVariable("seq") String seq) {
+
+        log.debug("move to facility_manager view page");
+        ModelAndView mv = new ModelAndView("services/facility_manager/info");
+
+        // 장소코드 코드리스트
+        List<CodeDTO> spotCdList = CodeManager.getInstance().getSubCodeList(CodeEnums.SPOT_CD);
+        mv.addObject("spotCdList", spotCdList);
+
+
+        FacilityDTO dto = new FacilityDTO();
+        dto.setSeq(seq);
+
+        dto = service.selectFacilityManager(dto);
+
+        // 이미지 처리
+        String oriImgSeq = dto.getOriImgSeq();
+        UploadResult oriImg = fileUploadService.selectUploadedFile(oriImgSeq);
+        if(oriImg != null) {
+            CMSUtil.getUploadResultForWeb(oriImg);
+            mv.addObject("oriImg", oriImg);
+        }
+
+        // 이미지 처리
+        String thmbImgSeq = dto.getThmbImgSeq();
+        UploadResult thmbImg = fileUploadService.selectUploadedFile(thmbImgSeq);
+        if(thmbImg != null) {
+            CMSUtil.getUploadResultForWeb(thmbImg);
+            mv.addObject("thmbImg", thmbImg);
+        }
+
+        mv.addObject("facility", dto);
+
+        /* 검색조건 유지를 위한 리스트 파라미터 전달 */
+        mv.addObject("listParam", StringUtil.queryStringt2Map(request.getQueryString()));
+
+        return mv;
+    }
+
+    /**
+     * 시설물관리 등록, 수정
+     * @param dto
+     * @return
+     */
+    @AuthChecking(value = AuthChecking.AuthType.ALL)
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public RequestResult update(@ModelAttribute FacilityDTO dto, HttpServletRequest request) {
+
+    	RequestResult requestResult = new RequestResult();
+
+    	String rgstUsr = CMSUtil.getAdmin(request).getId();
+        dto.setRgstUsr(rgstUsr);
+
+        // 시설물 장소코드 중복 체크
+        if( checkSpotCdDuplicate(dto) ) {
+            requestResult.setResultCode(ResultCode.duplicate);
+            return requestResult;
+        }
+
+        FileUploadHandler fHandler = new FileUploadHandler();
+
+        if(dto.getFileList() != null && dto.getFileList().size() != 0) {
+        	List<UploadResult> uploadResultList = fHandler.upload(FileUploadHandler.UploadPath.FACILITY_MANAGER, dto.getFileList());
+
+            uploadResultList.forEach(item -> {
+                if(item.getUname().equals("oriImg")) {
+                    String imgSeq = item.getSeq();
+                    if(imgSeq != null && !imgSeq.equals("")) {
+                        dto.setOriImgSeq(item.getSeq());
+                    }
+                }
+                if(item.getUname().equals("thmbImg")) {
+                    String imgSeq = item.getSeq();
+                    if(imgSeq != null && !imgSeq.equals("")) {
+                        dto.setThmbImgSeq(item.getSeq());
+                    }
+                }
+            });
+        }
+
+        if( StringUtils.isNotEmpty(dto.getSeq()) ) {
+
+            if(dto.getOriImgSeq() != null && !dto.getOriImgSeq().equals("")) {
+                dto.setDeleteOriImgSeq(null);
+            }
+            if(dto.getThmbImgSeq() != null && !dto.getThmbImgSeq().equals("")) {
+                dto.setDeleteThmbImgSeq(null);
+            }
+            service.updateFacilityManager(dto);
+        } else {
+
+            service.insertFacilityManager(dto);
+        }
+
+        requestResult.setResultCode(ResultCode.success);
+
+        return requestResult;
+    }
+
+
+    /**
+     * 시설물관리 상품 삭제
+     * @param request
+     * @return
+     */
+    @AuthChecking(value = AuthChecking.AuthType.ALL)
+    @ResponseBody
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Map<String, Object> delete(HttpServletRequest request, @RequestBody FacilityDTO dto) {
+
+        log.debug("remove facility_manager Data");
+
+        Map<String, Object> resultMap = new HashMap<>();
+
+        resultMap.put("resultCode", ResultCode.success);
+
+        service.deleteFacilityManager(dto);
+
+        return resultMap;
+    }
+
+
+
+    /**
+     * 멀터파트 File(file) binding 시에
+     * 스트링으로 값이 세팅되는 것을 막기 위해 필요한 코드
+     * @param binder
+     * @throws Exception
+     */
+    @InitBinder
+    public void initBinder(WebDataBinder binder) throws Exception {
+        binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
+
+            @Override
+            public void setAsText(String text) {
+                log.debug("initBinder MultipartFile.class: {}; set null;", text);
+                setValue(null);
+            }
+
+        });
+    }
 }

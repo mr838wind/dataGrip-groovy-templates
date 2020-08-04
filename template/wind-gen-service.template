@@ -1,20 +1,58 @@
-package $packageNameDTO
+package ${packageNameService}
 
-import lombok.Data;
+package kr.co.ondongne.cmm.services.facility.service;
 
-/**
- * ${className}VO
- */
+import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
+import kr.co.ondongne.cmm.services.facility.dao.FacilityDao;
+import kr.co.ondongne.cmm.services.facility.dto.FacilityDTO;
+import kr.co.ondongne.cmm.services.facility.dto.FacilitySvcDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-@Data
-public class ${className}Service {
+import java.util.List;
+import java.util.Map;
 
-    <%fields.each() {%>
+@Service
+public class FacilityService {
+
+    @Autowired
+    FacilityDao dao;
+
+    /** ====================================   시설물 관리  ==================================== */
+
     /**
-     * ${it.comment}
-     * column: ${it.dbName}
+     *
+     * @param criteria
+     * @return
      */
-     private ${it.type} ${it.name};
-    <%}%>
+    public List<FacilityDTO> selectFacilityManagerlist(SearchCriteria criteria) {
+        return dao.selectFacilityManagerlist(criteria);
+    }
+
+    public int selectFacilityManagerTotalCount(SearchCriteria criteria) {
+        return dao.selectFacilityManagerTotalCount(criteria);
+    }
+
+    public FacilityDTO selectFacilityManager(FacilityDTO dto) {
+        return dao.selectFacilityManager(dto);
+    }
+
+    public FacilityDTO selectFacilityManager(String seq) {
+        FacilityDTO dto = new FacilityDTO();
+        dto.setSeq(seq);
+        return dao.selectFacilityManager(dto);
+    }
+
+    public void updateFacilityManager(FacilityDTO dto) {
+        dao.updateFacilityManager(dto);
+    }
+
+    public void insertFacilityManager(FacilityDTO dto) {
+        dao.insertFacilityManager(dto);
+    }
+
+    public void deleteFacilityManager(FacilityDTO dto) {
+        dao.deleteFacilityManager(dto);
+    }
 
 }

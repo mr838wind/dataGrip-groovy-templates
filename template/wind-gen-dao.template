@@ -1,20 +1,46 @@
-package $packageNameDTO
+package ${packageNameDAO};
 
-import lombok.Data;
+import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
+import kr.co.ondongne.cmm.services.facility.dto.FacilityDTO;
+import kr.co.ondongne.cmm.services.facility.dto.FacilitySvcDTO;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-/**
- * ${className}VO
- */
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@Data
+@Repository
 public class ${className}DAO {
 
-    <%fields.each() {%>
-    /**
-     * ${it.comment}
-     * column: ${it.dbName}
-     */
-     private ${it.type} ${it.name};
-    <%}%>
+    @Autowired
+    SqlSession sqlSession;
+
+    /** ====================================   시설물 관리  ==================================== */
+
+    public List<FacilityDTO> selectFacilityManagerlist(SearchCriteria criteria) {
+        return sqlSession.selectList("facility-sql.selectFacilityManagerlist", criteria);
+    }
+
+    public int selectFacilityManagerTotalCount(SearchCriteria criteria) {
+        return sqlSession.selectOne("facility-sql.selectFacilityManagerTotalCount", criteria);
+    }
+
+    public FacilityDTO selectFacilityManager(FacilityDTO dto) {
+        return sqlSession.selectOne("facility-sql.selectFacilityManager", dto);
+    }
+
+    public void updateFacilityManager(FacilityDTO dto) {
+        sqlSession.update("facility-sql.updateFacilityManager", dto);
+    }
+
+    public void insertFacilityManager(FacilityDTO dto) {
+        sqlSession.insert("facility-sql.insertFacilityManager", dto);
+    }
+
+    public void deleteFacilityManager(FacilityDTO dto) {
+        sqlSession.delete("facility-sql.deleteFacilityManager", dto);
+    }
 
 }

@@ -47,7 +47,7 @@
          <%= index != 0 ? "," : "" %> <%=it.dbName%>
         <%}%>
 		FROM
-		CS_FACILITY
+		${table.name}
 		where seq = #{seq}
 	</select>
 
@@ -88,7 +88,6 @@
 		WHERE
 			seq = #{seq}
 	</delete>
-
 
 
 </mapper>
