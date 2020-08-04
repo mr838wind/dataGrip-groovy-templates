@@ -23,8 +23,8 @@ schemeName = "test"  //db name
 REMOVE_TABLE_PREFIX = true  //== table 이름 t_ 제거
 
 /** 사용자별 schema 위치 */
-//TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
-TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
+//TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 TEMPLATE_DTO = TEMPLATE_BASE + "/wind-gen-dto.template"
 TEMPLATE_MYBATIS = TEMPLATE_BASE + "/wind-gen-mybatis.template"
 TEMPLATE_DAO = TEMPLATE_BASE + "/wind-gen-dao.template"
@@ -109,6 +109,7 @@ def getDefaultBinding(className, fields, table) {
     binding.packageNameController = packageNameController
     binding.schemeName = schemeName //db name
     binding.className = className
+    binding.classNameLower = Case.LOWER.apply(className)
     binding.fields = fields
     binding.table = table
     return binding

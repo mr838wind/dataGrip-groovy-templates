@@ -8,7 +8,7 @@
         def fullDTO = "${packageNameDTO}.${className}DTO"
     %>
 	<!--/** ====================================   관리  ==================================== */-->
-	<!-- 목록 검색 조건 -->
+	<!-- search -->
 	<sql id="criteria${className}">
 		<trim prefix="WHERE" prefixOverrides="AND |OR ">
 			<if test='selectedCompxCd != null and selectedCompxCd != ""'>
@@ -17,7 +17,7 @@
 		</trim>
 	</sql>
 
-	<!-- 목록 조회 -->
+	<!-- list -->
 	<select id="select${className}list"  parameterType="searchCriteria" resultType="${fullDTO}">
 		SELECT
         <%fields.eachWithIndex { it,index -> %>
@@ -31,7 +31,7 @@
 		#{pageStart}, #{perPageNum}
 	</select>
 
-	<!-- 시설물 관리 전체 개수 조회 -->
+	<!-- list tocal count -->
 	<select id="select${className}TotalCount"  parameterType="searchCriteria" resultType="int">
 		SELECT
 		COUNT(*)
@@ -40,7 +40,7 @@
 		<include refid="criteria${className}"></include>
 	</select>
 
-	<!-- 단건 -->
+	<!-- single -->
 	<select id="select${className}" parameterType="${className}" resultType="${fullDTO}" >
 		SELECT
         <%fields.eachWithIndex { it,index -> %>
@@ -52,7 +52,7 @@
 	</select>
 
 
-	<!-- 등록 -->
+	<!-- insert -->
 	<insert id="insert${className}" parameterType="${fullDTO}">
 		<selectKey resultType="string" keyProperty="seq" order="AFTER">
 			SELECT LAST_INSERT_ID()
@@ -69,7 +69,7 @@
 		)
 	</insert>
 
-	<!-- 수정 -->
+	<!-- update -->
 	<update id="update${className}" parameterType="${fullDTO}">
 		UPDATE
 		${table.name}
@@ -81,7 +81,7 @@
 		seq = #{ seq }
 	</update>
 
-	<!-- 삭제 -->
+	<!-- delete -->
 	<delete id="delete${className}" parameterType="${fullDTO}">
 		DELETE FROM
 			${table.name}

@@ -1,11 +1,6 @@
 package ${packageNameService}
 
-package kr.co.ondongne.cmm.services.facility.service;
-
 import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
-import kr.co.ondongne.cmm.services.facility.dao.FacilityDao;
-import kr.co.ondongne.cmm.services.facility.dto.FacilityDTO;
-import kr.co.ondongne.cmm.services.facility.dto.FacilitySvcDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,46 +8,46 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class FacilityService {
+public class ${className}Service {
 
     @Autowired
-    FacilityDao dao;
+    ${className}Dao dao;
 
-    /** ====================================   시설물 관리  ==================================== */
+    /** ====================================   관리  ==================================== */
 
     /**
      *
      * @param criteria
      * @return
      */
-    public List<FacilityDTO> selectFacilityManagerlist(SearchCriteria criteria) {
-        return dao.selectFacilityManagerlist(criteria);
+    public List<${className}DTO> select${className}list(SearchCriteria criteria) {
+        return dao.select${className}list(criteria);
     }
 
-    public int selectFacilityManagerTotalCount(SearchCriteria criteria) {
-        return dao.selectFacilityManagerTotalCount(criteria);
+    public int select${className}TotalCount(SearchCriteria criteria) {
+        return dao.select${className}TotalCount(criteria);
     }
 
-    public FacilityDTO selectFacilityManager(FacilityDTO dto) {
-        return dao.selectFacilityManager(dto);
+    public ${className}DTO select${className}(${className}DTO dto) {
+        return dao.select${className}(dto);
     }
 
-    public FacilityDTO selectFacilityManager(String seq) {
-        FacilityDTO dto = new FacilityDTO();
+    public ${className}DTO select${className}(String seq) {
+        ${className}DTO dto = new ${className}DTO();
         dto.setSeq(seq);
-        return dao.selectFacilityManager(dto);
+        return dao.select${className}(dto);
     }
 
-    public void updateFacilityManager(FacilityDTO dto) {
-        dao.updateFacilityManager(dto);
+    public void update${className}(${className}DTO dto) {
+        dao.update${className}(dto);
     }
 
-    public void insertFacilityManager(FacilityDTO dto) {
-        dao.insertFacilityManager(dto);
+    public void insert${className}(${className}DTO dto) {
+        dao.insert${className}(dto);
     }
 
-    public void deleteFacilityManager(FacilityDTO dto) {
-        dao.deleteFacilityManager(dto);
+    public void delete${className}(${className}DTO dto) {
+        dao.delete${className}(dto);
     }
 
 }

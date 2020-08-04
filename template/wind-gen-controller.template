@@ -1,7 +1,5 @@
 package $packageNameController
 
-package kr.co.ondongne.cmm.services.facility.controller;
-
 import kr.co.ondongne.cmm.common.RequestResult;
 import kr.co.ondongne.cmm.common.ResultCode;
 import kr.co.ondongne.cmm.common.annotations.AuthChecking;
@@ -13,9 +11,6 @@ import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
 import kr.co.ondongne.cmm.common.upload.dto.UploadResult;
 import kr.co.ondongne.cmm.common.upload.handler.FileUploadHandler;
 import kr.co.ondongne.cmm.common.upload.service.FileUploadService;
-import kr.co.ondongne.cmm.services.facility.dto.FacilityDTO;
-import kr.co.ondongne.cmm.services.facility.dto.FacilitySvcDTO;
-import kr.co.ondongne.cmm.services.facility.service.FacilityService;
 import kr.co.ondongne.cmm.utils.CMSUtil;
 import kr.co.ondongne.cmm.utils.StringUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +33,17 @@ import java.util.Map;
  */
 @Slf4j
 @Controller
-@RequestMapping(value = "/facility_manager")
-public class FacilityManagerController {
+@RequestMapping(value = "/${classNameLower}")
+public class ${className}Controller {
 
     @Autowired
-    FacilityService service;
+    ${className}Service service;
 
     @Autowired
     FileUploadService fileUploadService;
 
     /**
-     * 시설물관리 리스트 페이지 이동
+     * 리스트 페이지 이동
      * @return
      */
     @RequestMapping(value = "")
@@ -56,14 +51,14 @@ public class FacilityManagerController {
     public ModelAndView listPage(HttpServletRequest request) {
     	log.debug("move to facility list page");
 
-        ModelAndView mv = new ModelAndView("services/facility_manager/list");
+        ModelAndView mv = new ModelAndView("services/${classNameLower}/list");
 
         return mv;
     }
 
 
     /**
-     * 시설물관리 리스트 페이지 조회
+     * 리스트 페이지 조회
      * @param criteria
      */
     @AuthChecking(value = AuthChecking.AuthType.ALL)
@@ -71,16 +66,16 @@ public class FacilityManagerController {
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public Map<String, Object> list(@RequestBody SearchCriteria criteria) {
 
-    	log.debug("facility_manager list Search!");
+    	log.debug("${className} list Search!");
 
         Map<String, Object> resultMap = new HashMap<>();
 
-        List<FacilityDTO> list = service.selectFacilityManagerlist(criteria);
+        List<${className}DTO> list = service.select${className}list(criteria);
 
         PageMaker pageMaker = new PageMaker();
         pageMaker.setCriteria(criteria);
 
-        pageMaker.setTotalCount(service.selectFacilityManagerTotalCount(criteria));
+        pageMaker.setTotalCount(service.select${className}TotalCount(criteria));
 
         criteria.setPage(criteria.getPage());
 
@@ -93,7 +88,7 @@ public class FacilityManagerController {
 
 
     /**
-     * 시설물관리 등록 페이지 이동
+     * 등록 페이지 이동
      * @param request
      * @return
      */
@@ -102,8 +97,8 @@ public class FacilityManagerController {
     @RequestMapping(value = "/info")
     public ModelAndView register(HttpServletRequest request) {
 
-        log.debug("move to facility_manager register page");
-        ModelAndView mv = new ModelAndView("services/facility_manager/info");
+        log.debug("move to ${className} register page");
+        ModelAndView mv = new ModelAndView("services/${className}/info");
 
         // 장소코드 코드리스트
         List<CodeDTO> spotCdList = CodeManager.getInstance().getSubCodeList(CodeEnums.SPOT_CD);
@@ -116,7 +111,7 @@ public class FacilityManagerController {
     }
 
     /**
-     * 시설물관리 상세 페이지 이동
+     * 상세 페이지 이동
      * @param request
      * @param seq
      * @return
@@ -126,18 +121,18 @@ public class FacilityManagerController {
     @RequestMapping(value = "/info/{seq}")
     public ModelAndView view(HttpServletRequest request, @PathVariable("seq") String seq) {
 
-        log.debug("move to facility_manager view page");
-        ModelAndView mv = new ModelAndView("services/facility_manager/info");
+        log.debug("move to ${className} view page");
+        ModelAndView mv = new ModelAndView("services/${className}/info");
 
         // 장소코드 코드리스트
         List<CodeDTO> spotCdList = CodeManager.getInstance().getSubCodeList(CodeEnums.SPOT_CD);
         mv.addObject("spotCdList", spotCdList);
 
 
-        FacilityDTO dto = new FacilityDTO();
+        ${className}DTO dto = new ${className}DTO();
         dto.setSeq(seq);
 
-        dto = service.selectFacilityManager(dto);
+        dto = service.select${className}(dto);
 
         // 이미지 처리
         String oriImgSeq = dto.getOriImgSeq();
@@ -164,14 +159,14 @@ public class FacilityManagerController {
     }
 
     /**
-     * 시설물관리 등록, 수정
+     * 등록, 수정
      * @param dto
      * @return
      */
     @AuthChecking(value = AuthChecking.AuthType.ALL)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public RequestResult update(@ModelAttribute FacilityDTO dto, HttpServletRequest request) {
+    public RequestResult update(@ModelAttribute ${className}DTO dto, HttpServletRequest request) {
 
     	RequestResult requestResult = new RequestResult();
 
@@ -213,10 +208,10 @@ public class FacilityManagerController {
             if(dto.getThmbImgSeq() != null && !dto.getThmbImgSeq().equals("")) {
                 dto.setDeleteThmbImgSeq(null);
             }
-            service.updateFacilityManager(dto);
+            service.update${className}(dto);
         } else {
 
-            service.insertFacilityManager(dto);
+            service.insert${className}(dto);
         }
 
         requestResult.setResultCode(ResultCode.success);
@@ -233,15 +228,15 @@ public class FacilityManagerController {
     @AuthChecking(value = AuthChecking.AuthType.ALL)
     @ResponseBody
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Map<String, Object> delete(HttpServletRequest request, @RequestBody FacilityDTO dto) {
+    public Map<String, Object> delete(HttpServletRequest request, @RequestBody ${className}DTO dto) {
 
-        log.debug("remove facility_manager Data");
+        log.debug("remove ${className} Data");
 
         Map<String, Object> resultMap = new HashMap<>();
 
         resultMap.put("resultCode", ResultCode.success);
 
-        service.deleteFacilityManager(dto);
+        service.delete${className}(dto);
 
         return resultMap;
     }

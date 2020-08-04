@@ -1,8 +1,6 @@
 package ${packageNameDAO};
 
 import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
-import kr.co.ondongne.cmm.services.facility.dto.FacilityDTO;
-import kr.co.ondongne.cmm.services.facility.dto.FacilitySvcDTO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,30 +15,34 @@ public class ${className}DAO {
     @Autowired
     SqlSession sqlSession;
 
-    /** ====================================   시설물 관리  ==================================== */
+    <%
+        def sqlNs = "sql-${className}"
+    %>
 
-    public List<FacilityDTO> selectFacilityManagerlist(SearchCriteria criteria) {
-        return sqlSession.selectList("facility-sql.selectFacilityManagerlist", criteria);
+    /** ====================================     ==================================== */
+
+    public List<${className}DTO> select${className}list(SearchCriteria criteria) {
+        return sqlSession.selectList("${sqlNs}.select${className}list", criteria);
     }
 
-    public int selectFacilityManagerTotalCount(SearchCriteria criteria) {
-        return sqlSession.selectOne("facility-sql.selectFacilityManagerTotalCount", criteria);
+    public int select${className}TotalCount(SearchCriteria criteria) {
+        return sqlSession.selectOne("${sqlNs}.select${className}TotalCount", criteria);
     }
 
-    public FacilityDTO selectFacilityManager(FacilityDTO dto) {
-        return sqlSession.selectOne("facility-sql.selectFacilityManager", dto);
+    public ${className}DTO select${className}(${className}DTO dto) {
+        return sqlSession.selectOne("${sqlNs}.select${className}", dto);
     }
 
-    public void updateFacilityManager(FacilityDTO dto) {
-        sqlSession.update("facility-sql.updateFacilityManager", dto);
+    public void update${className}(${className}DTO dto) {
+        sqlSession.update("${sqlNs}.update${className}", dto);
     }
 
-    public void insertFacilityManager(FacilityDTO dto) {
-        sqlSession.insert("facility-sql.insertFacilityManager", dto);
+    public void insert${className}(${className}DTO dto) {
+        sqlSession.insert("${sqlNs}.insert${className}", dto);
     }
 
-    public void deleteFacilityManager(FacilityDTO dto) {
-        sqlSession.delete("facility-sql.deleteFacilityManager", dto);
+    public void delete${className}(${className}DTO dto) {
+        sqlSession.delete("${sqlNs}.delete${className}", dto);
     }
 
 }
