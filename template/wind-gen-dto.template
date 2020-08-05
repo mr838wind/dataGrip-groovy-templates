@@ -3,7 +3,7 @@ package $packageNameDTO
 import lombok.Data;
 
 /**
- * ${className}VO
+ * ${className}DTO
  */
 
 @Data

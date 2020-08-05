@@ -4,9 +4,6 @@
 
 <mapper namespace="sql-${className}">
 
-    <%
-        def fullDTO = "${packageNameDTO}.${className}DTO"
-    %>
 	<!--/** ====================================   관리  ==================================== */-->
 	<!-- search -->
 	<sql id="criteria${className}">

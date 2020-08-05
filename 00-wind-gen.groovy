@@ -13,25 +13,31 @@ import com.intellij.database.util.DasUtil
  */
 
 //=============== [s] vars ===============
-packageNameBase = "com.test"
-packageNameDTO = packageNameBase + ".dto"
-packageNameDAO = packageNameBase + ".dao"
-packageNameService = packageNameBase + ".service"
-packageNameController = packageNameBase + ".controller"
+INPUT = [:]  //empty map
 
-schemeName = "test"  //db name
-REMOVE_TABLE_PREFIX = true  //== table 이름 t_ 제거
+//table 이름 t_ 제거
+INPUT.REMOVE_TABLE_PREFIX = true
 
-/** 사용자별 schema 위치 */
-TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
-//TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
-TEMPLATE_DTO = TEMPLATE_BASE + "/wind-gen-dto.template"
-TEMPLATE_MYBATIS = TEMPLATE_BASE + "/wind-gen-mybatis.template"
-TEMPLATE_DAO = TEMPLATE_BASE + "/wind-gen-dao.template"
-TEMPLATE_SERVICE = TEMPLATE_BASE + "/wind-gen-service.template"
-TEMPLATE_CONTROLLER = TEMPLATE_BASE + "/wind-gen-controller.template"
+//사용자별 template 위치
+//INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
+INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+
+//==
+INPUT.TEMPLATE_DTO = INPUT.TEMPLATE_BASE + "/wind-gen-dto.template"
+INPUT.TEMPLATE_MYBATIS = INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template"
+INPUT.TEMPLATE_DAO = INPUT.TEMPLATE_BASE + "/wind-gen-dao.template"
+INPUT.TEMPLATE_SERVICE = INPUT.TEMPLATE_BASE + "/wind-gen-service.template"
+INPUT.TEMPLATE_CONTROLLER = INPUT.TEMPLATE_BASE + "/wind-gen-controller.template"
+
+//==
+INPUT.packageNameBase = "com.test"
+INPUT.packageNameDTO = INPUT.packageNameBase + ".dto"
+INPUT.packageNameDAO = INPUT.packageNameBase + ".dao"
+INPUT.packageNameService = INPUT.packageNameBase + ".service"
+INPUT.packageNameController = INPUT.packageNameBase + ".controller"
 
 //=============== [e] vars ===============
+
 
 //=============== [s] main ===============
 allTables = new HashMap<>()
@@ -48,44 +54,58 @@ typeMapping = [
         (~/(?i)/)                         : "String"
 ]
 
+//== template binding map
+def getDefaultBinding(className, fields, table) {
+    //== template binding:
+    def binding = INPUT.clone()
+
+    binding.className = className
+    binding.classNameLower = Case.LOWER.apply(className)
+    binding.fields = fields
+    binding.table = table
+    binding.sqlNs = "sql-${className}"
+    binding.fullDTO = "${INPUT.packageNameDTO}.${className}DTO"
+    return binding
+}
+
 FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store generated files") { dir ->
         //== fetch all tables
         SELECTION.filter { it instanceof DasTable && it.getKind() == ObjectKind.TABLE }.each {
             fetchAllDbInfo(it, dir)
         }
-        //== vo
+        //== dto
         allTables.each { className, table ->
             new File(dir, className + "DTO.java").withPrintWriter { out ->
                 def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$TEMPLATE_DTO" )
+                _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_DTO" )
             }
         }
         //== mybatis
         allTables.each { className, table ->
             new File(dir, "sql-" + className + ".xml").withPrintWriter { out ->
                 def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$TEMPLATE_MYBATIS" )
+                _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_MYBATIS" )
             }
         }
         //== dao
         allTables.each { className, table ->
             new File(dir, className + "DAO.java").withPrintWriter { out ->
               def fields = allFields[className];
-              _generateItem(out, className, fields, table, "$TEMPLATE_DAO" )
+              _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_DAO" )
             }
         }
         //== service
         allTables.each { className, table ->
             new File(dir, className + "Service.java").withPrintWriter { out ->
               def fields = allFields[className];
-              _generateItem(out, className, fields, table, "$TEMPLATE_SERVICE" )
+              _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_SERVICE" )
             }
         }
         //== controller
         allTables.each { className, table ->
             new File(dir, className + "Controller.java").withPrintWriter { out ->
                 def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$TEMPLATE_CONTROLLER" )
+                _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_CONTROLLER" )
             }
         }
 }
@@ -97,22 +117,6 @@ def fetchAllDbInfo(table, dir) {
     def fields = calcFields(table, className)
     allTables.put(className, table)
     allFields.put(className, fields)
-}
-
-
-def getDefaultBinding(className, fields, table) {
-    //== template binding:
-    def binding = [:]
-    binding.packageNameDTO = packageNameDTO
-    binding.packageNameDAO = packageNameDAO
-    binding.packageNameService = packageNameService
-    binding.packageNameController = packageNameController
-    binding.schemeName = schemeName //db name
-    binding.className = className
-    binding.classNameLower = Case.LOWER.apply(className)
-    binding.fields = fields
-    binding.table = table
-    return binding
 }
 
 def _generateItem(out, className, fields, table, templatePath) {
@@ -127,20 +131,6 @@ def _generateItem(out, className, fields, table, templatePath) {
     out.println template.toString()
 }
 
-private void generateComment(out, comment = null) {
-    out.println "/**"
-    out.println " * " + comment
-    out.println " *"
-    out.println " * <p>Date: " + new java.util.Date().toString() + "</p>"
-    out.println " */"
-}
-
-def toLowerCaseFirstOne(s){
-    if(Character.isLowerCase(s.charAt(0)))
-        return s;
-    else
-        return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
-}
 
 // fields
 def calcFields(table, javaName) {
@@ -167,7 +157,7 @@ def calcFields(table, javaName) {
 
 def javaName(str, capitalize) {
     def s = ''
-    if(REMOVE_TABLE_PREFIX) {
+    if(INPUT.REMOVE_TABLE_PREFIX) {
         s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
             .collect { Case.LOWER.apply(it).capitalize() }
             .subList(1, 2) // remove prefix like t_
@@ -188,6 +178,22 @@ def columnName(str) {
             .join("")
             .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
     s.length() == 1? s : Case.LOWER.apply(s[0]) + s[1..-1]
+}
+
+
+def generateComment(out, comment = null) {
+    out.println "/**"
+    out.println " * " + comment
+    out.println " *"
+    out.println " * <p>Date: " + new java.util.Date().toString() + "</p>"
+    out.println " */"
+}
+
+def toLowerCaseFirstOne(s){
+    if(Character.isLowerCase(s.charAt(0)))
+        return s;
+    else
+        return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
 }
 
 static String genSerialID()

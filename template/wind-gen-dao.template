@@ -15,10 +15,6 @@ public class ${className}DAO {
     @Autowired
     SqlSession sqlSession;
 
-    <%
-        def sqlNs = "sql-${className}"
-    %>
-
     /** ====================================     ==================================== */
 
     public List<${className}DTO> select${className}list(SearchCriteria criteria) {
