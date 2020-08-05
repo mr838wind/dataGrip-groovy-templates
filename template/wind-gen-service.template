@@ -1,4 +1,4 @@
-package ${packageNameService}
+package ${ITEMS.SERVICE.packageName};
 
 import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;

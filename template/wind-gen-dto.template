@@ -1,4 +1,4 @@
-package $packageNameDTO
+package ${ITEMS.DTO.packageName};
 
 import lombok.Data;
 

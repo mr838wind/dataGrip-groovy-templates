@@ -12,31 +12,52 @@ import com.intellij.database.util.DasUtil
  *   FILES       files helper
  */
 
-//=============== [s] vars ===============
+//=============== [s] inputs ===============
 INPUT = [:]  //empty map
 
-//table 이름 t_ 제거
+//= table 이름 t_ 제거
 INPUT.REMOVE_TABLE_PREFIX = true
 
-//사용자별 template 위치
+//= 사용자별 template 위치
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 
-//==
-INPUT.TEMPLATE_DTO = INPUT.TEMPLATE_BASE + "/wind-gen-dto.template"
-INPUT.TEMPLATE_MYBATIS = INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template"
-INPUT.TEMPLATE_DAO = INPUT.TEMPLATE_BASE + "/wind-gen-dao.template"
-INPUT.TEMPLATE_SERVICE = INPUT.TEMPLATE_BASE + "/wind-gen-service.template"
-INPUT.TEMPLATE_CONTROLLER = INPUT.TEMPLATE_BASE + "/wind-gen-controller.template"
-
-//==
+//= package base name:
 INPUT.packageNameBase = "com.test"
-INPUT.packageNameDTO = INPUT.packageNameBase + ".dto"
-INPUT.packageNameDAO = INPUT.packageNameBase + ".dao"
-INPUT.packageNameService = INPUT.packageNameBase + ".service"
-INPUT.packageNameController = INPUT.packageNameBase + ".controller"
 
-//=============== [e] vars ===============
+//==
+INPUT.ITEMS = [:]
+INPUT.ITEMS.DTO = [
+    filePrefix : '',
+    fileSuffix : 'DTO.java',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-dto.template",
+    packageName : INPUT.packageNameBase + ".dto",
+]
+INPUT.ITEMS.MYBATIS = [
+    filePrefix : 'sql-',
+    fileSuffix : '.xml',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template",
+    packageName : '',
+]
+INPUT.ITEMS.DAO = [
+    filePrefix : '',
+    fileSuffix : 'DAO.java',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-dao.template",
+    packageName : INPUT.packageNameBase + ".dao",
+]
+INPUT.ITEMS.SERVICE = [
+    filePrefix : '',
+    fileSuffix : 'Service.java',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-service.template",
+    packageName : INPUT.packageNameBase + ".service",
+]
+INPUT.ITEMS.CONTROLLER = [
+    filePrefix : '',
+    fileSuffix : 'Controller.java',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-controller.template",
+    packageName : INPUT.packageNameBase + ".controller",
+]
+//=============== [e] inputs ===============
 
 
 //=============== [s] main ===============
@@ -64,7 +85,7 @@ def getDefaultBinding(className, fields, table) {
     binding.fields = fields
     binding.table = table
     binding.sqlNs = "sql-${className}"
-    binding.fullDTO = "${INPUT.packageNameDTO}.${className}DTO"
+    binding.fullDTO = "${INPUT.ITEMS.DTO.packageName}.${className}DTO"
     return binding
 }
 
@@ -73,39 +94,15 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
         SELECTION.filter { it instanceof DasTable && it.getKind() == ObjectKind.TABLE }.each {
             fetchAllDbInfo(it, dir)
         }
-        //== dto
-        allTables.each { className, table ->
-            new File(dir, className + "DTO.java").withPrintWriter { out ->
-                def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_DTO" )
-            }
-        }
-        //== mybatis
-        allTables.each { className, table ->
-            new File(dir, "sql-" + className + ".xml").withPrintWriter { out ->
-                def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_MYBATIS" )
-            }
-        }
-        //== dao
-        allTables.each { className, table ->
-            new File(dir, className + "DAO.java").withPrintWriter { out ->
-              def fields = allFields[className];
-              _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_DAO" )
-            }
-        }
-        //== service
-        allTables.each { className, table ->
-            new File(dir, className + "Service.java").withPrintWriter { out ->
-              def fields = allFields[className];
-              _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_SERVICE" )
-            }
-        }
-        //== controller
-        allTables.each { className, table ->
-            new File(dir, className + "Controller.java").withPrintWriter { out ->
-                def fields = allFields[className];
-                _generateItem(out, className, fields, table, "$INPUT.TEMPLATE_CONTROLLER" )
+
+        //== generate for each
+        INPUT.ITEMS.each {  entry ->
+            def item = entry.value
+            allTables.each { className, table ->
+                new File(dir, "${item.filePrefix}" + className + "${item.fileSuffix}").withPrintWriter { out ->
+                    def fields = allFields[className];
+                    _generateItem(out, className, fields, table, "${item.template}" )
+                }
             }
         }
 }

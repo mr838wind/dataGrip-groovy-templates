@@ -1,4 +1,4 @@
-package $packageNameController
+package ${ITEMS.CONTROLLER.packageName};
 
 import kr.co.ondongne.cmm.common.RequestResult;
 import kr.co.ondongne.cmm.common.ResultCode;
