@@ -19,8 +19,8 @@ INPUT = [:]  //empty map
 INPUT.REMOVE_TABLE_PREFIX = true
 
 //= 사용자별 template 위치
-//INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
-INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
+//INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 
 //= package base name:
 INPUT.packageNameBase = "com.test"
