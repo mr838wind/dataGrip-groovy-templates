@@ -63,6 +63,7 @@ INPUT.ITEMS.CONTROLLER = [
 //=============== [s] main ===============
 allTables = new HashMap<>()
 allFields = new HashMap<>()
+allPkInfos = new HashMap<>()
 
 typeMapping = [
         (~/(?i)int/)                      : "Integer",
@@ -86,6 +87,7 @@ def getDefaultBinding(className, fields, table) {
     binding.table = table
     binding.sqlNs = "sql-${className}"
     binding.fullDTO = "${INPUT.ITEMS.DTO.packageName}.${className}DTO"
+    binding.pkInfo = allPkInfos[className]
     return binding
 }
 
@@ -114,6 +116,19 @@ def fetchAllDbInfo(table, dir) {
     def fields = calcFields(table, className)
     allTables.put(className, table)
     allFields.put(className, fields)
+    allPkInfos.put(className, getPkInfo(fields) )
+}
+
+def getPkInfo(fields) {
+    def pkDbName = ''
+    def pkName = ''
+    fields.each { it ->
+        if(it.isPk) {
+            pkDbName = it.dbName
+            pkName = it.name
+        }
+    }
+    return [name:pkName, dbName:pkDbName]
 }
 
 def _generateItem(out, className, fields, table, templatePath) {
@@ -135,7 +150,7 @@ def calcFields(table, javaName) {
         def spec = Case.LOWER.apply(col.getDataType().getSpecification())
         def typeStr = typeMapping.find { p, t -> p.matcher(spec).find() }.value
         def comm = [
-                pk : false,
+                isPk : false,
                 dbName : col.getName(),
                 name : columnName(col.getName()),
                 type : typeStr,
@@ -143,7 +158,7 @@ def calcFields(table, javaName) {
                 comment: col.getComment()
         ]
         if (table.getColumnAttrs(col).contains(DasColumn.Attribute.PRIMARY_KEY)) {
-            comm.pk = true
+            comm.isPk = true
             comm.annos += ["@Id"]
             comm.annos += ["@GeneratedValue(strategy = GenerationType.IDENTITY)"]
         }

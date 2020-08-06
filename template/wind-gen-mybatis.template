@@ -18,12 +18,12 @@
 	<select id="select${className}list"  parameterType="searchCriteria" resultType="${fullDTO}">
 		SELECT
         <%fields.eachWithIndex { it,index -> %>
-         <%= index != 0 ? "," : "" %> <%=it.dbName%>
+         <%= index != 0 ? "," : "" %> T.<%=it.dbName%>
         <%}%>
 		FROM
-		${table.name}
+		${table.name} T
 		<include refid="criteria${className}"></include>
-		ORDER BY seq DESC
+		ORDER BY T.seq DESC
 		LIMIT
 		#{pageStart}, #{perPageNum}
 	</select>
@@ -33,7 +33,7 @@
 		SELECT
 		COUNT(*)
 		FROM
-		${table.name}
+		${table.name} T
 		<include refid="criteria${className}"></include>
 	</select>
 
@@ -41,11 +41,11 @@
 	<select id="select${className}" parameterType="${className}" resultType="${fullDTO}" >
 		SELECT
         <%fields.eachWithIndex { it,index -> %>
-         <%= index != 0 ? "," : "" %> <%=it.dbName%>
+         <%= index != 0 ? "," : "" %> T.<%=it.dbName%>
         <%}%>
 		FROM
-		${table.name}
-		where seq = #{seq}
+		${table.name} T
+		where T.seq = #{seq}
 	</select>
 
 
@@ -71,9 +71,9 @@
 		UPDATE
 		${table.name}
 		SET
-            <%fields.eachWithIndex { it,index -> %>
+            <%fields.eachWithIndex { it,index ->  if(!it.isPk) { %>
              <%= index != 0 ? "," : "" %> <%=it.dbName%> = #{ <%=it.name%> }
-            <%}%>
+            <% } }%>
 		WHERE
 		seq = #{ seq }
 	</update>
