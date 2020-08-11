@@ -19,8 +19,8 @@ INPUT = [:]  //empty map
 INPUT.REMOVE_TABLE_PREFIX = true
 
 //= 사용자별 template 위치
-INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
-//INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+//INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
+INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 
 //= package base name:
 INPUT.packageNameBase = "com.test"
@@ -169,18 +169,16 @@ def calcFields(table, javaName) {
 
 def javaName(str, capitalize) {
     def s = ''
+
+    def tmp = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
+        .collect { Case.LOWER.apply(it).capitalize() }
     if(INPUT.REMOVE_TABLE_PREFIX) {
-        s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
-            .collect { Case.LOWER.apply(it).capitalize() }
-            .subList(1, 2) // remove prefix like t_
-            .join("")
-            .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
-    } else {
-        s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
-            .collect { Case.LOWER.apply(it).capitalize() }
-            .join("")
-            .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
+        //remove first prefix like t_
+        tmp = tmp.subList(1,tmp.size())
     }
+    s = tmp.join("")
+        .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
+
     capitalize || s.length() == 1 ? s : Case.LOWER.apply(s[0]) + s[1..-1]
 }
 
