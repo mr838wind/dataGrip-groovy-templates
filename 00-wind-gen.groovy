@@ -68,11 +68,11 @@ allPkInfos = new HashMap<>()
 typeMapping = [
         (~/(?i)int/)                      : "Integer",
         (~/(?i)long/)                     : "Long",
-        (~/(?i)number/)                   : "String",
+        (~/(?i)number/)                   : "Integer",  //""String",
         (~/(?i)float|double|decimal|real/): "Double",
-        (~/(?i)datetime|timestamp/)       : "java.sql.Timestamp",
-        (~/(?i)date/)                     : "java.sql.Date",
-        (~/(?i)time/)                     : "java.sql.Time",
+        (~/(?i)datetime|timestamp/)       : "String", //"java.sql.Timestamp",
+        (~/(?i)date/)                     : "String", //"java.sql.Date",
+        (~/(?i)time/)                     : "String", //"java.sql.Time",
         (~/(?i)/)                         : "String"
 ]
 
@@ -101,7 +101,11 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
         INPUT.ITEMS.each {  entry ->
             def item = entry.value
             allTables.each { className, table ->
-                new File(dir, "${item.filePrefix}" + className + "${item.fileSuffix}").withPrintWriter { out ->
+                def newDir = new File(dir, "${className}")
+                if(!newDir.exists()) {
+                    newDir.mkdirs();
+                }
+                new File(newDir, "${item.filePrefix}" + className + "${item.fileSuffix}").withPrintWriter { out ->
                     def fields = allFields[className];
                     _generateItem(out, className, fields, table, "${item.template}" )
                 }
