@@ -23,7 +23,7 @@ INPUT.REMOVE_TABLE_PREFIX = true
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 
 //= package base name:
-INPUT.packageNameBase = "com.test"
+INPUT.packageNameBase = "com.shinsegae.villiv"
 
 //==
 INPUT.ITEMS = [:]
@@ -33,9 +33,15 @@ INPUT.ITEMS.DTO = [
     template : INPUT.TEMPLATE_BASE + "/wind-gen-dto.template",
     packageName : INPUT.packageNameBase + ".dto",
 ]
+INPUT.ITEMS.SEARCH_CRITERIA = [
+    filePrefix : '',
+    fileSuffix : 'SearchCriteria.java',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-SearchCriteria.template",
+    packageName : INPUT.packageNameBase + ".dto",
+]
 INPUT.ITEMS.MYBATIS = [
     filePrefix : 'sql-',
-    fileSuffix : '.xml',
+    fileSuffix : 'Mapper.xml',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template",
     packageName : '',
 ]
@@ -43,6 +49,12 @@ INPUT.ITEMS.DAO = [
     filePrefix : '',
     fileSuffix : 'DAO.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-dao.template",
+    packageName : INPUT.packageNameBase + ".dao",
+]
+INPUT.ITEMS.MAPPER = [
+    filePrefix : '',
+    fileSuffix : 'Mapper.java',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-mapper.template",
     packageName : INPUT.packageNameBase + ".dao",
 ]
 INPUT.ITEMS.SERVICE = [
@@ -87,6 +99,7 @@ def getDefaultBinding(className, fields, table) {
     binding.table = table
     binding.sqlNs = "sql-${className}"
     binding.fullDTO = "${INPUT.ITEMS.DTO.packageName}.${className}DTO"
+    binding.fullSearchCriteria = "${INPUT.ITEMS.DTO.packageName}.${className}SearchCriteria"
     binding.pkInfo = allPkInfos[className]
     return binding
 }

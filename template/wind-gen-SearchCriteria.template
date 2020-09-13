@@ -1,0 +1,15 @@
+package ${ITEMS.SEARCH_CRITERIA.packageName};
+
+import com.shinsegae.villiv.common.SearchCriteria;
+import lombok.Data;
+
+/**
+ * ${className}DTO
+ */
+
+@Data
+public class ${className}SearchCriteria extends SearchCriteria {
+
+
+
+}

@@ -1,6 +1,5 @@
 package ${ITEMS.SERVICE.packageName};
 
-import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,43 +10,38 @@ import java.util.Map;
 public class ${className}Service {
 
     @Autowired
-    ${className}Dao dao;
+    ${className}Mapper mapper;
 
     /** ====================================   관리  ==================================== */
 
-    /**
-     *
-     * @param criteria
-     * @return
-     */
-    public List<${className}DTO> select${className}list(SearchCriteria criteria) {
-        return dao.select${className}list(criteria);
+    public List<${className}DTO> select${className}List(${className}SearchCriteria criteria) {
+        return mapper.select${className}List(criteria);
     }
 
-    public int select${className}TotalCount(SearchCriteria criteria) {
-        return dao.select${className}TotalCount(criteria);
+    public int select${className}ListCount(${className}SearchCriteria criteria) {
+        return mapper.select${className}ListCount(criteria);
     }
 
     public ${className}DTO select${className}(${className}DTO dto) {
-        return dao.select${className}(dto);
+        return mapper.select${className}(dto);
     }
 
     public ${className}DTO select${className}(String seq) {
         ${className}DTO dto = new ${className}DTO();
         dto.setSeq(seq);
-        return dao.select${className}(dto);
+        return mapper.select${className}(dto);
     }
 
     public void update${className}(${className}DTO dto) {
-        dao.update${className}(dto);
+        mapper.update${className}(dto);
     }
 
     public void insert${className}(${className}DTO dto) {
-        dao.insert${className}(dto);
+        mapper.insert${className}(dto);
     }
 
     public void delete${className}(${className}DTO dto) {
-        dao.delete${className}(dto);
+        mapper.delete${className}(dto);
     }
 
 }

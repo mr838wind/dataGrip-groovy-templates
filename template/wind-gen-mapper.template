@@ -1,0 +1,30 @@
+package ${ITEMS.MAPPER.packageName};
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * DAO를 MAPPER로 씀
+ */
+@Repository
+@Mapper
+public interface ${className}Mapper {
+
+    /** ====================================     ==================================== */
+
+    List<${className}DTO> select${className}List(${className}SearchCritera searchCriteria);
+
+    int select${className}ListCount(${className}SearchCritera searchCriteria);
+
+    ${className}DTO select${className}(${className}DTO dto);
+
+    void update${className}(${className}DTO dto);
+
+    void insert${className}(${className}DTO dto);
+
+    void delete${className}(${className}DTO dto);
+
+}

@@ -1,89 +1,172 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
+<mapper namespace="${ITEMS.MAPPER.packageName}.${className}Mapper">
 
-<mapper namespace="${sqlNs}">
+<%
+    def nonPkFields = fields.findAll { !it.isPk }
+    def pkFields = fields.findAll { it.isPk }
+%>
 
 	<!--/** ====================================   관리  ==================================== */-->
 	<!-- search -->
 	<sql id="criteria${className}">
 		<trim prefix="WHERE" prefixOverrides="AND |OR ">
-			<if test='selectedCompxCd != null and selectedCompxCd != ""'>
-				AND compx_cd = #{selectedCompxCd}
-			</if>
+            <if test=" bzCd != null and bzCd != '' ">
+                AND T.BZ_CD = #{bzCd}
+            </if>
 		</trim>
 	</sql>
 
 	<!-- list -->
-	<select id="select${className}list"  parameterType="searchCriteria" resultType="${fullDTO}">
+	<select id="select${className}List"  parameterType="${fullSearchCriteria}" resultType="${fullDTO}">
+	    <include refid="common.pagingStart" />
 		SELECT
-        <%fields.eachWithIndex { it,index -> %>
-         <%= index != 0 ? "," : "" %> T.<%=it.dbName%>
-        <%}%>
-		FROM
-		${table.name} T
-		<include refid="criteria${className}"></include>
-		ORDER BY T.seq DESC
-		LIMIT
-		#{pageStart}, #{perPageNum}
+        <%
+          fields.eachWithIndex { it,index ->
+                if(index != 0) {
+                    out.print("		  ,")
+                }
+                out.print(" T.")
+                out.print(it.dbName)
+                out.println()
+          }
+        %>
+		FROM ${table.name} T
+		<include refid="criteria${className}" />
+		ORDER BY
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  , ")
+                    }
+                    out.print(it.dbName)
+                    out.print(" DESC ")
+                    out.println()
+              }
+            %>
+		<include refid="common.pagingEnd" />
 	</select>
 
-	<!-- list tocal count -->
-	<select id="select${className}TotalCount"  parameterType="searchCriteria" resultType="int">
+	<!-- list count -->
+	<select id="select${className}ListCount"  parameterType="${fullSearchCriteria}" resultType="int">
 		SELECT
 		COUNT(*)
-		FROM
-		${table.name} T
+		FROM ${table.name} T
 		<include refid="criteria${className}"></include>
 	</select>
 
 	<!-- single -->
-	<select id="select${className}" parameterType="${className}" resultType="${fullDTO}" >
+	<select id="select${className}" parameterType="${fullDTO}" resultType="${fullDTO}" >
 		SELECT
-        <%fields.eachWithIndex { it,index -> %>
-         <%= index != 0 ? "," : "" %> T.<%=it.dbName%>
-        <%}%>
-		FROM
-		${table.name} T
-		where T.seq = #{seq}
+        <%
+          fields.eachWithIndex { it,index ->
+                if(index != 0) {
+                    out.print("		  ,")
+                }
+                out.print(" T.")
+                out.print(it.dbName)
+                out.println()
+          }
+        %>
+		FROM ${table.name} T
+		where
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  and ")
+                    }
+                    out.print(it.dbName)
+                    out.print(" = ")
+                    out.print('#{ ')
+                    out.print(it.name)
+                    out.print(' }')
+                    out.println()
+              }
+            %>
 	</select>
 
 
 	<!-- insert -->
 	<insert id="insert${className}" parameterType="${fullDTO}">
-		<selectKey resultType="string" keyProperty="seq" order="AFTER">
-			SELECT LAST_INSERT_ID()
+		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+			SELECT SQ_${table.name}.NEXTVAL FROM DUAL
 		</selectKey>
-		INSERT INTO
-		${table.name} (
-            <%fields.eachWithIndex { it,index -> %>
-             <%= index != 0 ? "," : "" %> <%=it.dbName%>
-            <%}%>
+		INSERT INTO ${table.name} (
+            <%
+              fields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  ,")
+                    }
+                    out.print(it.dbName)
+                    out.println()
+              }
+            %>
 		) VALUES (
-            <%fields.eachWithIndex { it,index -> %>
-             <%= index != 0 ? "," : "" %> #{ <%=it.name%> }
-            <%}%>
+            <%
+              fields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  ,")
+                    }
+                    out.print('#{ ')
+                    out.print(it.name)
+                    out.print(' }')
+                    out.println()
+              }
+            %>
 		)
 	</insert>
 
 	<!-- update -->
 	<update id="update${className}" parameterType="${fullDTO}">
-		UPDATE
-		${table.name}
+		UPDATE ${table.name}
 		SET
-            <%fields.eachWithIndex { it,index ->  if(!it.isPk) { %>
-             <%= index != 0 ? "," : "" %> <%=it.dbName%> = #{ <%=it.name%> }
-            <% } }%>
+            <%
+              nonPkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  ,")
+                    }
+                    out.print(it.dbName)
+                    out.print(" = ")
+                    out.print('#{ ')
+                    out.print(it.name)
+                    out.print(' }')
+                    out.println()
+              }
+            %>
 		WHERE
-		seq = #{ seq }
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  and ")
+                    }
+                    out.print(it.dbName)
+                    out.print(" = ")
+                    out.print('#{ ')
+                    out.print(it.name)
+                    out.print(' }')
+                    out.println()
+              }
+            %>
 	</update>
 
 	<!-- delete -->
 	<delete id="delete${className}" parameterType="${fullDTO}">
-		DELETE FROM
-			${table.name}
+		DELETE FROM ${table.name}
 		WHERE
-			seq = #{seq}
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  and ")
+                    }
+                    out.print(it.dbName)
+                    out.print(" = ")
+                    out.print('#{ ')
+                    out.print(it.name)
+                    out.print(' }')
+                    out.println()
+              }
+            %>
 	</delete>
 
 
