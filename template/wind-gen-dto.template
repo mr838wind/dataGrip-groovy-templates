@@ -12,8 +12,9 @@ public class ${className}DTO {
     <%fields.each() {%>
     /**
      * ${it.comment}
+     * ${it.dbName}
      */
-     private ${it.type} ${it.name};
+     private ${it.dtoTypeStr} ${it.name};
     <%}%>
 
 }

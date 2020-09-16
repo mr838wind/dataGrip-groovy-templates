@@ -8,6 +8,10 @@
     def pkFields = fields.findAll { it.isPk }
 %>
 
+<!--
+<![CDATA[  test ]]>
+-->
+
 	<!--/** ====================================   관리  ==================================== */-->
 	<!-- search -->
 	<sql id="criteria${className}">
@@ -27,8 +31,14 @@
                 if(index != 0) {
                     out.print("		  ,")
                 }
-                out.print(" T.")
-                out.print(it.dbName)
+
+                if(it.isDateType) {
+                    def s = String.format( "TO_CHAR(T.%s,'YYYYMMDDHH24MISS') AS %s", it.dbName, it.dbName )
+                    out.print( s )
+                } else {
+                    def s = String.format( "T.%s", it.dbName )
+                    out.print( s )
+                }
                 out.println()
           }
         %>
@@ -40,8 +50,8 @@
                     if(index != 0) {
                         out.print("		  , ")
                     }
-                    out.print(it.dbName)
-                    out.print(" DESC ")
+                    def s = String.format( " %s DESC ", it.dbName )
+                    out.print( s )
                     out.println()
               }
             %>
@@ -64,8 +74,13 @@
                 if(index != 0) {
                     out.print("		  ,")
                 }
-                out.print(" T.")
-                out.print(it.dbName)
+                if(it.isDateType) {
+                    def s = String.format( "TO_CHAR(T.%s,'YYYYMMDDHH24MISS') AS %s", it.dbName, it.dbName )
+                    out.print( s )
+                } else {
+                    def s = String.format( "T.%s", it.dbName )
+                    out.print( s )
+                }
                 out.println()
           }
         %>
@@ -76,11 +91,8 @@
                     if(index != 0) {
                         out.print("		  and ")
                     }
-                    out.print(it.dbName)
-                    out.print(" = ")
-                    out.print('#{ ')
-                    out.print(it.name)
-                    out.print(' }')
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
                     out.println()
               }
             %>
@@ -108,9 +120,8 @@
                     if(index != 0) {
                         out.print("		  ,")
                     }
-                    out.print('#{ ')
-                    out.print(it.name)
-                    out.print(' }')
+                    def s = String.format( " #{ %s } ", it.name )
+                    out.print( s )
                     out.println()
               }
             %>
@@ -126,11 +137,9 @@
                     if(index != 0) {
                         out.print("		  ,")
                     }
-                    out.print(it.dbName)
-                    out.print(" = ")
-                    out.print('#{ ')
-                    out.print(it.name)
-                    out.print(' }')
+
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
                     out.println()
               }
             %>
@@ -140,11 +149,8 @@
                     if(index != 0) {
                         out.print("		  and ")
                     }
-                    out.print(it.dbName)
-                    out.print(" = ")
-                    out.print('#{ ')
-                    out.print(it.name)
-                    out.print(' }')
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
                     out.println()
               }
             %>
@@ -159,11 +165,9 @@
                     if(index != 0) {
                         out.print("		  and ")
                     }
-                    out.print(it.dbName)
-                    out.print(" = ")
-                    out.print('#{ ')
-                    out.print(it.name)
-                    out.print(' }')
+
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
                     out.println()
               }
             %>

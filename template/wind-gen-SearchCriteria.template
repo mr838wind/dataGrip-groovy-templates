@@ -4,7 +4,7 @@ import com.shinsegae.villiv.common.SearchCriteria;
 import lombok.Data;
 
 /**
- * ${className}DTO
+ *
  */
 
 @Data

@@ -26,11 +26,11 @@ public class ${className}Service {
         return mapper.select${className}(dto);
     }
 
-    public ${className}DTO select${className}(String seq) {
-        ${className}DTO dto = new ${className}DTO();
-        dto.setSeq(seq);
-        return mapper.select${className}(dto);
-    }
+    //public ${className}DTO select${className}(String seq) {
+    //    ${className}DTO dto = new ${className}DTO();
+    //    dto.setSeq(seq);
+    //    return mapper.select${className}(dto);
+    //}
 
     public void update${className}(${className}DTO dto) {
         mapper.update${className}(dto);

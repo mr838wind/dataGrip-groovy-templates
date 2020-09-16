@@ -82,11 +82,15 @@ typeMapping = [
         (~/(?i)long/)                     : "Long",
         (~/(?i)number/)                   : "Integer",  //""String",
         (~/(?i)float|double|decimal|real/): "Double",
-        (~/(?i)datetime|timestamp/)       : "String", //"java.sql.Timestamp",
-        (~/(?i)date/)                     : "String", //"java.sql.Date",
-        (~/(?i)time/)                     : "String", //"java.sql.Time",
+        (~/(?i)datetime|timestamp/)       : "java.util.Date", //"java.sql.Timestamp",
+        (~/(?i)date/)                     : "java.util.Date", //"java.sql.Date",
+        (~/(?i)time/)                     : "java.util.Date", //"java.sql.Time",
         (~/(?i)/)                         : "String"
 ]
+
+INSERT_FIELD_LIST = ["IPT_ID", "IPT_DTM", "IPT_IP"]
+UPDATE_FIELD_LIST = ["UPD_ID", "UPD_DTM", "UPD_IP"]
+
 
 //== template binding map
 def getDefaultBinding(className, fields, table) {
@@ -160,17 +164,35 @@ def _generateItem(out, className, fields, table, templatePath) {
     out.println template.toString()
 }
 
+// dtoTypeStr:  날짜는 String으로
+def getDtoTypeStr(typeStr) {
+    if(typeStr == "java.util.Date") {
+        return "String"
+    } else {
+        return typeStr
+    }
+}
+
 
 // fields
 def calcFields(table, javaName) {
     DasUtil.getColumns(table).reduce([]) { fields, col ->
         def spec = Case.LOWER.apply(col.getDataType().getSpecification())
         def typeStr = typeMapping.find { p, t -> p.matcher(spec).find() }.value
+        def dtoTypeStr = getDtoTypeStr(typeStr)     //dto 에 사용할 타입
+        def isDateType = (typeStr == "java.util.Date" ? true : false)   //날짜 타입 yn
+        def isInsertField = INSERT_FIELD_LIST.contains(col.getName())   // insert column
+        def isUpdateField = UPDATE_FIELD_LIST.contains(col.getName())   // update column
+
         def comm = [
                 isPk : false,
                 dbName : col.getName(),
                 name : columnName(col.getName()),
                 type : typeStr,
+                dtoTypeStr : dtoTypeStr,
+                isDateType : isDateType,
+                isInsertField : isInsertField,
+                isUpdateField : isUpdateField,
                 annos: ["@Column(name = \"" + col.getName() + "\" )"],
                 comment: col.getComment()
         ]
