@@ -15,9 +15,9 @@ public interface ${className}Mapper {
 
     /** ====================================     ==================================== */
 
-    List<${className}DTO> select${className}List(${className}SearchCritera searchCriteria);
+    List<${className}DTO> select${className}List(${className}SearchCriteria searchCriteria);
 
-    int select${className}ListCount(${className}SearchCritera searchCriteria);
+    int select${className}ListCount(${className}SearchCriteria searchCriteria);
 
     ${className}DTO select${className}(${className}DTO dto);
 
