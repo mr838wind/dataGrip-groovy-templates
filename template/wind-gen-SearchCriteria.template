@@ -4,9 +4,8 @@ import com.shinsegae.villiv.common.SearchCriteria;
 import lombok.Data;
 
 /**
- *
+ * <%= tableComment %> 조회 조건
  */
-
 @Data
 public class ${className}SearchCriteria extends SearchCriteria {
 

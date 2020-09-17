@@ -29,7 +29,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 시설물 관리
+ * [not used]
+ * <%= tableComment %> Controller
  */
 @Slf4j
 @Controller

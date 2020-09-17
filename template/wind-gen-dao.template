@@ -9,6 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * [not used]
+ * <%= tableComment %> DAO
+ */
 @Repository
 public class ${className}DAO {
 

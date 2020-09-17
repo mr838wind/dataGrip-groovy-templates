@@ -3,7 +3,7 @@ package ${ITEMS.DTO.packageName};
 import lombok.Data;
 
 /**
- *
+ * <%= tableComment %> DTO
  */
 
 @Data

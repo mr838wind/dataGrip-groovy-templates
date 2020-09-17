@@ -101,6 +101,7 @@ def getDefaultBinding(className, fields, table) {
     binding.classNameLower = Case.LOWER.apply(className)
     binding.fields = fields
     binding.table = table
+    binding.tableComment = table.getComment()
     binding.sqlNs = "sql-${className}"
     binding.fullDTO = "${INPUT.ITEMS.DTO.packageName}.${className}DTO"
     binding.fullSearchCriteria = "${INPUT.ITEMS.DTO.packageName}.${className}SearchCriteria"
@@ -140,6 +141,7 @@ def fetchAllDbInfo(table, dir) {
     allPkInfos.put(className, getPkInfo(fields) )
 }
 
+// [not used]
 def getPkInfo(fields) {
     def pkDbName = ''
     def pkName = ''
