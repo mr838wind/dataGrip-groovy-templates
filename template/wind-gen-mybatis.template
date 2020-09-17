@@ -6,20 +6,19 @@
 <%
     def nonPkFields = fields.findAll { !it.isPk }
     def pkFields = fields.findAll { it.isPk }
+    def nonPkNoInsertFields = nonPkFields.findAll { !it.isInsertField }
 %>
 
 <!--
-<![CDATA[  test ]]>
+    <![CDATA[  필요시 사용 ]]>
 -->
 
 	<!--/** ====================================   관리  ==================================== */-->
 	<!-- search -->
 	<sql id="criteria${className}">
-		<trim prefix="WHERE" prefixOverrides="AND |OR ">
-            <if test=" bzCd != null and bzCd != '' ">
-                AND T.BZ_CD = #{bzCd}
-            </if>
-		</trim>
+        <if test=" bzCd != null and bzCd != '' ">
+            AND T.BZ_CD = #{bzCd}
+        </if>
 	</sql>
 
 	<!-- list -->
@@ -43,6 +42,7 @@
           }
         %>
 		FROM ${table.name} T
+		WHERE 1=1
 		<include refid="criteria${className}" />
 		ORDER BY
             <%
@@ -63,7 +63,8 @@
 		SELECT
 		COUNT(*)
 		FROM ${table.name} T
-		<include refid="criteria${className}"></include>
+		WHERE 1=1
+		<include refid="criteria${className}" />
 	</select>
 
 	<!-- single -->
@@ -85,7 +86,7 @@
           }
         %>
 		FROM ${table.name} T
-		where
+		WHERE
             <%
               pkFields.eachWithIndex { it,index ->
                     if(index != 0) {
@@ -121,6 +122,11 @@
                         out.print("		  ,")
                     }
                     def s = String.format( " #{ %s } ", it.name )
+                    if( it.isDateType ) {
+                        if( it.isInsertField || it.isUpdateField ) {
+                            s = "SYSDATE"
+                        }
+                    }
                     out.print( s )
                     out.println()
               }
@@ -133,12 +139,17 @@
 		UPDATE ${table.name}
 		SET
             <%
-              nonPkFields.eachWithIndex { it,index ->
+              nonPkNoInsertFields.eachWithIndex { it,index ->
                     if(index != 0) {
                         out.print("		  ,")
                     }
 
                     def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    if( it.isDateType ) {
+                        if( it.isUpdateField ) {
+                            s = String.format( " %s = SYSDATE ", it.dbName)
+                        }
+                    }
                     out.print( s )
                     out.println()
               }
