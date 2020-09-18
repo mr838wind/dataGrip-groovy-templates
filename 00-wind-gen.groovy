@@ -45,12 +45,14 @@ INPUT.ITEMS.MYBATIS = [
     template : INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template",
     packageName : '',
 ]
-INPUT.ITEMS.DAO = [
-    filePrefix : '',
-    fileSuffix : 'DAO.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-dao.template",
-    packageName : INPUT.packageNameBase + ".dao",
-]
+
+//INPUT.ITEMS.DAO = [
+//    filePrefix : '',
+//    fileSuffix : 'DAO.java',
+//    template : INPUT.TEMPLATE_BASE + "/wind-gen-dao.template",
+//    packageName : INPUT.packageNameBase + ".dao",
+//]
+
 INPUT.ITEMS.MAPPER = [
     filePrefix : '',
     fileSuffix : 'Mapper.java',

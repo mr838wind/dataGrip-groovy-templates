@@ -106,10 +106,13 @@
 
 
 	<!-- insert -->
-	<insert id="insert${className}" parameterType="${fullDTO}">
+	<!--
 		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
 			SELECT SQ_${table.name}.NEXTVAL FROM DUAL
 		</selectKey>
+	-->
+	<insert id="insert${className}" parameterType="${fullDTO}">
+
 		INSERT INTO ${table.name} (
             <%
               fields.eachWithIndex { it,index ->
