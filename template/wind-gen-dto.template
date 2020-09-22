@@ -9,6 +9,11 @@ import lombok.Data;
 @Data
 public class ${className}DTO {
 
+
+    //=========== [s] custom added ===========
+
+    //=========== [e] custom added ===========
+
     <%fields.each() {%>
     /**
      * ${it.comment}

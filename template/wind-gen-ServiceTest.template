@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(
-        classes = {VillivFrontApplication.class}
+        classes = {VillivBackofficeApplication.class}
     , webEnvironment = SpringBootTest.WebEnvironment.MOCK
 )
 @AutoConfigureMockMvc
