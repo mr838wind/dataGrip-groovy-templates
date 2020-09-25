@@ -34,18 +34,21 @@ INPUT.ITEMS.DTO = [
     fileSuffix : 'DTO.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-dto.template",
     packageName : INPUT.packageNameBase + ".dto",
+    subPath: 'dto',
 ]
 INPUT.ITEMS.SEARCH_CRITERIA = [
     filePrefix : '',
     fileSuffix : 'SearchCriteria.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-SearchCriteria.template",
     packageName : INPUT.packageNameBase + ".dto",
+    subPath: 'dto',
 ]
 INPUT.ITEMS.MYBATIS = [
     filePrefix : 'sql-',
     fileSuffix : 'Mapper.xml',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template",
     packageName : '',
+    subPath: 'mybatis',
 ]
 
 //INPUT.ITEMS.DAO = [
@@ -53,6 +56,7 @@ INPUT.ITEMS.MYBATIS = [
 //    fileSuffix : 'DAO.java',
 //    template : INPUT.TEMPLATE_BASE + "/wind-gen-dao.template",
 //    packageName : INPUT.packageNameBase + ".dao",
+//    subPath: 'dao',
 //]
 
 INPUT.ITEMS.MAPPER = [
@@ -60,30 +64,35 @@ INPUT.ITEMS.MAPPER = [
     fileSuffix : 'Mapper.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-mapper.template",
     packageName : INPUT.packageNameBase + ".dao",
+    subPath: 'dao',
 ]
 INPUT.ITEMS.SERVICE = [
     filePrefix : '',
     fileSuffix : 'Service.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-service.template",
     packageName : INPUT.packageNameBase + ".service",
+    subPath: 'service',
 ]
 INPUT.ITEMS.CONTROLLER = [
     filePrefix : '',
     fileSuffix : 'Controller.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-controller.template",
     packageName : INPUT.packageNameBase + ".controller",
+    subPath: 'controller',
 ]
 INPUT.ITEMS.ServiceTest = [
     filePrefix : '',
     fileSuffix : 'ServiceTest.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-ServiceTest.template",
     packageName : INPUT.packageNameBase + ".service",
+    subPath: 'test',
 ]
 //INPUT.ITEMS.ControllerTest = [
 //    filePrefix : '',
 //    fileSuffix : 'ControllerTest.java',
 //    template : INPUT.TEMPLATE_BASE + "/wind-gen-ControllerTest.template",
 //    packageName : INPUT.packageNameBase + ".mvc",
+//    subPath: 'test',
 //]
 //=============== [e] inputs ===============
 
@@ -135,8 +144,14 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
         INPUT.ITEMS.each {  entry ->
             def item = entry.value
             allTables.each { className, table ->
-                def classNameLower = javaName(table.getName(), false)
-                def newDir = new File(dir, "${classNameLower}")
+                //== 업무별로
+                //def classNameLower = javaName(table.getName(), false)
+                //def newDir = new File(dir, "${classNameLower}")
+                //if(!newDir.exists()) {
+                //    newDir.mkdirs();
+                //}
+                //== package별로
+                def newDir = new File(dir, "${item.subPath}")
                 if(!newDir.exists()) {
                     newDir.mkdirs();
                 }
