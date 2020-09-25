@@ -54,19 +54,20 @@ public class BzaTest extends BaseMvcTest {
 
     }
 
+
     @Test
     public void list() throws Exception {
         ${className}SearchCriteria searchCriteria = new ${className}SearchCriteria();
 
-        final ResultActions actions = mockMvc.perform(get("/api/back/${className}/list")
+        final ResultActions actions = mockMvc.perform(get("/api/back/$classNameLower/list")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                //.param()
+                //.param("", "")
         )
                 .andDo(print());
 
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("$.list").exists())
+//                .andExpect( jsonPath("\$.list").exists())
 
         ;
     }
@@ -75,7 +76,7 @@ public class BzaTest extends BaseMvcTest {
     @Test
     public void detail() throws Exception {
 
-        final ResultActions actions = mockMvc.perform(get("/api/back/${className}/detail")
+        final ResultActions actions = mockMvc.perform(get("/api/back/$classNameLower/detail")
                         .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .param("bzCd", BZ_CD)
         )
@@ -83,7 +84,7 @@ public class BzaTest extends BaseMvcTest {
 
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("$.list").exists())
+//                .andExpect( jsonPath("\$.list").exists())
 
         ;
     }
@@ -101,18 +102,18 @@ public class BzaTest extends BaseMvcTest {
 //        String base64File = BASE64DecodedMultipartFile.fileToString(file);
 //        String orgFileName = file.getName();
 
-        ${className}DTO bzMstDTO = new ${className}DTO();
+        ${className}DTO dto = new ${className}DTO();
 
 
-        final ResultActions actions = mockMvc.perform(post("/api/back/${className}/insert")
+        final ResultActions actions = mockMvc.perform(post("/api/back/$classNameLower/insert")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(bzMstDTO))
+                .content(JSONUtil.toJson(dto))
         )
                 .andDo(print());
 
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("$.list").exists())
+//                .andExpect( jsonPath("\$.list").exists())
 
         ;
     }
@@ -121,20 +122,20 @@ public class BzaTest extends BaseMvcTest {
     @Test
     public void update() throws Exception {
 
-//        ${className}DTO bzMstDTO = service.select${className}WithSub(BZ_CD);
+//        ${className}DTO item = service.select${className}WithSub(BZ_CD);
 
-        ${className}DTO bzMstDTO = new ${className}DTO();
+        ${className}DTO item = new ${className}DTO();
 
 
-        final ResultActions actions = mockMvc.perform(post("/api/back/${className}/update")
+        final ResultActions actions = mockMvc.perform(post("/api/back/$classNameLower/update")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(bzMstDTO))
+                .content(JSONUtil.toJson(item))
         )
                 .andDo(print());
 
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("$.list").exists())
+//                .andExpect( jsonPath("\$.list").exists())
 
         ;
     }
@@ -144,23 +145,22 @@ public class BzaTest extends BaseMvcTest {
     @Test
     public void delete() throws Exception {
 
-        ${className}DTO bzMstDTO = new ${className}DTO();
-//        bzMstDTO.setBzCd(BZ_CD);
+        ${className}DTO item = new ${className}DTO();
+//        item.setBzCd(BZ_CD);
 
 
-        final ResultActions actions = mockMvc.perform(post("/api/back/${classNameLower}/delete")
+        final ResultActions actions = mockMvc.perform(post("/api/back/$classNameLower/delete")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(bzMstDTO))
+                .content(JSONUtil.toJson(item))
         )
                 .andDo(print());
 
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("$.list").exists())
+//                .andExpect( jsonPath("\$.list").exists())
 
         ;
     }
-
 
 
 }
