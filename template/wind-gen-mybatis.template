@@ -66,16 +66,7 @@
             </when>
 			<otherwise>
 				ORDER BY
-                    <%
-                      pkFields.eachWithIndex { it,index ->
-                            if(index != 0) {
-                                out.print("		  , ")
-                            }
-                            def s = String.format( " %s ASC ", it.dbName )
-                            out.print( s )
-                            out.println()
-                      }
-                    %>
+                    IPT_DTM DESC
 			</otherwise>
 		</choose>
 		<include refid="common.pagingEnd" />

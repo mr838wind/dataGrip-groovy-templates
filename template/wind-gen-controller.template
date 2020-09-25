@@ -23,7 +23,7 @@ import java.util.List;
  * <%= tableComment %> 관리
  */
 @RestController
-@RequestMapping(value = "/api/back/${className}")
+@RequestMapping(value = "/api/back/${classNameLower}")
 @Slf4j
 public class ${className}Controller {
 

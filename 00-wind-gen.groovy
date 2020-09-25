@@ -1,3 +1,5 @@
+package com.wind
+
 import com.intellij.database.model.DasTable
 import com.intellij.database.model.DasColumn
 import com.intellij.database.model.ObjectKind
@@ -112,7 +114,7 @@ def getDefaultBinding(className, fields, table) {
     def binding = INPUT.clone()
 
     binding.className = className
-    binding.classNameLower = Case.LOWER.apply(className)
+    binding.classNameLower = javaName(table.getName(), false)
     binding.fields = fields
     binding.table = table
     binding.tableComment = table.getComment()
@@ -133,7 +135,8 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
         INPUT.ITEMS.each {  entry ->
             def item = entry.value
             allTables.each { className, table ->
-                def newDir = new File(dir, "${className}")
+                def classNameLower = javaName(table.getName(), false)
+                def newDir = new File(dir, "${classNameLower}")
                 if(!newDir.exists()) {
                     newDir.mkdirs();
                 }
@@ -221,7 +224,7 @@ def calcFields(table, javaName) {
     }
 }
 
-
+//== like camel case
 def javaName(str, capitalize) {
     def s = ''
 
@@ -237,6 +240,7 @@ def javaName(str, capitalize) {
     capitalize || s.length() == 1 ? s : Case.LOWER.apply(s[0]) + s[1..-1]
 }
 
+//== like camel case
 def columnName(str) {
     def s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
             .collect { Case.LOWER.apply(it).capitalize() }
@@ -264,4 +268,18 @@ def toLowerCaseFirstOne(s){
 static String genSerialID()
 {
     return "    private static final long serialVersionUID =  " + Math.abs(new Random().nextLong())+"L;"
+}
+
+
+//== not used : do not know how to bind method in template
+class WindUtils {
+    static toCamelCase( String text, boolean capitalized = false ) {
+        text = text.replaceAll( "(_)([A-Za-z0-9])", { Object[] it -> it[2].toUpperCase() } )
+        return capitalized ? capitalize(text) : text
+    }
+
+    static toSnakeCase( String text ) {
+        return text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
+    }
+
 }
