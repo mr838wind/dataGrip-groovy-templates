@@ -77,6 +77,12 @@ INPUT.ITEMS.ServiceTest = [
     template : INPUT.TEMPLATE_BASE + "/wind-gen-ServiceTest.template",
     packageName : INPUT.packageNameBase + ".service",
 ]
+//INPUT.ITEMS.ControllerTest = [
+//    filePrefix : '',
+//    fileSuffix : 'ControllerTest.java',
+//    template : INPUT.TEMPLATE_BASE + "/wind-gen-ControllerTest.template",
+//    packageName : INPUT.packageNameBase + ".mvc",
+//]
 //=============== [e] inputs ===============
 
 

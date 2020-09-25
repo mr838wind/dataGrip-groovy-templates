@@ -2,7 +2,6 @@ package com.shinsegae.villiv.service;
 
 import com.shinsegae.villiv.dto.${className}DTO;
 import com.shinsegae.villiv.dto.${className}SearchCriteria;
-import com.shinsegae.villiv.front.VillivFrontApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ import static org.junit.Assert.assertTrue;
     , webEnvironment = SpringBootTest.WebEnvironment.MOCK
 )
 @AutoConfigureMockMvc
+@Slf4j
 public class ${className}ServiceTest {
 
     @Autowired

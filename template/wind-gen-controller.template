@@ -1,265 +1,173 @@
 package ${ITEMS.CONTROLLER.packageName};
 
-import kr.co.ondongne.cmm.common.RequestResult;
-import kr.co.ondongne.cmm.common.ResultCode;
-import kr.co.ondongne.cmm.common.annotations.AuthChecking;
-import kr.co.ondongne.cmm.common.code.CodeManager;
-import kr.co.ondongne.cmm.common.code.dto.CodeDTO;
-import kr.co.ondongne.cmm.common.code.enums.CodeEnums;
-import kr.co.ondongne.cmm.common.pagination.PageMaker;
-import kr.co.ondongne.cmm.common.pagination.SearchCriteria;
-import kr.co.ondongne.cmm.common.upload.dto.UploadResult;
-import kr.co.ondongne.cmm.common.upload.handler.FileUploadHandler;
-import kr.co.ondongne.cmm.common.upload.service.FileUploadService;
-import kr.co.ondongne.cmm.utils.CMSUtil;
-import kr.co.ondongne.cmm.utils.StringUtil;
+import com.shinsegae.villiv.common.APIResult;
+import com.shinsegae.villiv.common.CodeEnums;
+import com.shinsegae.villiv.common.code.service.CodeService;
+import com.shinsegae.villiv.common.upload.dto.BASE64DecodedMultipartFile;
+import com.shinsegae.villiv.common.upload.dto.UploadResultDTO;
+import com.shinsegae.villiv.common.upload.handler.FileUploadHandler;
+import com.shinsegae.villiv.common.utils.VUtil;
+import com.shinsegae.villiv.dto.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.beans.PropertyEditorSupport;
-import java.util.HashMap;
+import java.io.File;
 import java.util.List;
-import java.util.Map;
+
 
 /**
- * [not used]
- * <%= tableComment %> Controller
+ * <%= tableComment %> 관리
  */
+@RestController
+@RequestMapping(value = "/api/back/${className}")
 @Slf4j
-@Controller
-@RequestMapping(value = "/${classNameLower}")
 public class ${className}Controller {
 
     @Autowired
-    ${className}Service service;
+    ${className}Service ${classNameLower}Service;
 
     @Autowired
-    FileUploadService fileUploadService;
+    CodeService codeService;
+
+    @Autowired
+    FileUploadHandler fileUploadHandler;
 
     /**
-     * 리스트 페이지 이동
+     * <%= tableComment %> 목록 조회
      * @return
-     */
-    @RequestMapping(value = "")
-    @AuthChecking(value = AuthChecking.AuthType.ALL)
-    public ModelAndView listPage(HttpServletRequest request) {
-    	log.debug("move to facility list page");
-
-        ModelAndView mv = new ModelAndView("services/${classNameLower}/list");
-
-        return mv;
-    }
-
-
-    /**
-     * 리스트 페이지 조회
-     * @param criteria
-     */
-    @AuthChecking(value = AuthChecking.AuthType.ALL)
-    @ResponseBody
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public Map<String, Object> list(@RequestBody SearchCriteria criteria) {
-
-    	log.debug("${className} list Search!");
-
-        Map<String, Object> resultMap = new HashMap<>();
-
-        List<${className}DTO> list = service.select${className}list(criteria);
-
-        PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(criteria);
-
-        pageMaker.setTotalCount(service.select${className}TotalCount(criteria));
-
-        criteria.setPage(criteria.getPage());
-
-        resultMap.put("list", list);
-        resultMap.put("pageMaker", pageMaker);
-
-        return resultMap;
-    }
-
-
-
-    /**
-     * 등록 페이지 이동
-     * @param request
-     * @return
-     */
-    @AuthChecking(value = AuthChecking.AuthType.ALL)
-    @ResponseBody
-    @RequestMapping(value = "/info")
-    public ModelAndView register(HttpServletRequest request) {
-
-        log.debug("move to ${className} register page");
-        ModelAndView mv = new ModelAndView("services/${className}/info");
-
-        // 장소코드 코드리스트
-        List<CodeDTO> spotCdList = CodeManager.getInstance().getSubCodeList(CodeEnums.SPOT_CD);
-        mv.addObject("spotCdList", spotCdList);
-
-        /* 검색조건 유지를 위한 리스트 파라미터 전달 */
-        mv.addObject("listParam", StringUtil.queryStringt2Map(request.getQueryString()));
-
-        return mv;
-    }
-
-    /**
-     * 상세 페이지 이동
-     * @param request
-     * @param seq
-     * @return
-     */
-    @AuthChecking(value = AuthChecking.AuthType.ALL)
-    @ResponseBody
-    @RequestMapping(value = "/info/{seq}")
-    public ModelAndView view(HttpServletRequest request, @PathVariable("seq") String seq) {
-
-        log.debug("move to ${className} view page");
-        ModelAndView mv = new ModelAndView("services/${className}/info");
-
-        // 장소코드 코드리스트
-        List<CodeDTO> spotCdList = CodeManager.getInstance().getSubCodeList(CodeEnums.SPOT_CD);
-        mv.addObject("spotCdList", spotCdList);
-
-
-        ${className}DTO dto = new ${className}DTO();
-        dto.setSeq(seq);
-
-        dto = service.select${className}(dto);
-
-        // 이미지 처리
-        String oriImgSeq = dto.getOriImgSeq();
-        UploadResult oriImg = fileUploadService.selectUploadedFile(oriImgSeq);
-        if(oriImg != null) {
-            CMSUtil.getUploadResultForWeb(oriImg);
-            mv.addObject("oriImg", oriImg);
-        }
-
-        // 이미지 처리
-        String thmbImgSeq = dto.getThmbImgSeq();
-        UploadResult thmbImg = fileUploadService.selectUploadedFile(thmbImgSeq);
-        if(thmbImg != null) {
-            CMSUtil.getUploadResultForWeb(thmbImg);
-            mv.addObject("thmbImg", thmbImg);
-        }
-
-        mv.addObject("facility", dto);
-
-        /* 검색조건 유지를 위한 리스트 파라미터 전달 */
-        mv.addObject("listParam", StringUtil.queryStringt2Map(request.getQueryString()));
-
-        return mv;
-    }
-
-    /**
-     * 등록, 수정
-     * @param dto
-     * @return
-     */
-    @AuthChecking(value = AuthChecking.AuthType.ALL)
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
-    public RequestResult update(@ModelAttribute ${className}DTO dto, HttpServletRequest request) {
-
-    	RequestResult requestResult = new RequestResult();
-
-    	String rgstUsr = CMSUtil.getAdmin(request).getId();
-        dto.setRgstUsr(rgstUsr);
-
-        // 시설물 장소코드 중복 체크
-        if( checkSpotCdDuplicate(dto) ) {
-            requestResult.setResultCode(ResultCode.duplicate);
-            return requestResult;
-        }
-
-        FileUploadHandler fHandler = new FileUploadHandler();
-
-        if(dto.getFileList() != null && dto.getFileList().size() != 0) {
-        	List<UploadResult> uploadResultList = fHandler.upload(FileUploadHandler.UploadPath.FACILITY_MANAGER, dto.getFileList());
-
-            uploadResultList.forEach(item -> {
-                if(item.getUname().equals("oriImg")) {
-                    String imgSeq = item.getSeq();
-                    if(imgSeq != null && !imgSeq.equals("")) {
-                        dto.setOriImgSeq(item.getSeq());
-                    }
-                }
-                if(item.getUname().equals("thmbImg")) {
-                    String imgSeq = item.getSeq();
-                    if(imgSeq != null && !imgSeq.equals("")) {
-                        dto.setThmbImgSeq(item.getSeq());
-                    }
-                }
-            });
-        }
-
-        if( StringUtils.isNotEmpty(dto.getSeq()) ) {
-
-            if(dto.getOriImgSeq() != null && !dto.getOriImgSeq().equals("")) {
-                dto.setDeleteOriImgSeq(null);
-            }
-            if(dto.getThmbImgSeq() != null && !dto.getThmbImgSeq().equals("")) {
-                dto.setDeleteThmbImgSeq(null);
-            }
-            service.update${className}(dto);
-        } else {
-
-            service.insert${className}(dto);
-        }
-
-        requestResult.setResultCode(ResultCode.success);
-
-        return requestResult;
-    }
-
-
-    /**
-     * 시설물관리 상품 삭제
-     * @param request
-     * @return
-     */
-    @AuthChecking(value = AuthChecking.AuthType.ALL)
-    @ResponseBody
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public Map<String, Object> delete(HttpServletRequest request, @RequestBody ${className}DTO dto) {
-
-        log.debug("remove ${className} Data");
-
-        Map<String, Object> resultMap = new HashMap<>();
-
-        resultMap.put("resultCode", ResultCode.success);
-
-        service.delete${className}(dto);
-
-        return resultMap;
-    }
-
-
-
-    /**
-     * 멀터파트 File(file) binding 시에
-     * 스트링으로 값이 세팅되는 것을 막기 위해 필요한 코드
-     * @param binder
      * @throws Exception
      */
-    @InitBinder
-    public void initBinder(WebDataBinder binder) throws Exception {
-        binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public APIResult list(
+            HttpServletRequest request
+            ,@ModelAttribute ${className}SearchCriteria searchCriteria
+    ) throws Exception {
+        APIResult result = APIResult.fail();
 
-            @Override
-            public void setAsText(String text) {
-                log.debug("initBinder MultipartFile.class: {}; set null;", text);
-                setValue(null);
-            }
+        List<${className}DTO> list = ${classNameLower}Service.select${className}List(searchCriteria);
+        int totalCount = ${classNameLower}Service.select${className}ListCount(searchCriteria);
+        searchCriteria.setTotalCount(totalCount);
 
-        });
+        //== codeName 공통 처리: 예제:  bzType --> bzTypeName
+        //codeService.handleCodeName(list, false, "bzType", CodeEnums.BZ_TYPE);
+        //codeService.handleCodeName(list, true, "bzPrpy", CodeEnums.BZ_PRPY);
+
+        //== 이미지 base64 조회
+        //for(${className}DTO item : list) {
+        //    selectBase64Value(item);
+        //}
+
+        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.put("search", searchCriteria);
+        result.put("list", list);
+        return result;
     }
+
+
+
+    /**
+     * <%= tableComment %> 상세 조회
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    public APIResult detail(
+            HttpServletRequest request
+            ,@RequestParam String bzCd
+    ) throws Exception {
+        APIResult result = APIResult.fail();
+
+        //
+        ${className}DTO info = ${classNameLower}Service.select${className}(bzCd);
+
+        //== codeName 공통 처리: 예제:  bzType --> bzTypeName
+        //codeService.handleCodeName(info, false, "bzType", CodeEnums.BZ_TYPE);
+        //codeService.handleCodeName(info, true, "bzPrpy", CodeEnums.BZ_PRPY);
+
+        //== 이미지 base64 조회
+        //selectBase64Value(info);
+
+        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.put("info", info);
+        return result;
+    }
+
+
+    /**
+     * <%= tableComment %> 추가
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/insert", method = RequestMethod.POST)
+    public APIResult insert(
+            HttpServletRequest request
+            ,@RequestBody ${className}DTO ${classNameLower}DTO
+    ) throws Exception {
+        APIResult result = APIResult.fail();
+
+        String userId = VUtil.getUserId(request);
+        String clientIp = VUtil.getClientIP(request);
+        VUtil.setCommonProperties(${classNameLower}DTO, userId, clientIp);
+
+        ${classNameLower}Service.insert${className}(${classNameLower}DTO);
+
+        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.put("info", ${classNameLower}DTO);
+        return result;
+    }
+
+
+    /**
+     * <%= tableComment %> 수정
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public APIResult update(
+            HttpServletRequest request
+            ,@RequestBody ${className}DTO ${classNameLower}DTO
+    ) throws Exception {
+        APIResult result = APIResult.fail();
+
+        String userId = VUtil.getUserId(request);
+        String clientIp = VUtil.getClientIP(request);
+        VUtil.setCommonProperties(${classNameLower}DTO, userId, clientIp);
+
+        ${classNameLower}Service.update${className}(${classNameLower}DTO);
+
+        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.put("info", ${classNameLower}DTO);
+        return result;
+    }
+
+
+
+    /**
+     * <%= tableComment %> 삭제
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public APIResult delete(
+            HttpServletRequest request
+            ,@RequestBody ${className}DTO ${classNameLower}DTO
+    ) throws Exception {
+        APIResult result = APIResult.fail();
+
+        String userId = VUtil.getUserId(request);
+        String clientIp = VUtil.getClientIP(request);
+        VUtil.setCommonProperties(${classNameLower}DTO, userId, clientIp);
+
+        ${classNameLower}Service.delete${className}(${classNameLower}DTO);
+
+        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        return result;
+    }
+
+
+
 }

@@ -1,12 +1,21 @@
 package ${ITEMS.DTO.packageName};
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <%= tableComment %> DTO
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ${className}DTO {
 
 
@@ -21,5 +30,11 @@ public class ${className}DTO {
      */
      private ${it.dtoTypeStr} ${it.name};
     <%}%>
+
+    /*
+     * 참고: pk로 equal, hashCode 설정:
+     * class에 : @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+     * pk에 : @EqualsAndHashCode.Include
+     */
 
 }

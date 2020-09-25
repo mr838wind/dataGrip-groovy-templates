@@ -1,0 +1,166 @@
+package ${ITEMS.ControllerTest.packageName};
+
+
+import com.shinsegae.villiv.backoffice.VillivBackofficeApplication;
+import com.shinsegae.villiv.common.upload.dto.BASE64DecodedMultipartFile;
+import com.shinsegae.villiv.common.upload.dto.UploadResultDTO;
+import com.shinsegae.villiv.common.utils.JSONUtil;
+import com.shinsegae.villiv.dto.*;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Test;
+import org.junit.jupiter.params.aggregator.ArgumentAccessException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
+/**
+ * <%= tableComment %> test
+ */
+@RunWith(SpringRunner.class)
+@SpringBootTest(
+        classes = {VillivBackofficeApplication.class}
+        , webEnvironment = SpringBootTest.WebEnvironment.MOCK
+)
+@AutoConfigureMockMvc
+@Slf4j
+public class BzaTest extends BaseMvcTest {
+
+//    public static final String IMAGE_ORANGE = "/Users/wind/DEV/test/t-orange.jpg";
+//    public static final String IMAGE_PEAR = "/Users/wind/DEV/test/t-pear.jpg";
+
+    public static final String BZ_CD = "100100";
+
+
+    @Autowired
+    ${className}Service service;
+
+    @Test
+    public void contextLoads() {
+
+    }
+
+    @Test
+    public void list() throws Exception {
+        ${className}SearchCriteria searchCriteria = new ${className}SearchCriteria();
+
+        final ResultActions actions = mockMvc.perform(get("/api/back/${className}/list")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                //.param()
+        )
+                .andDo(print());
+
+        actions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect( jsonPath("$.list").exists())
+
+        ;
+    }
+
+
+    @Test
+    public void detail() throws Exception {
+
+        final ResultActions actions = mockMvc.perform(get("/api/back/${className}/detail")
+                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                .param("bzCd", BZ_CD)
+        )
+                .andDo(print());
+
+        actions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect( jsonPath("$.list").exists())
+
+        ;
+    }
+
+
+
+    @Test
+    public void insert() throws Exception {
+
+//        //== image
+//        File file = new File(IMAGE_ORANGE);
+//        if(!file.exists()) {
+//            throw new ArgumentAccessException("file not exist");
+//        }
+//        String base64File = BASE64DecodedMultipartFile.fileToString(file);
+//        String orgFileName = file.getName();
+
+        ${className}DTO bzMstDTO = new ${className}DTO();
+
+
+        final ResultActions actions = mockMvc.perform(post("/api/back/${className}/insert")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                .content(JSONUtil.toJson(bzMstDTO))
+        )
+                .andDo(print());
+
+        actions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect( jsonPath("$.list").exists())
+
+        ;
+    }
+
+
+    @Test
+    public void update() throws Exception {
+
+//        ${className}DTO bzMstDTO = service.select${className}WithSub(BZ_CD);
+
+        ${className}DTO bzMstDTO = new ${className}DTO();
+
+
+        final ResultActions actions = mockMvc.perform(post("/api/back/${className}/update")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                .content(JSONUtil.toJson(bzMstDTO))
+        )
+                .andDo(print());
+
+        actions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect( jsonPath("$.list").exists())
+
+        ;
+    }
+
+
+
+    @Test
+    public void delete() throws Exception {
+
+        ${className}DTO bzMstDTO = new ${className}DTO();
+//        bzMstDTO.setBzCd(BZ_CD);
+
+
+        final ResultActions actions = mockMvc.perform(post("/api/back/${classNameLower}/delete")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
+                .content(JSONUtil.toJson(bzMstDTO))
+        )
+                .andDo(print());
+
+        actions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect( jsonPath("$.list").exists())
+
+        ;
+    }
+
+
+
+}

@@ -16,6 +16,7 @@
 
 <!--
     <![CDATA[ sample ]]>
+    참고: searchCriteria 에서 appType 으로 front,back 구분할수 있음
 -->
 
 	<!--/** ====================================    ==================================== */-->
@@ -49,17 +50,34 @@
 		FROM ${table.name} T
 		WHERE 1=1
 		<include refid="criteria${className}" />
-		ORDER BY
-            <%
-              pkFields.eachWithIndex { it,index ->
-                    if(index != 0) {
-                        out.print("		  , ")
-                    }
-                    def s = String.format( " %s DESC ", it.dbName )
-                    out.print( s )
-                    out.println()
-              }
-            %>
+	    <choose>
+			<when test=" appType == 'FRONT' ">
+                ORDER BY
+                    <%
+                      pkFields.eachWithIndex { it,index ->
+                            if(index != 0) {
+                                out.print("		  , ")
+                            }
+                            def s = String.format( " %s ASC ", it.dbName )
+                            out.print( s )
+                            out.println()
+                      }
+                    %>
+            </when>
+			<otherwise>
+				ORDER BY
+                    <%
+                      pkFields.eachWithIndex { it,index ->
+                            if(index != 0) {
+                                out.print("		  , ")
+                            }
+                            def s = String.format( " %s ASC ", it.dbName )
+                            out.print( s )
+                            out.println()
+                      }
+                    %>
+			</otherwise>
+		</choose>
 		<include refid="common.pagingEnd" />
 	</select>
 
