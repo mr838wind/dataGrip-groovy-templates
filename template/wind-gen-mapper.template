@@ -26,4 +26,6 @@ public interface ${className}Mapper extends BaseMapper {
 
     void delete${className}(${className}DTO dto);
 
+    void delete${className}ByUpdate(${className}DTO dto);
+
 }

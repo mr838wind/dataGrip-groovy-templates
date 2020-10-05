@@ -38,12 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 )
 @AutoConfigureMockMvc
 @Slf4j
-public class BzaTest extends BaseMvcTest {
-
-//    public static final String IMAGE_ORANGE = "/Users/wind/DEV/test/t-orange.jpg";
-//    public static final String IMAGE_PEAR = "/Users/wind/DEV/test/t-pear.jpg";
-
-    public static final String BZ_CD = "100100";
+public class ${className}ControllerTest extends BaseMvcTest {
 
 
     @Autowired
@@ -61,7 +56,13 @@ public class BzaTest extends BaseMvcTest {
 
         final ResultActions actions = mockMvc.perform(get("/api/back/$classNameLower/list")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                //.param("", "")
+                .param("bzCd", BZ_CD)
+//                .param("useYn", "0")
+//                .param("catCd", "A1")
+//                .param("iptDateStart", "20200901")
+//                .param("iptDateEnd", "20201001")
+//                .param("searchType", "grpcNm")
+//                .param("searchWord", "a")
         )
                 .andDo(print());
 
@@ -95,7 +96,7 @@ public class BzaTest extends BaseMvcTest {
     public void insert() throws Exception {
 
 //        //== image
-//        File file = new File(IMAGE_ORANGE);
+//        File file = imageOrange;
 //        if(!file.exists()) {
 //            throw new ArgumentAccessException("file not exist");
 //        }
@@ -121,6 +122,14 @@ public class BzaTest extends BaseMvcTest {
 
     @Test
     public void update() throws Exception {
+
+//        //== image
+//        File file = imageOrange;
+//        if(!file.exists()) {
+//            throw new ArgumentAccessException("file not exist");
+//        }
+//        String base64File = BASE64DecodedMultipartFile.fileToString(file);
+//        String orgFileName = file.getName();
 
 //        ${className}DTO item = service.select${className}WithSub(BZ_CD);
 

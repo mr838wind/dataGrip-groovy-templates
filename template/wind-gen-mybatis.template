@@ -27,6 +27,7 @@
         </if>
 	</sql>
 
+
 	<!-- list -->
 	<select id="select${className}List"  parameterType="${fullSearchCriteria}" resultType="${fullDTO}">
 	    <include refid="common.pagingStart" />
@@ -71,6 +72,14 @@
 		</choose>
 		<include refid="common.pagingEnd" />
 	</select>
+
+	<!--
+	    참고:
+	      , (SELECT BZ_NM FROM TLSB_BZ_MST WHERE BZ_CD = T.BZ_CD) AS BZ_NM
+		  , (SELECT FILE_PATH FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_PATH
+		  , (SELECT ORG_FILE_NM FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_ORG
+	-->
+
 
 	<!-- list count -->
 	<select id="select${className}ListCount"  parameterType="${fullSearchCriteria}" resultType="int">
@@ -200,6 +209,28 @@
               }
             %>
 	</delete>
+
+	<!-- delete by update -->
+	<delete id="delete${className}ByUpdate" parameterType="${fullDTO}">
+		UPDATE ${table.name}
+		SET
+		    USE_YN = '0'
+		WHERE
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  and ")
+                    }
+
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
+                    out.println()
+              }
+            %>
+	</delete>
+
+
+
 
 
 </mapper>

@@ -1,5 +1,11 @@
 package ${ITEMS.DTO.packageName};
 
+
+import com.shinsegae.villiv.common.CodeEnums;
+import com.shinsegae.villiv.common.code.annotation.AnnoCode;
+import com.shinsegae.villiv.common.upload.annotation.AnnoFileUpload;
+import com.shinsegae.villiv.common.upload.enums.UploadPathEnum;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +28,7 @@ public class ${className}DTO {
 
     //=========== [s] custom added ===========
 
+
     //=========== [e] custom added ===========
 
     <%fields.each() {%>
@@ -32,10 +39,21 @@ public class ${className}DTO {
      private ${it.dtoTypeStr} ${it.name};
     <%}%>
 
+    //================= 참고:
     /*
      * 참고: pk로 equal, hashCode 설정:
      * class에 : @EqualsAndHashCode(onlyExplicitlyIncluded = true)
      * pk에 : @EqualsAndHashCode.Include
      */
+
+     /*
+        //== 참고: 공통코드명 :  @AnnoCode(codeEnum = CodeEnums.SSG_GRPC_CAT_CD)
+        //private String catCdName;
+
+        //== 참고: 파일 imgFileId 관련 : @AnnoFileUpload(pathEnum = UploadPathEnum.SSG_GRPC)
+        //private String imgFileIdPath;
+        //private String imgFileIdEnc;
+        //private String imgFileIdOrg;
+    */
 
 }

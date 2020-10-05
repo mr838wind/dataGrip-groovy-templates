@@ -52,15 +52,6 @@ public class ${className}Controller {
         int totalCount = ${classNameLower}Service.select${className}ListCount(searchCriteria);
         searchCriteria.setTotalCount(totalCount);
 
-        //== codeName 공통 처리: 예제:  bzType --> bzTypeName
-        //codeService.handleCodeName(list, false, "bzType", CodeEnums.BZ_TYPE);
-        //codeService.handleCodeName(list, true, "bzPrpy", CodeEnums.BZ_PRPY);
-
-        //== 이미지 base64 조회
-        //for(${className}DTO item : list) {
-        //    selectBase64Value(item);
-        //}
-
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("search", searchCriteria);
         result.put("list", list);
@@ -81,15 +72,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        //
         ${className}DTO info = ${classNameLower}Service.select${className}(bzCd);
-
-        //== codeName 공통 처리: 예제:  bzType --> bzTypeName
-        //codeService.handleCodeName(info, false, "bzType", CodeEnums.BZ_TYPE);
-        //codeService.handleCodeName(info, true, "bzPrpy", CodeEnums.BZ_PRPY);
-
-        //== 이미지 base64 조회
-        //selectBase64Value(info);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", info);
@@ -106,12 +89,9 @@ public class ${className}Controller {
     public APIResult insert(
             HttpServletRequest request
             ,@RequestBody ${className}DTO ${classNameLower}DTO
+            ,@AnnoUser UserInfo uInfo
     ) throws Exception {
         APIResult result = APIResult.fail();
-
-        String userId = VUtil.getUserId(request);
-        String clientIp = VUtil.getClientIP(request);
-        VUtil.setCommonProperties(${classNameLower}DTO, userId, clientIp);
 
         ${classNameLower}Service.insert${className}(${classNameLower}DTO);
 
@@ -133,10 +113,6 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        String userId = VUtil.getUserId(request);
-        String clientIp = VUtil.getClientIP(request);
-        VUtil.setCommonProperties(${classNameLower}DTO, userId, clientIp);
-
         ${classNameLower}Service.update${className}(${classNameLower}DTO);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
@@ -157,10 +133,6 @@ public class ${className}Controller {
             ,@RequestBody ${className}DTO ${classNameLower}DTO
     ) throws Exception {
         APIResult result = APIResult.fail();
-
-        String userId = VUtil.getUserId(request);
-        String clientIp = VUtil.getClientIP(request);
-        VUtil.setCommonProperties(${classNameLower}DTO, userId, clientIp);
 
         ${classNameLower}Service.delete${className}(${classNameLower}DTO);
 

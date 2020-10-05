@@ -1,5 +1,10 @@
 package ${ITEMS.SERVICE.packageName};
 
+import com.shinsegae.villiv.common.annotation.AnnoSearchCode;
+import com.shinsegae.villiv.common.annotation.AnnoSearchFileEnc;
+import com.shinsegae.villiv.common.annotation.AnnoSetCommon;
+import com.shinsegae.villiv.common.annotation.AnnoSetFileUpload;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +29,30 @@ public class ${className}Service {
         return mapper.select${className}List(criteria);
     }
 
+    /*
+        @AnnoSearchCode
+        public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
+            List<${className}DTO> list = select${className}List;
+            if(! CollectionUtils.isEmpty(list) ) {
+                for(${className}DTO dto : list) {
+                    selectSubList(dto);
+                }
+            }
+            return list;
+        }
+
+        @AnnoSearchCode
+        @AnnoSearchFileEnc
+        public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
+            return select${className}ListWithSub(criteria);
+        }
+
+        private void selectSubList(${className}DTO info) {
+
+        }
+    */
+
+
     /**
      * 목록 총개수 조회
      */
@@ -38,14 +67,23 @@ public class ${className}Service {
         return mapper.select${className}(dto);
     }
 
-    /**
-     * 단건 조회
-     */
-    //public ${className}DTO select${className}(String seq) {
-    //    ${className}DTO dto = new ${className}DTO();
-    //    dto.setSeq(seq);
-    //    return mapper.select${className}(dto);
-    //}
+    /*
+        @AnnoSearchCode
+        public ${className}DTO select${className}WithSub(${className}DTO dto) {
+            ${className}DTO info = select${className}(dto);
+            if(info != null) {
+                selectSubList(info);
+            }
+            return info;
+        }
+
+        @AnnoSearchCode
+        @AnnoSearchFileEnc
+        public ${className}DTO select${className}(${className}DTO dto) {
+            return select${className}WithSub(dto);
+        }
+    */
+
 
     /**
      * 변경
@@ -54,6 +92,16 @@ public class ${className}Service {
         mapper.update${className}(dto);
     }
 
+    /*
+        @AnnoSetCommon
+        @AnnoSetFileUpload
+        public void update${className}WithSub(${className}DTO dto) {
+            mapper.update${className}(dto);
+            deleteSubList(dto);
+            insertSubList(dto);
+        }
+    */
+
     /**
      * 등록
      */
@@ -61,11 +109,34 @@ public class ${className}Service {
         mapper.insert${className}(dto);
     }
 
+    /*
+        public void insert${className}WithSub(${className}DTO dto) {
+            mapper.insert${className}(dto);
+            insertSubList(dto);
+        }
+    */
+
     /**
      * 삭제
      */
     public void delete${className}(${className}DTO dto) {
         mapper.delete${className}(dto);
     }
+
+    /*
+        @AnnoSetCommon
+        public void delete${className}ByUpdate(${className}DTO dto) {
+            mapper.delete${className}ByUpdate(dto);
+        }
+
+        private void insertSubList(${className}DTO dto) {
+
+        }
+
+        private void deleteSubList(SsgGrpcDTO dto) {
+
+        }
+    */
+
 
 }
