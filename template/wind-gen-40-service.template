@@ -1,9 +1,9 @@
 package ${ITEMS.SERVICE.packageName};
 
 import com.shinsegae.villiv.common.annotation.AnnoSearchCode;
-import com.shinsegae.villiv.common.annotation.AnnoSearchFileEnc;
+import com.shinsegae.villiv.common.annotation.AnnoSearchFileEncV2;
 import com.shinsegae.villiv.common.annotation.AnnoSetCommon;
-import com.shinsegae.villiv.common.annotation.AnnoSetFileUpload;
+import com.shinsegae.villiv.common.annotation.AnnoSetFileUploadV2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,17 +20,29 @@ public class ${className}Service {
     @Autowired
     ${className}Mapper mapper;
 
-    /** ====================================     ==================================== */
+    /** ====================================  list   ==================================== */
 
-    /**
-     * 목록 조회
-     */
+    public int select${className}ListCount(${className}SearchCriteria criteria) {
+        return mapper.select${className}ListCount(criteria);
+    }
+
     public List<${className}DTO> select${className}List(${className}SearchCriteria criteria) {
         return mapper.select${className}List(criteria);
     }
 
+    @AnnoSearchCode
+    public List<${className}DTO> select${className}ListAnnoCode(${className}SearchCriteria criteria) {
+        return select${className}List(criteria);
+    }
+
+    @AnnoSearchCode
+    @AnnoSearchFileEncV2
+    public List<${className}DTO> select${className}ListAnnoCodeFile(${className}SearchCriteria criteria) {
+        return select${className}List(criteria);
+    }
+
     /*
-        @AnnoSearchCode
+        //== sub
         public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
             List<${className}DTO> list = select${className}List;
             if(! CollectionUtils.isEmpty(list) ) {
@@ -42,33 +54,38 @@ public class ${className}Service {
         }
 
         @AnnoSearchCode
-        @AnnoSearchFileEnc
-        public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
+        public List<${className}DTO> select${className}ListWithSubAnnoCode(${className}SearchCriteria criteria) {
             return select${className}ListWithSub(criteria);
         }
 
-        private void selectSubList(${className}DTO info) {
-
+        @AnnoSearchCode
+        @AnnoSearchFileEncV2
+        public List<${className}DTO> select${className}ListWithSubAnnoCodeFile(${className}SearchCriteria criteria) {
+            return select${className}ListWithSub(criteria);
         }
     */
 
 
-    /**
-     * 목록 총개수 조회
-     */
-    public int select${className}ListCount(${className}SearchCriteria criteria) {
-        return mapper.select${className}ListCount(criteria);
-    }
 
-    /**
-     * 단건 조회
-     */
+    /** ====================================  detail   ==================================== */
+
     public ${className}DTO select${className}(${className}DTO dto) {
         return mapper.select${className}(dto);
     }
 
+    @AnnoSearchCode
+    public ${className}DTO select${className}AnnoCode(${className}DTO dto) {
+        return select${className}(dto);
+    }
+
+    @AnnoSearchCode
+    @AnnoSearchFileEncV2
+    public ${className}DTO select${className}AnnoCodeFile(${className}DTO dto) {
+        return select${className}(dto);
+    }
+
     /*
-        @AnnoSearchCode
+        //== sub
         public ${className}DTO select${className}WithSub(${className}DTO dto) {
             ${className}DTO info = select${className}(dto);
             if(info != null) {
@@ -78,65 +95,128 @@ public class ${className}Service {
         }
 
         @AnnoSearchCode
-        @AnnoSearchFileEnc
-        public ${className}DTO select${className}(${className}DTO dto) {
+        public ${className}DTO select${className}WithSubAnnoCode(${className}DTO dto) {
+            return select${className}WithSub(dto);
+        }
+
+        @AnnoSearchCode
+        @AnnoSearchFileEncV2
+        public ${className}DTO select${className}WithSubAnnoCodeFile(${className}DTO dto) {
             return select${className}WithSub(dto);
         }
     */
 
 
-    /**
-     * 변경
-     */
+
+
+    /** ====================================  insert   ==================================== */
+
+    public void insert${className}(${className}DTO dto) {
+        mapper.insert${className}(dto);
+    }
+
+    @AnnoSetCommon
+    @AnnoSetFileUploadV2
+    public void insert${className}Anno(${className}DTO dto) {
+        insert${className}(dto);
+    }
+
+    /*
+        //==
+        public void insert${className}WithSub(${className}DTO dto) {
+            mapper.insert${className}(dto);
+            insertSubList(dto);
+        }
+
+        @AnnoSetCommon
+        @AnnoSetFileUploadV2
+        public void insert${className}WithSubAnno(${className}DTO dto) {
+            insert${className}WithSub(dto);
+        }
+    */
+
+
+
+    /** ====================================   update  ==================================== */
+
     public void update${className}(${className}DTO dto) {
         mapper.update${className}(dto);
     }
 
+    @AnnoSetCommon
+    @AnnoSetFileUploadV2
+    public void update${className}Anno(${className}DTO dto) {
+        update${className}(dto);
+    }
+
     /*
-        @AnnoSetCommon
-        @AnnoSetFileUpload
+        //== sub
         public void update${className}WithSub(${className}DTO dto) {
             mapper.update${className}(dto);
             deleteSubList(dto);
             insertSubList(dto);
         }
-    */
 
-    /**
-     * 등록
-     */
-    public void insert${className}(${className}DTO dto) {
-        mapper.insert${className}(dto);
-    }
-
-    /*
-        public void insert${className}WithSub(${className}DTO dto) {
-            mapper.insert${className}(dto);
-            insertSubList(dto);
+        @AnnoSetCommon
+        @AnnoSetFileUploadV2
+        public void update${className}WithSubAnno(${className}DTO dto) {
+            update${className}WithSub(dto);
         }
     */
 
-    /**
-     * 삭제
-     */
+
+
+
+    /** ====================================   delete  ==================================== */
+
+
     public void delete${className}(${className}DTO dto) {
         mapper.delete${className}(dto);
     }
 
+    @AnnoSetCommon
+    public void delete${className}Anno(${className}DTO dto) {
+        delete${className}(dto);
+    }
+
     /*
+        //== sub
+        public void delete${className}WithSub(${className}DTO dto) {
+            deleteSubList(dto);
+            mapper.delete${className}(dto);
+        }
+
         @AnnoSetCommon
+        public void delete${className}WithSubAnno(${className}DTO dto) {
+            delete${className}WithSub(dto);
+        }
+
+
         public void delete${className}ByUpdate(${className}DTO dto) {
             mapper.delete${className}ByUpdate(dto);
+        }
+
+        @AnnoSetCommon
+        public void delete${className}ByUpdateAnno(${className}DTO dto) {
+            delete${className}ByUpdate(dto);
+        }
+    */
+
+
+    /** ====================================  subList   ==================================== */
+
+    /*
+        private void selectSubList(${className}DTO info) {
+
         }
 
         private void insertSubList(${className}DTO dto) {
 
         }
 
-        private void deleteSubList(SsgGrpcDTO dto) {
+        private void deleteSubList(${className}DTO dto) {
 
         }
     */
-
 
 }

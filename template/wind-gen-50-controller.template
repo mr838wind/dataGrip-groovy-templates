@@ -48,7 +48,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        List<${className}DTO> list = ${classNameLower}Service.select${className}List(searchCriteria);
+        List<${className}DTO> list = ${classNameLower}Service.select${className}ListAnnoCodeFile(searchCriteria);
         int totalCount = ${classNameLower}Service.select${className}ListCount(searchCriteria);
         searchCriteria.setTotalCount(totalCount);
 
@@ -72,7 +72,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${className}DTO info = ${classNameLower}Service.select${className}(bzCd);
+        ${className}DTO info = ${classNameLower}Service.select${className}AnnoCodeFile(bzCd);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", info);
@@ -93,7 +93,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.insert${className}(${classNameLower}DTO);
+        ${classNameLower}Service.insert${className}Anno(${classNameLower}DTO);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", ${classNameLower}DTO);
@@ -113,7 +113,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.update${className}(${classNameLower}DTO);
+        ${classNameLower}Service.update${className}Anno(${classNameLower}DTO);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", ${classNameLower}DTO);
@@ -134,7 +134,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.delete${className}(${classNameLower}DTO);
+        ${classNameLower}Service.delete${className}Anno(${classNameLower}DTO);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         return result;

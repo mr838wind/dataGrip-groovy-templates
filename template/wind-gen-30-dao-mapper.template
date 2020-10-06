@@ -20,9 +20,9 @@ public interface ${className}Mapper extends BaseMapper {
 
     ${className}DTO select${className}(${className}DTO dto);
 
-    void update${className}(${className}DTO dto);
-
     void insert${className}(${className}DTO dto);
+
+    void update${className}(${className}DTO dto);
 
     void delete${className}(${className}DTO dto);
 

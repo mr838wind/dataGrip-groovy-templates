@@ -40,6 +40,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @Slf4j
 public class ${className}ControllerTest extends BaseMvcTest {
 
+    public static final String API_PREFIX = "/api/back/$classNameLower";
+
+    // int id = 10;
+
 
     @Autowired
     ${className}Service service;
@@ -54,7 +58,7 @@ public class ${className}ControllerTest extends BaseMvcTest {
     public void list() throws Exception {
         ${className}SearchCriteria searchCriteria = new ${className}SearchCriteria();
 
-        final ResultActions actions = mockMvc.perform(get("/api/back/$classNameLower/list")
+        final ResultActions actions = mockMvc.perform(get(API_PREFIX + "/list")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .param("bzCd", BZ_CD)
 //                .param("useYn", "0")
@@ -77,7 +81,7 @@ public class ${className}ControllerTest extends BaseMvcTest {
     @Test
     public void detail() throws Exception {
 
-        final ResultActions actions = mockMvc.perform(get("/api/back/$classNameLower/detail")
+        final ResultActions actions = mockMvc.perform(get(API_PREFIX + "/detail")
                         .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .param("bzCd", BZ_CD)
         )
@@ -102,11 +106,18 @@ public class ${className}ControllerTest extends BaseMvcTest {
 //        }
 //        String base64File = BASE64DecodedMultipartFile.fileToString(file);
 //        String orgFileName = file.getName();
+//        UploadInfoDTO uploadInfoDTO = UploadInfoDTO.builder()
+//                .fileId(null)
+//                .enc(base64File)
+//                .orgFileNm(orgFileName)
+//                .build();
 
-        ${className}DTO dto = new ${className}DTO();
+        ${className}DTO dto = ${className}DTO.builder()
+                        .bzCd(BZ_CD)
+                        .build();
 
 
-        final ResultActions actions = mockMvc.perform(post("/api/back/$classNameLower/insert")
+        final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/insert")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .content(JSONUtil.toJson(dto))
         )
@@ -130,13 +141,19 @@ public class ${className}ControllerTest extends BaseMvcTest {
 //        }
 //        String base64File = BASE64DecodedMultipartFile.fileToString(file);
 //        String orgFileName = file.getName();
+//        UploadInfoDTO uploadInfoDTO = UploadInfoDTO.builder()
+//                .fileId(null)
+//                .enc(base64File)
+//                .orgFileNm("mod-" + orgFileName)
+//                .build();
+
 
 //        ${className}DTO item = service.select${className}WithSub(BZ_CD);
 
         ${className}DTO item = new ${className}DTO();
 
 
-        final ResultActions actions = mockMvc.perform(post("/api/back/$classNameLower/update")
+        final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/update")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .content(JSONUtil.toJson(item))
         )
@@ -155,10 +172,9 @@ public class ${className}ControllerTest extends BaseMvcTest {
     public void delete() throws Exception {
 
         ${className}DTO item = new ${className}DTO();
-//        item.setBzCd(BZ_CD);
+        item.setBzCd(BZ_CD);
 
-
-        final ResultActions actions = mockMvc.perform(post("/api/back/$classNameLower/delete")
+        final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/delete")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
                 .content(JSONUtil.toJson(item))
         )
