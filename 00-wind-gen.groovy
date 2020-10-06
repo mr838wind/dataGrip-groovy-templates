@@ -32,21 +32,21 @@ INPUT.ITEMS = [:]
 INPUT.ITEMS.DTO = [
     filePrefix : '',
     fileSuffix : 'DTO.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-dto.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-10-dto.template",
     packageName : INPUT.packageNameBase + ".dto",
     subPath: 'dto',
 ]
 INPUT.ITEMS.SEARCH_CRITERIA = [
     filePrefix : '',
     fileSuffix : 'SearchCriteria.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-SearchCriteria.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-12-SearchCriteria.template",
     packageName : INPUT.packageNameBase + ".dto",
     subPath: 'dto',
 ]
 INPUT.ITEMS.MYBATIS = [
     filePrefix : 'sql-',
     fileSuffix : 'Mapper.xml',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-mybatis.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-20-mybatis.template",
     packageName : '',
     subPath: 'mybatis',
 ]
@@ -54,7 +54,7 @@ INPUT.ITEMS.MYBATIS = [
 //INPUT.ITEMS.DAO = [
 //    filePrefix : '',
 //    fileSuffix : 'DAO.java',
-//    template : INPUT.TEMPLATE_BASE + "/wind-gen-dao.template",
+//    template : INPUT.TEMPLATE_BASE + "/wind-gen-99-dao.template",
 //    packageName : INPUT.packageNameBase + ".dao",
 //    subPath: 'dao',
 //]
@@ -62,35 +62,35 @@ INPUT.ITEMS.MYBATIS = [
 INPUT.ITEMS.MAPPER = [
     filePrefix : '',
     fileSuffix : 'Mapper.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-mapper.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-30-dao-mapper.template",
     packageName : INPUT.packageNameBase + ".dao",
     subPath: 'dao',
 ]
 INPUT.ITEMS.SERVICE = [
     filePrefix : '',
     fileSuffix : 'Service.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-service.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-40-service.template",
     packageName : INPUT.packageNameBase + ".service",
     subPath: 'service',
 ]
 INPUT.ITEMS.CONTROLLER = [
     filePrefix : '',
     fileSuffix : 'Controller.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-controller.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-50-controller.template",
     packageName : INPUT.packageNameBase + ".controller",
     subPath: 'controller',
 ]
 INPUT.ITEMS.ServiceTest = [
     filePrefix : '',
     fileSuffix : 'ServiceTest.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-ServiceTest.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-60-ServiceTest.template",
     packageName : INPUT.packageNameBase + ".service",
     subPath: 'test_service',
 ]
 INPUT.ITEMS.ControllerTest = [
     filePrefix : '',
     fileSuffix : 'ControllerTest.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-ControllerTest.template",
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-62-ControllerTest.template",
     packageName : INPUT.packageNameBase + ".mvc",
     subPath: 'test_controller',
 ]

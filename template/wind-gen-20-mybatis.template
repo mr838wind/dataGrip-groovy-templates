@@ -211,23 +211,25 @@
 	</delete>
 
 	<!-- delete by update -->
-	<delete id="delete${className}ByUpdate" parameterType="${fullDTO}">
-		UPDATE ${table.name}
-		SET
-		    USE_YN = '0'
-		WHERE
-            <%
-              pkFields.eachWithIndex { it,index ->
-                    if(index != 0) {
-                        out.print("		  and ")
-                    }
+	<!--
+        <delete id="delete${className}ByUpdate" parameterType="${fullDTO}">
+            UPDATE ${table.name}
+            SET
+                USE_YN = '0'
+            WHERE
+                <%
+                  pkFields.eachWithIndex { it,index ->
+                        if(index != 0) {
+                            out.print("		  and ")
+                        }
 
-                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
-                    out.print( s )
-                    out.println()
-              }
-            %>
-	</delete>
+                        def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                        out.print( s )
+                        out.println()
+                  }
+                %>
+        </delete>
+	-->
 
 
 
