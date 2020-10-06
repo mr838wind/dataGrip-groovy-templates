@@ -23,9 +23,8 @@
 	<!--/** ====================================    ==================================== */-->
 	<!-- search -->
 	<sql id="criteria${className}">
-	    AND T.BZ_CD = #{ bzCd }
-
 	    <!-- 참고:
+	        AND T.BZ_CD = #{ bzCd }
             <if test=" catCd != null and catCd != '' ">
                 AND T.CAT_CD = #{ catCd }
             </if>

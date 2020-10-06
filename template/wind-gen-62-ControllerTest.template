@@ -38,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 )
 @AutoConfigureMockMvc
 @Slf4j
-public class ${className}ControllerTest extends BaseMvcTest {
+public class Test${className}Controller extends TestBaseMvc {
 
     public static final String API_PREFIX = "/api/back/$classNameLower";
 
@@ -113,7 +113,7 @@ public class ${className}ControllerTest extends BaseMvcTest {
 //                .build();
 
         ${className}DTO dto = ${className}DTO.builder()
-                        .bzCd(BZ_CD)
+                        //.bzCd(BZ_CD)
                         .build();
 
 
@@ -172,7 +172,7 @@ public class ${className}ControllerTest extends BaseMvcTest {
     public void delete() throws Exception {
 
         ${className}DTO item = new ${className}DTO();
-        item.setBzCd(BZ_CD);
+        //item.setBzCd(BZ_CD);
 
         final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/delete")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")

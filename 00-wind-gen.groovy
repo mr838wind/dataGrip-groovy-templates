@@ -88,8 +88,8 @@ INPUT.ITEMS.ServiceTest = [
     subPath: 'test_service',
 ]
 INPUT.ITEMS.ControllerTest = [
-    filePrefix : '',
-    fileSuffix : 'ControllerTest.java',
+    filePrefix : 'Test',
+    fileSuffix : 'Controller.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-62-ControllerTest.template",
     packageName : INPUT.packageNameBase + ".mvc",
     subPath: 'test_controller',

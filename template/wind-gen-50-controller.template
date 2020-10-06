@@ -72,7 +72,10 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${className}DTO info = ${classNameLower}Service.select${className}AnnoCodeFile(bzCd);
+        ${className}DTO criteria = new ${className}DTO();
+        criteria.setBzCd(bzCd);
+
+        ${className}DTO info = ${classNameLower}Service.select${className}AnnoCodeFile(criteria);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", info);
