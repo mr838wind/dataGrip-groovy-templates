@@ -17,25 +17,29 @@
 <!--
     <![CDATA[ sample ]]>
     참고: searchCriteria 에서 appType 으로 front,back 구분할수 있음
-    주의: 날짜 column 처리 insert / update
+    주의:
+        1. seq
+        2. 날짜 column 처리 insert / update
+
 -->
 
 	<!--/** ====================================    ==================================== */-->
 	<!-- search -->
 	<sql id="criteria${className}">
-	    <!-- 참고:
-	        AND T.BZ_CD = #{ bzCd }
-            <if test=" catCd != null and catCd != '' ">
-                AND T.CAT_CD = #{ catCd }
-            </if>
-            <choose>
-                <when test=" appType == 'FRONT' ">
-                    AND T.USE_YN = '1'
-                </when>
-            </choose>
-		-->
 
 	</sql>
+
+	<!-- 참고:
+        AND T.BZ_CD = #{ bzCd }
+        <if test=" catCd != null and catCd != '' ">
+            AND T.CAT_CD = #{ catCd }
+        </if>
+        <choose>
+            <when test=" appType == 'FRONT' ">
+                AND T.USE_YN = '1'
+            </when>
+        </choose>
+    -->
 
 
 	<!-- list -->
