@@ -1,10 +1,5 @@
 package ${ITEMS.SERVICE.packageName};
 
-import com.shinsegae.villiv.common.annotation.AnnoSearchCode;
-import com.shinsegae.villiv.common.annotation.AnnoSearchFileEncV2;
-import com.shinsegae.villiv.common.annotation.AnnoSetCommon;
-import com.shinsegae.villiv.common.annotation.AnnoSetFileUploadV2;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,16 +25,6 @@ public class ${className}Service {
         return mapper.select${className}List(criteria);
     }
 
-    @AnnoSearchCode
-    public List<${className}DTO> select${className}ListAnnoCode(${className}SearchCriteria criteria) {
-        return select${className}List(criteria);
-    }
-
-    @AnnoSearchCode
-    @AnnoSearchFileEncV2
-    public List<${className}DTO> select${className}ListAnnoCodeFile(${className}SearchCriteria criteria) {
-        return select${className}List(criteria);
-    }
 
     /*
         //== sub
@@ -52,17 +37,6 @@ public class ${className}Service {
             }
             return list;
         }
-
-        @AnnoSearchCode
-        public List<${className}DTO> select${className}ListWithSubAnnoCode(${className}SearchCriteria criteria) {
-            return select${className}ListWithSub(criteria);
-        }
-
-        @AnnoSearchCode
-        @AnnoSearchFileEncV2
-        public List<${className}DTO> select${className}ListWithSubAnnoCodeFile(${className}SearchCriteria criteria) {
-            return select${className}ListWithSub(criteria);
-        }
     */
 
 
@@ -73,17 +47,6 @@ public class ${className}Service {
         return mapper.select${className}(dto);
     }
 
-    @AnnoSearchCode
-    public ${className}DTO select${className}AnnoCode(${className}DTO dto) {
-        return select${className}(dto);
-    }
-
-    @AnnoSearchCode
-    @AnnoSearchFileEncV2
-    public ${className}DTO select${className}AnnoCodeFile(${className}DTO dto) {
-        return select${className}(dto);
-    }
-
     /*
         //== sub
         public ${className}DTO select${className}WithSub(${className}DTO dto) {
@@ -92,17 +55,6 @@ public class ${className}Service {
                 selectSubList(info);
             }
             return info;
-        }
-
-        @AnnoSearchCode
-        public ${className}DTO select${className}WithSubAnnoCode(${className}DTO dto) {
-            return select${className}WithSub(dto);
-        }
-
-        @AnnoSearchCode
-        @AnnoSearchFileEncV2
-        public ${className}DTO select${className}WithSubAnnoCodeFile(${className}DTO dto) {
-            return select${className}WithSub(dto);
         }
     */
 
@@ -115,23 +67,11 @@ public class ${className}Service {
         mapper.insert${className}(dto);
     }
 
-    @AnnoSetCommon
-    @AnnoSetFileUploadV2
-    public void insert${className}Anno(${className}DTO dto) {
-        insert${className}(dto);
-    }
-
     /*
         //==
         public void insert${className}WithSub(${className}DTO dto) {
             mapper.insert${className}(dto);
             insertSubList(dto);
-        }
-
-        @AnnoSetCommon
-        @AnnoSetFileUploadV2
-        public void insert${className}WithSubAnno(${className}DTO dto) {
-            insert${className}WithSub(dto);
         }
     */
 
@@ -143,24 +83,12 @@ public class ${className}Service {
         mapper.update${className}(dto);
     }
 
-    @AnnoSetCommon
-    @AnnoSetFileUploadV2
-    public void update${className}Anno(${className}DTO dto) {
-        update${className}(dto);
-    }
-
     /*
         //== sub
         public void update${className}WithSub(${className}DTO dto) {
             mapper.update${className}(dto);
             deleteSubList(dto);
             insertSubList(dto);
-        }
-
-        @AnnoSetCommon
-        @AnnoSetFileUploadV2
-        public void update${className}WithSubAnno(${className}DTO dto) {
-            update${className}WithSub(dto);
         }
     */
 
@@ -174,11 +102,6 @@ public class ${className}Service {
         mapper.delete${className}(dto);
     }
 
-    @AnnoSetCommon
-    public void delete${className}Anno(${className}DTO dto) {
-        delete${className}(dto);
-    }
-
     /*
         //== sub
         public void delete${className}WithSub(${className}DTO dto) {
@@ -186,19 +109,8 @@ public class ${className}Service {
             mapper.delete${className}(dto);
         }
 
-        @AnnoSetCommon
-        public void delete${className}WithSubAnno(${className}DTO dto) {
-            delete${className}WithSub(dto);
-        }
-
-
         public void delete${className}ByUpdate(${className}DTO dto) {
             mapper.delete${className}ByUpdate(dto);
-        }
-
-        @AnnoSetCommon
-        public void delete${className}ByUpdateAnno(${className}DTO dto) {
-            delete${className}ByUpdate(dto);
         }
     */
 

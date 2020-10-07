@@ -2,6 +2,11 @@ package ${ITEMS.CONTROLLER.packageName};
 
 import com.shinsegae.villiv.common.APIResult;
 import com.shinsegae.villiv.common.CodeEnums;
+import com.shinsegae.villiv.common.annotation.AnnoSearchCode;
+import com.shinsegae.villiv.common.annotation.AnnoSearchFileEncV2;
+import com.shinsegae.villiv.common.annotation.AnnoSetCommon;
+import com.shinsegae.villiv.common.annotation.AnnoSetFileUploadV2;
+import com.shinsegae.villiv.common.user.AnnoUser;
 import com.shinsegae.villiv.common.code.service.CodeService;
 import com.shinsegae.villiv.common.upload.dto.BASE64DecodedMultipartFile;
 import com.shinsegae.villiv.common.upload.dto.UploadResultDTO;
@@ -41,6 +46,8 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
+    @AnnoSearchFileEncV2(name = "list")
+    @AnnoSearchCode(name = "list")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public APIResult list(
             HttpServletRequest request
@@ -48,7 +55,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        List<${className}DTO> list = ${classNameLower}Service.select${className}ListAnnoCodeFile(searchCriteria);
+        List<${className}DTO> list = ${classNameLower}Service.select${className}List(searchCriteria);
         int totalCount = ${classNameLower}Service.select${className}ListCount(searchCriteria);
         searchCriteria.setTotalCount(totalCount);
 
@@ -65,6 +72,8 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
+    @AnnoSearchFileEncV2(name = "info")
+    @AnnoSearchCode(name = "info")
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public APIResult detail(
             HttpServletRequest request
@@ -75,7 +84,7 @@ public class ${className}Controller {
         ${className}DTO criteria = new ${className}DTO();
         criteria.setBzCd(bzCd);
 
-        ${className}DTO info = ${classNameLower}Service.select${className}AnnoCodeFile(criteria);
+        ${className}DTO info = ${classNameLower}Service.select${className}(criteria);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", info);
@@ -88,15 +97,16 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
+    @AnnoSetCommon
+    @AnnoSetFileUploadV2
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public APIResult insert(
             HttpServletRequest request
-            ,@RequestBody ${className}DTO ${classNameLower}DTO
-            ,@AnnoUser UserInfo uInfo
+            ,@RequestBody ${className}DTO dto
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.insert${className}Anno(${classNameLower}DTO);
+        ${classNameLower}Service.insert${className}(dto);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", ${classNameLower}DTO);
@@ -109,14 +119,16 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
+    @AnnoSetCommon
+    @AnnoSetFileUploadV2
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public APIResult update(
             HttpServletRequest request
-            ,@RequestBody ${className}DTO ${classNameLower}DTO
+            ,@RequestBody ${className}DTO dto
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.update${className}Anno(${classNameLower}DTO);
+        ${classNameLower}Service.update${className}(dto);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("info", ${classNameLower}DTO);
@@ -130,14 +142,15 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
+    @AnnoSetCommon
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public APIResult delete(
             HttpServletRequest request
-            ,@RequestBody ${className}DTO ${classNameLower}DTO
+            ,@RequestBody ${className}DTO dto
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.delete${className}Anno(${classNameLower}DTO);
+        ${classNameLower}Service.delete${className}(dto);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         return result;
