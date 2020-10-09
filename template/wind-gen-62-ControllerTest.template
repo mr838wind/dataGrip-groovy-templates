@@ -46,7 +46,7 @@ public class Test${className}Controller extends TestBaseMvc {
     ${className}Service service;
 
     /** 최신 id */
-    int latestId = 0;
+    Integer latestId = 0;
 
 //    @Before
 //    public void setUp() {
@@ -118,8 +118,8 @@ public class Test${className}Controller extends TestBaseMvc {
 //                .build();
 
         ${className}DTO dto = ${className}DTO.builder()
-                        //.bzCd(BZ_CD)
-                        .build();
+                  //.bzCd(BZ_CD)
+                  .build();
 
 
         final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/insert")
@@ -153,14 +153,15 @@ public class Test${className}Controller extends TestBaseMvc {
 //                .build();
 
 
-//        ${className}DTO item = service.select${className}WithSub(BZ_CD);
+//        ${className}DTO item = new ${className}DTO();
+          ${className}DTO search = new ${className}DTO();
 
-        ${className}DTO item = new ${className}DTO();
+          ${className}DTO dto = service.select${className}WithSub(search);
 
 
         final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/update")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(item))
+                .content(JSONUtil.toJson(dto))
         )
                 .andDo(print());
 
@@ -176,12 +177,12 @@ public class Test${className}Controller extends TestBaseMvc {
     @Test
     public void delete() throws Exception {
 
-        ${className}DTO item = new ${className}DTO();
+        ${className}DTO dto = new ${className}DTO();
         //item.setBzCd(BZ_CD);
 
         final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/delete")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(item))
+                .content(JSONUtil.toJson(dto))
         )
                 .andDo(print());
 
