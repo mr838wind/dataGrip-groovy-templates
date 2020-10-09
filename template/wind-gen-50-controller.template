@@ -46,8 +46,8 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
-    @AnnoSearchFileEncV2(name = "list")
-    @AnnoSearchCode(name = "list")
+    @AnnoSearchFileEncV2(name = "data")
+    @AnnoSearchCode(name = "data")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public APIResult list(
             HttpServletRequest request
@@ -61,7 +61,7 @@ public class ${className}Controller {
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
         result.put("search", searchCriteria);
-        result.put("list", list);
+        result.put("data", list);
         return result;
     }
 
@@ -72,8 +72,8 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
-    @AnnoSearchFileEncV2(name = "info")
-    @AnnoSearchCode(name = "info")
+    @AnnoSearchFileEncV2(name = "data")
+    @AnnoSearchCode(name = "data")
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public APIResult detail(
             HttpServletRequest request
@@ -87,7 +87,7 @@ public class ${className}Controller {
         ${className}DTO info = ${classNameLower}Service.select${className}(criteria);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
-        result.put("info", info);
+        result.put("data", info);
         return result;
     }
 
@@ -103,13 +103,14 @@ public class ${className}Controller {
     public APIResult insert(
             HttpServletRequest request
             ,@RequestBody ${className}DTO dto
+            ,@AnnoUser UserInfo userInfo
     ) throws Exception {
         APIResult result = APIResult.fail();
 
         ${classNameLower}Service.insert${className}(dto);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
-        result.put("info", ${classNameLower}DTO);
+        result.put("data", dto);
         return result;
     }
 
@@ -125,13 +126,14 @@ public class ${className}Controller {
     public APIResult update(
             HttpServletRequest request
             ,@RequestBody ${className}DTO dto
+            ,@AnnoUser UserInfo userInfo
     ) throws Exception {
         APIResult result = APIResult.fail();
 
         ${classNameLower}Service.update${className}(dto);
 
         result.setResultCode(APIResult.APIResultCode.SUCCESS);
-        result.put("info", ${classNameLower}DTO);
+        result.put("data", dto);
         return result;
     }
 
@@ -147,6 +149,7 @@ public class ${className}Controller {
     public APIResult delete(
             HttpServletRequest request
             ,@RequestBody ${className}DTO dto
+            ,@AnnoUser UserInfo userInfo
     ) throws Exception {
         APIResult result = APIResult.fail();
 

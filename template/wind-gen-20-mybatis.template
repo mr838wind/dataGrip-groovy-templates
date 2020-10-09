@@ -19,8 +19,6 @@
     참고: searchCriteria 에서 appType 으로 front,back 구분할수 있음
     주의:
         1. seq
-        2. 날짜 column 처리 insert / update
-
 -->
 
 	<!--/** ====================================    ==================================== */-->
@@ -30,7 +28,9 @@
 	</sql>
 
 	<!-- 참고:
-        AND T.BZ_CD = #{ bzCd }
+        <if test=" bzCd != null and bzCd != '' ">
+            AND T.BZ_CD = #{ bzCd }
+        </if>
         <if test=" catCd != null and catCd != '' ">
             AND T.CAT_CD = #{ catCd }
         </if>
@@ -42,10 +42,7 @@
     -->
 
 
-	<!-- list -->
-	<select id="select${className}List"  parameterType="${fullSearchCriteria}" resultType="${fullDTO}">
-	    <include refid="common.pagingStart" />
-		SELECT
+    <sql id="columnsForMain">
         <%
           fields.eachWithIndex { it,index ->
                 if(index != 0) {
@@ -62,6 +59,27 @@
                 out.println()
           }
         %>
+    </sql>
+
+    <sql id="columnsForOther">
+
+    </sql>
+
+    <!--
+	    참고:
+	      , (SELECT BZ_NM FROM TLSB_BZ_MST WHERE BZ_CD = T.BZ_CD) AS BZ_NM
+		  , (SELECT FILE_PATH FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_PATH
+		  , (SELECT ORG_FILE_NM FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_ORG
+	-->
+
+
+	<!-- list -->
+	<select id="select${className}List"  parameterType="${fullSearchCriteria}" resultType="${fullDTO}">
+	    <include refid="common.pagingStart" />
+		SELECT
+            <include refid="columnsForMain" />
+        	<include refid="columnsForOther" />
+
 		FROM ${table.name} T
 		WHERE 1=1
 		<include refid="criteria${className}" />
@@ -87,13 +105,6 @@
 		<include refid="common.pagingEnd" />
 	</select>
 
-	<!--
-	    참고:
-	      , (SELECT BZ_NM FROM TLSB_BZ_MST WHERE BZ_CD = T.BZ_CD) AS BZ_NM
-		  , (SELECT FILE_PATH FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_PATH
-		  , (SELECT ORG_FILE_NM FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_ORG
-	-->
-
 
 	<!-- list count -->
 	<select id="select${className}ListCount"  parameterType="${fullSearchCriteria}" resultType="int">
@@ -107,21 +118,9 @@
 	<!-- single -->
 	<select id="select${className}" parameterType="${fullDTO}" resultType="${fullDTO}" >
 		SELECT
-        <%
-          fields.eachWithIndex { it,index ->
-                if(index != 0) {
-                    out.print("		  ,")
-                }
-                if(it.isDateType) {
-                    def s = String.format( "TO_CHAR(T.%s,'YYYYMMDDHH24MISS') AS %s", it.dbName, it.dbName )
-                    out.print( s )
-                } else {
-                    def s = String.format( "T.%s", it.dbName )
-                    out.print( s )
-                }
-                out.println()
-          }
-        %>
+            <include refid="columnsForMain" />
+        	<include refid="columnsForOther" />
+
 		FROM ${table.name} T
 		WHERE
             <%
@@ -165,6 +164,8 @@
                     if( it.isDateType ) {
                         if( it.isInsertField || it.isUpdateField ) {
                             s = "SYSDATE"
+                        } else {
+                            s = String.format( " TO_DATE( #{ dispStrDt } ,'YYYYMMDDHH24MISS' )", it.name )
                         }
                     }
                     out.print( s )
@@ -188,6 +189,8 @@
                     if( it.isDateType ) {
                         if( it.isUpdateField ) {
                             s = String.format( " %s = SYSDATE ", it.dbName)
+                        } else {
+                            s = String.format( " %s = TO_DATE( #{ %s } ,'YYYYMMDDHH24MISS' )", it.dbName, it.name  )
                         }
                     }
                     out.print( s )

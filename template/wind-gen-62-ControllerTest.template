@@ -42,11 +42,16 @@ public class Test${className}Controller extends TestBaseMvc {
 
     public static final String API_PREFIX = "/api/back/$classNameLower";
 
-    // int id = 10;
-
-
     @Autowired
     ${className}Service service;
+
+    /** 최신 id */
+    int latestId = 0;
+
+//    @Before
+//    public void setUp() {
+//        latestId = (Integer) jdbcTemplate.queryForObject(" select max(BNER_ID) as id from ${table.name} ", Integer.class);
+//    }
 
     @Test
     public void contextLoads() {

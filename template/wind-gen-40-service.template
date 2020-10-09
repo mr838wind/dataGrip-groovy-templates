@@ -2,6 +2,7 @@ package ${ITEMS.SERVICE.packageName};
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class ${className}Service {
     /*
         //== sub
         public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
-            List<${className}DTO> list = select${className}List;
+            List<${className}DTO> list = select${className}List(criteria);
             if(! CollectionUtils.isEmpty(list) ) {
                 for(${className}DTO dto : list) {
                     selectSubList(dto);
@@ -118,7 +119,7 @@ public class ${className}Service {
     /** ====================================  subList   ==================================== */
 
     /*
-        private void selectSubList(${className}DTO info) {
+        private void selectSubList(${className}DTO dto) {
 
         }
 
