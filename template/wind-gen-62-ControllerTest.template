@@ -7,6 +7,7 @@ import com.shinsegae.villiv.common.upload.dto.UploadResultDTO;
 import com.shinsegae.villiv.common.utils.JSONUtil;
 import com.shinsegae.villiv.dto.*;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.params.aggregator.ArgumentAccessException;
 import org.junit.runner.RunWith;
@@ -105,17 +106,7 @@ public class Test${className}Controller extends TestBaseMvc {
     public void insert() throws Exception {
 
 //        //== image
-//        File file = imageOrange;
-//        if(!file.exists()) {
-//            throw new ArgumentAccessException("file not exist");
-//        }
-//        String base64File = BASE64DecodedMultipartFile.fileToString(file);
-//        String orgFileName = file.getName();
-//        UploadInfoDTO uploadInfoDTO = UploadInfoDTO.builder()
-//                .fileId(null)
-//                .enc(base64File)
-//                .orgFileNm(orgFileName)
-//                .build();
+//        UploadInfoDTO uploadInfoDTO = getUploadInfoDTO(imageOrange);
 
         ${className}DTO dto = ${className}DTO.builder()
                   //.bzCd(BZ_CD)
@@ -140,23 +131,12 @@ public class Test${className}Controller extends TestBaseMvc {
     public void update() throws Exception {
 
 //        //== image
-//        File file = imageOrange;
-//        if(!file.exists()) {
-//            throw new ArgumentAccessException("file not exist");
-//        }
-//        String base64File = BASE64DecodedMultipartFile.fileToString(file);
-//        String orgFileName = file.getName();
-//        UploadInfoDTO uploadInfoDTO = UploadInfoDTO.builder()
-//                .fileId(null)
-//                .enc(base64File)
-//                .orgFileNm("mod-" + orgFileName)
-//                .build();
+//        UploadInfoDTO uploadInfoDTO = getUploadInfoDTO(imageOrange, true);
 
 
-//        ${className}DTO item = new ${className}DTO();
-          ${className}DTO search = new ${className}DTO();
-
-          ${className}DTO dto = service.select${className}WithSub(search);
+            ${className}DTO dto = new ${className}DTO();
+//          ${className}DTO search = new ${className}DTO();
+//          ${className}DTO dto = service.select${className}WithSub(search);
 
 
         final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/update")
@@ -178,7 +158,7 @@ public class Test${className}Controller extends TestBaseMvc {
     public void delete() throws Exception {
 
         ${className}DTO dto = new ${className}DTO();
-        //item.setBzCd(BZ_CD);
+        //dto.setBzCd(BZ_CD);
 
         final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/delete")
                 .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")

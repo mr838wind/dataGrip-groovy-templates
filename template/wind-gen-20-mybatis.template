@@ -86,16 +86,7 @@
 	    <choose>
 			<when test=" appType == 'FRONT' ">
                 ORDER BY
-                    <%
-                      pkFields.eachWithIndex { it,index ->
-                            if(index != 0) {
-                                out.print("		  , ")
-                            }
-                            def s = String.format( " %s ASC ", it.dbName )
-                            out.print( s )
-                            out.println()
-                      }
-                    %>
+                    IPT_DTM DESC
             </when>
 			<otherwise>
 				ORDER BY
@@ -126,7 +117,7 @@
             <%
               pkFields.eachWithIndex { it,index ->
                     if(index != 0) {
-                        out.print("		  and ")
+                        out.print("		  AND ")
                     }
                     def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
                     out.print( s )
@@ -165,7 +156,7 @@
                         if( it.isInsertField || it.isUpdateField ) {
                             s = "SYSDATE"
                         } else {
-                            s = String.format( " TO_DATE( #{ dispStrDt } ,'YYYYMMDDHH24MISS' )", it.name )
+                            s = String.format( " TO_DATE( #{ %s } ,'YYYYMMDDHH24MISS' )", it.name )
                         }
                     }
                     out.print( s )
@@ -201,7 +192,7 @@
             <%
               pkFields.eachWithIndex { it,index ->
                     if(index != 0) {
-                        out.print("		  and ")
+                        out.print("		  AND ")
                     }
                     def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
                     out.print( s )
@@ -217,7 +208,7 @@
             <%
               pkFields.eachWithIndex { it,index ->
                     if(index != 0) {
-                        out.print("		  and ")
+                        out.print("		  AND ")
                     }
 
                     def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
@@ -233,11 +224,14 @@
             UPDATE ${table.name}
             SET
                 USE_YN = '0'
+                , UPD_ID = #{updId}
+                , UPD_IP = #{updIp}
+                , UPD_DTM = SYSDATE
             WHERE
                 <%
                   pkFields.eachWithIndex { it,index ->
                         if(index != 0) {
-                            out.print("		  and ")
+                            out.print("		  AND ")
                         }
 
                         def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
