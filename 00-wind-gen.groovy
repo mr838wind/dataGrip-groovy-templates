@@ -20,6 +20,10 @@ INPUT = [:]  //empty map
 //= table 이름 t_ 제거
 INPUT.REMOVE_TABLE_PREFIX = true
 
+//= 업무 이름 *******: (bizNameDynamicYn: table명 두번째 필드로 task 이름 계산)
+INPUT.bizNameDynamicYn = true
+INPUT.bizName = "biz"
+
 //= 사용자별 template 위치
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
@@ -33,65 +37,65 @@ INPUT.ITEMS.DTO = [
     filePrefix : '',
     fileSuffix : 'DTO.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-10-dto.template",
-    packageName : INPUT.packageNameBase + ".dto",
+    packageName : '', //calc by sub
+    subPackageName : "dto",
     subPath: 'dto',
 ]
 INPUT.ITEMS.SEARCH_CRITERIA = [
     filePrefix : '',
     fileSuffix : 'SearchCriteria.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-12-SearchCriteria.template",
-    packageName : INPUT.packageNameBase + ".dto",
+    packageName : '', //calc by sub
+    subPackageName : "dto",
     subPath: 'dto',
 ]
 INPUT.ITEMS.MYBATIS = [
     filePrefix : 'sql-',
     fileSuffix : 'Mapper.xml',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-20-mybatis.template",
-    packageName : '',
+    packageName : '', //calc by sub
+    subPackageName : "",
     subPath: 'mybatis',
 ]
-
-//INPUT.ITEMS.DAO = [
-//    filePrefix : '',
-//    fileSuffix : 'DAO.java',
-//    template : INPUT.TEMPLATE_BASE + "/wind-gen-99-dao.template",
-//    packageName : INPUT.packageNameBase + ".dao",
-//    subPath: 'dao',
-//]
 
 INPUT.ITEMS.MAPPER = [
     filePrefix : '',
     fileSuffix : 'Mapper.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-30-dao-mapper.template",
-    packageName : INPUT.packageNameBase + ".dao",
+    packageName : '', //calc by sub
+    subPackageName : "dao",
     subPath: 'dao',
 ]
 INPUT.ITEMS.SERVICE = [
     filePrefix : '',
     fileSuffix : 'Service.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-40-service.template",
-    packageName : INPUT.packageNameBase + ".service",
+    packageName : '', //calc by sub
+    subPackageName : "service",
     subPath: 'service',
 ]
 INPUT.ITEMS.CONTROLLER = [
     filePrefix : '',
     fileSuffix : 'Controller.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-50-controller.template",
-    packageName : INPUT.packageNameBase + ".controller",
+    packageName : '', //calc by sub
+    subPackageName : "controller",
     subPath: 'controller',
 ]
 INPUT.ITEMS.ServiceTest = [
     filePrefix : '',
     fileSuffix : 'ServiceTest.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-60-ServiceTest.template",
-    packageName : INPUT.packageNameBase + ".service",
+    packageName : '', //calc by sub
+    subPackageName : "service",
     subPath: 'test_service',
 ]
 INPUT.ITEMS.ControllerTest = [
     filePrefix : 'Test',
     fileSuffix : 'Controller.java',
     template : INPUT.TEMPLATE_BASE + "/wind-gen-62-ControllerTest.template",
-    packageName : INPUT.packageNameBase + ".mvc",
+    packageName : '', //calc by sub
+    subPackageName : "mvc",
     subPath: 'test_controller',
 ]
 //=============== [e] inputs ===============
@@ -119,6 +123,8 @@ UPDATE_FIELD_LIST = ["UPD_ID", "UPD_DTM", "UPD_IP"]
 
 //== template binding map
 def getDefaultBinding(className, fields, table) {
+    calcPackageName()
+
     //== template binding:
     def binding = INPUT.clone()
 
@@ -134,6 +140,26 @@ def getDefaultBinding(className, fields, table) {
     return binding
 }
 
+//== bizName calculate: second word
+def calcBizName(table) {
+    def bizName = "biz"
+    def str = table.getName()
+
+    def s = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
+            .collect { Case.LOWER.apply(it).capitalize() }
+
+    bizName = (s.size() == 1)? Case.LOWER.apply(s[0]) : Case.LOWER.apply(s[1])
+
+    INPUT.bizName = bizName;
+}
+
+//== packageName calculate
+def calcPackageName() {
+    INPUT.ITEMS.each { key, val ->
+        val.packageName = INPUT.packageNameBase + "." + INPUT.bizName + "." + val.subPackageName
+    }
+}
+
 FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store generated files") { dir ->
         //== fetch all tables
         SELECTION.filter { it instanceof DasTable && it.getKind() == ObjectKind.TABLE }.each {
@@ -144,14 +170,18 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
         INPUT.ITEMS.each {  entry ->
             def item = entry.value
             allTables.each { className, table ->
-                //== 업무별로
-                //def classNameLower = javaName(table.getName(), false)
-                //def newDir = new File(dir, "${classNameLower}")
-                //if(!newDir.exists()) {
-                //    newDir.mkdirs();
-                //}
+
+                //== 업무이름 계산: table명 두번째 필드로
+                if(INPUT.bizNameDynamicYn) {
+                    calcBizName(table)
+                }
+
                 //== package별로
-                def newDir = new File(dir, "${item.subPath}")
+                def baseDir = new File(dir, "${INPUT.bizName}")
+                if(!baseDir.exists()) {
+                    baseDir.mkdirs();
+                }
+                def newDir = new File(baseDir, "${item.subPath}")
                 if(!newDir.exists()) {
                     newDir.mkdirs();
                 }
@@ -238,6 +268,7 @@ def calcFields(table, javaName) {
         fields += [comm]
     }
 }
+
 
 //== like camel case
 def javaName(str, capitalize) {
