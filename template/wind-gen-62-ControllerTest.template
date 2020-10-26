@@ -5,7 +5,6 @@ import com.shinsegae.villiv.backoffice.VillivBackofficeApplication;
 import com.shinsegae.villiv.common.upload.dto.BASE64DecodedMultipartFile;
 import com.shinsegae.villiv.common.upload.dto.UploadResultDTO;
 import com.shinsegae.villiv.common.utils.JSONUtil;
-import com.shinsegae.villiv.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @Slf4j
 public class Test${className}Controller extends TestBaseMvc {
 
-    public static final String API_PREFIX = "/api/back/$classNameLower";
+    public static final String API_PREFIX = API_TYPE_PREFIX + "/$classNameLower";
 
     @Autowired
     ${className}Service service;
@@ -62,24 +61,20 @@ public class Test${className}Controller extends TestBaseMvc {
 
     @Test
     public void list() throws Exception {
-        ${className}SearchCriteria searchCriteria = new ${className}SearchCriteria();
+        MockHttpServletRequestBuilder requestBuilder = get(API_PREFIX + "/list")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8");
 
-        final ResultActions actions = mockMvc.perform(get(API_PREFIX + "/list")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .param("bzCd", BZ_CD)
-//                .param("useYn", "0")
-//                .param("catCd", "A1")
-//                .param("iptDateStart", "20200901")
-//                .param("iptDateEnd", "20201001")
-//                .param("searchType", "grpcNm")
-//                .param("searchWord", "a")
-        )
+        //== set value
+        ${className}SearchCriteria search = new ${className}SearchCriteria();
+        //search.setBzCd(BZ_CD);
+
+
+        setRequestBuilderParam(requestBuilder, search);
+        final ResultActions actions = mockMvc.perform(requestBuilder)
                 .andDo(print());
-
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
 //                .andExpect( jsonPath("\$.list").exists())
-
         ;
     }
 
@@ -87,16 +82,20 @@ public class Test${className}Controller extends TestBaseMvc {
     @Test
     public void detail() throws Exception {
 
-        final ResultActions actions = mockMvc.perform(get(API_PREFIX + "/detail")
-                        .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .param("bzCd", BZ_CD)
-        )
-                .andDo(print());
+        MockHttpServletRequestBuilder requestBuilder = get(API_PREFIX + "/detail")
+                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8");
 
+        //== set value
+        ${className}DTO search = new ${className}DTO();
+        //search.setBzCd(BZ_CD);
+
+
+        setRequestBuilderParam(requestBuilder, search);
+        final ResultActions actions = mockMvc.perform(requestBuilder)
+                .andDo(print());
         actions
                 .andExpect(MockMvcResultMatchers.status().isOk())
 //                .andExpect( jsonPath("\$.list").exists())
-
         ;
     }
 

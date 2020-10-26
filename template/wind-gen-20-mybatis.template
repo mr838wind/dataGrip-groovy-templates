@@ -19,6 +19,7 @@
     참고: searchCriteria 에서 appType 으로 front,back 구분할수 있음
     주의:
         1. seq
+        2. 날짜:  TO_CHAR(SYSDATE,'YYYYMMDD')
 -->
 
 	<!--/** ====================================    ==================================== */-->
@@ -31,9 +32,9 @@
         <if test=" bzCd != null and bzCd != '' ">
             AND T.BZ_CD = #{ bzCd }
         </if>
-        <if test=" catCd != null and catCd != '' ">
-            AND T.CAT_CD = #{ catCd }
-        </if>
+        <if test=" themeNm != null and themeNm != '' ">
+			AND T.THEME_NM like '%' || #{ themeNm } || '%'
+		</if>
         <choose>
             <when test=" appType == 'FRONT' ">
                 AND T.USE_YN = '1'

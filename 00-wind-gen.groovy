@@ -21,8 +21,8 @@ INPUT = [:]  //empty map
 INPUT.REMOVE_TABLE_PREFIX = true
 
 //= 업무 이름 *******: (bizNameDynamicYn: table명 두번째 필드로 task 이름 계산)
-INPUT.bizNameDynamicYn = true
-INPUT.bizName = "biz"
+INPUT.bizNameDynamicYn = false
+INPUT.bizName = "bz"
 
 //= 사용자별 template 위치
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
