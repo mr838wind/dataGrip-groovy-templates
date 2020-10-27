@@ -17,19 +17,25 @@ import com.intellij.database.util.DasUtil
 //=============== [s] inputs ===============
 INPUT = [:]  //empty map
 
-//= table 이름 t_ 제거
-INPUT.REMOVE_TABLE_PREFIX = true
-
-//= 업무 이름 *******: (bizNameDynamicYn: table명 두번째 필드로 task 이름 계산)
-INPUT.bizNameDynamicYn = false
-INPUT.bizName = "bz"
-
 //= 사용자별 template 위치
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/.DataGrip2018.3/config/extensions/com.intellij.database/schema/template"
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+INPUT.CONFIG = INPUT.TEMPLATE_BASE + '/../00-wind-gen.config'
+
+//== read from prop
+Properties prop = loadProp(INPUT.CONFIG)
+
+//= table 이름 t_ 제거
+INPUT.REMOVE_TABLE_PREFIX = "true".equals(prop.REMOVE_TABLE_PREFIX_STRING)
+
+//= 업무 이름 *******: (bizNameDynamicYn: table명 두번째 필드로 task 이름 계산)
+INPUT.bizNameDynamicYn = "true".equals(prop.bizNameDynamicYnString)
+INPUT.bizName = prop.bizName
 
 //= package base name:
-INPUT.packageNameBase = "com.shinsegae.villiv"
+INPUT.packageNameBase = prop.packageNameBase
+
+
 
 //==
 INPUT.ITEMS = [:]
@@ -159,6 +165,21 @@ def calcPackageName() {
         val.packageName = INPUT.packageNameBase + "." + INPUT.bizName + "." + val.subPackageName
     }
 }
+
+//== properties
+def loadProp(filePath) {
+    Properties prop = new Properties()
+    File propertiesFile = new File(filePath)
+    propertiesFile.withInputStream {
+        prop.load(it)
+    }
+
+    // test
+    assert prop.a == '1'
+
+    return prop;
+}
+
 
 FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store generated files") { dir ->
         //== fetch all tables
