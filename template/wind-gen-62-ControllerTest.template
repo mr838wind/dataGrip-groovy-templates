@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 /**
  * <%= tableComment %> test
@@ -61,42 +62,25 @@ public class Test${className}Controller extends TestBaseMvc {
 
     @Test
     public void list() throws Exception {
-        MockHttpServletRequestBuilder requestBuilder = get(API_PREFIX + "/list")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8");
-
-        //== set value
         ${className}SearchCriteria search = new ${className}SearchCriteria();
         //search.setBzCd(BZ_CD);
 
-
-        setRequestBuilderParam(requestBuilder, search);
-        final ResultActions actions = mockMvc.perform(requestBuilder)
-                .andDo(print());
-        actions
+        this.templateGet(API_PREFIX + "/list", search)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("\$.list").exists())
+                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
         ;
     }
 
 
     @Test
     public void detail() throws Exception {
-
-        MockHttpServletRequestBuilder requestBuilder = get(API_PREFIX + "/detail")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8");
-
-        //== set value
         ${className}DTO search = new ${className}DTO();
         //search.setBzCd(BZ_CD);
 
-
-        setRequestBuilderParam(requestBuilder, search);
-        final ResultActions actions = mockMvc.perform(requestBuilder)
-                .andDo(print());
-        actions
+        this.templateGet(API_PREFIX + "/detail", search)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("\$.list").exists())
-        ;
+                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
+                ;
     }
 
 
@@ -111,18 +95,10 @@ public class Test${className}Controller extends TestBaseMvc {
                   //.bzCd(BZ_CD)
                   .build();
 
-
-        final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/insert")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(dto))
-        )
-                .andDo(print());
-
-        actions
+        this.templatePost(API_PREFIX + "/insert", dto)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("\$.list").exists())
-
-        ;
+                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
+                ;
     }
 
 
@@ -132,23 +108,15 @@ public class Test${className}Controller extends TestBaseMvc {
 //        //== image
 //        UploadInfoDTO uploadInfoDTO = getUploadInfoDTO(imageOrange, true);
 
-
             ${className}DTO dto = new ${className}DTO();
 //          ${className}DTO search = new ${className}DTO();
 //          ${className}DTO dto = service.select${className}WithSub(search);
 
 
-        final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/update")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(dto))
-        )
-                .andDo(print());
-
-        actions
+        this.templatePost(API_PREFIX + "/update", dto)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("\$.list").exists())
-
-        ;
+                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
+                ;
     }
 
 
@@ -159,17 +127,10 @@ public class Test${className}Controller extends TestBaseMvc {
         ${className}DTO dto = new ${className}DTO();
         //dto.setBzCd(BZ_CD);
 
-        final ResultActions actions = mockMvc.perform(post(API_PREFIX + "/delete")
-                .contentType(MediaType.APPLICATION_JSON).characterEncoding("UTF-8")
-                .content(JSONUtil.toJson(dto))
-        )
-                .andDo(print());
-
-        actions
+        this.templatePost(API_PREFIX + "/delete", dto)
                 .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andExpect( jsonPath("\$.list").exists())
-
-        ;
+                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
+                ;
     }
 
 

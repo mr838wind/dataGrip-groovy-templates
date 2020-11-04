@@ -24,6 +24,7 @@ import java.util.List;
 
 
 /**
+ * TODO//dev
  * <%= tableComment %> 관리
  */
 @RestController
@@ -58,7 +59,7 @@ public class ${className}Controller {
         int totalCount = ${classNameLower}Service.select${className}ListCount(searchCriteria);
         searchCriteria.setTotalCount(totalCount);
 
-        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.setResultCodeSucess();
         result.put("search", searchCriteria);
         result.put("data", list);
         return result;
@@ -85,7 +86,7 @@ public class ${className}Controller {
 
         ${className}DTO info = ${classNameLower}Service.select${className}(criteria);
 
-        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.setResultCodeSucess();
         result.put("data", info);
         return result;
     }
@@ -108,7 +109,7 @@ public class ${className}Controller {
 
         ${classNameLower}Service.insert${className}(dto);
 
-        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.setResultCodeSucess();
         result.put("data", dto);
         return result;
     }
@@ -131,7 +132,7 @@ public class ${className}Controller {
 
         ${classNameLower}Service.update${className}(dto);
 
-        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.setResultCodeSucess();
         result.put("data", dto);
         return result;
     }
@@ -154,7 +155,7 @@ public class ${className}Controller {
 
         ${classNameLower}Service.delete${className}(dto);
 
-        result.setResultCode(APIResult.APIResultCode.SUCCESS);
+        result.setResultCodeSucess();
         return result;
     }
 
