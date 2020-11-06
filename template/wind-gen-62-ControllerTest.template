@@ -62,75 +62,53 @@ public class Test${className}Controller extends TestBaseMvc {
 
     @Test
     public void list() throws Exception {
-        ${className}SearchCriteria search = new ${className}SearchCriteria();
-        //search.setBzCd(BZ_CD);
+        //Map<String,String> dto = new HashMap<>();
+        ${className}SearchCriteria dto = new ${className}SearchCriteria();
+        //dto.setBzCd(BZ_CD);
 
-        this.templateGet(API_PREFIX + "/list", search)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
-        ;
+        this.templateCall(EnumCall.GET, API_PREFIX + "/list", dto);
     }
 
 
     @Test
     public void detail() throws Exception {
-        ${className}DTO search = new ${className}DTO();
-        //search.setBzCd(BZ_CD);
+        //Map<String,String> dto = new HashMap<>();
+        ${className}DTO dto = new ${className}DTO();
+        //dto.setBzCd(BZ_CD);
 
-        this.templateGet(API_PREFIX + "/detail", search)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
-                ;
+        this.templateCall(EnumCall.GET, API_PREFIX + "/detail", dto);
     }
 
 
 
     @Test
     public void insert() throws Exception {
-
-//        //== image
-//        UploadInfoDTO uploadInfoDTO = getUploadInfoDTO(imageOrange);
-
         ${className}DTO dto = ${className}DTO.builder()
                   //.bzCd(BZ_CD)
                   .build();
 
-        this.templatePost(API_PREFIX + "/insert", dto)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
-                ;
+        this.templateCall(EnumCall.POST, API_PREFIX + "/insert", dto);
     }
 
 
     @Test
     public void update() throws Exception {
-
-//        //== image
-//        UploadInfoDTO uploadInfoDTO = getUploadInfoDTO(imageOrange, true);
-
             ${className}DTO dto = new ${className}DTO();
 //          ${className}DTO search = new ${className}DTO();
 //          ${className}DTO dto = service.select${className}WithSub(search);
 
 
-        this.templatePost(API_PREFIX + "/update", dto)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
-                ;
+        this.templateCall(EnumCall.POST, API_PREFIX + "/update", dto);
     }
 
 
 
     @Test
     public void delete() throws Exception {
-
         ${className}DTO dto = new ${className}DTO();
         //dto.setBzCd(BZ_CD);
 
-        this.templatePost(API_PREFIX + "/delete", dto)
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect( jsonPath("\$.resultCode").value("SUCCESS") )
-                ;
+        this.templateCall(EnumCall.POST, API_PREFIX + "/delete", dto);
     }
 
 
