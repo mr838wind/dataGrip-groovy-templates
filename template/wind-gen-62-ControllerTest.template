@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 )
 @AutoConfigureMockMvc
 @Slf4j
-public class Test${className}Controller extends TestBaseMvc {
+public class Test${className}Controller extends Test0BaseMvc {
 
     public static final String API_PREFIX = API_TYPE_PREFIX + "/$classNameLower";
 

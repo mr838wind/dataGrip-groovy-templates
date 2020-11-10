@@ -1,6 +1,7 @@
 package ${ITEMS.CONTROLLER.packageName};
 
 import com.shinsegae.villiv.common.APIResult;
+import com.shinsegae.villiv.common.CmnConst;
 import com.shinsegae.villiv.common.CodeEnums;
 import com.shinsegae.villiv.common.annotation.AnnoSearchCode;
 import com.shinsegae.villiv.common.annotation.AnnoSearchFileEncV2;
@@ -46,8 +47,8 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
-    @AnnoSearchFileEncV2(name = "data")
-    @AnnoSearchCode(name = "data")
+    @AnnoSearchFileEncV2(name = CmnConst.KEY_DATA)
+    @AnnoSearchCode(name = CmnConst.KEY_DATA)
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public APIResult list(
             HttpServletRequest request
@@ -61,7 +62,7 @@ public class ${className}Controller {
 
         result.setResultCodeSucess();
         result.put("search", searchCriteria);
-        result.put("data", list);
+        result.setData( list);
         return result;
     }
 
@@ -72,8 +73,8 @@ public class ${className}Controller {
      * @return
      * @throws Exception
      */
-    @AnnoSearchFileEncV2(name = "data")
-    @AnnoSearchCode(name = "data")
+    @AnnoSearchFileEncV2(name = CmnConst.KEY_DATA)
+    @AnnoSearchCode(name = CmnConst.KEY_DATA)
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public APIResult detail(
             HttpServletRequest request
@@ -87,7 +88,7 @@ public class ${className}Controller {
         ${className}DTO info = ${classNameLower}Service.select${className}(criteria);
 
         result.setResultCodeSucess();
-        result.put("data", info);
+        result.setData( info);
         return result;
     }
 
@@ -99,6 +100,8 @@ public class ${className}Controller {
      */
     @AnnoSetCommon
     @AnnoSetFileUploadV2
+    @AnnoSearchFileEncV2(name = CmnConst.KEY_DATA)
+    @AnnoSearchCode(name = CmnConst.KEY_DATA)
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public APIResult insert(
             HttpServletRequest request
@@ -110,7 +113,7 @@ public class ${className}Controller {
         ${classNameLower}Service.insert${className}(dto);
 
         result.setResultCodeSucess();
-        result.put("data", dto);
+        result.setData( dto);
         return result;
     }
 
@@ -122,6 +125,8 @@ public class ${className}Controller {
      */
     @AnnoSetCommon
     @AnnoSetFileUploadV2
+    @AnnoSearchFileEncV2(name = CmnConst.KEY_DATA)
+    @AnnoSearchCode(name = CmnConst.KEY_DATA)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public APIResult update(
             HttpServletRequest request
@@ -133,7 +138,7 @@ public class ${className}Controller {
         ${classNameLower}Service.update${className}(dto);
 
         result.setResultCodeSucess();
-        result.put("data", dto);
+        result.setData(dto);
         return result;
     }
 
