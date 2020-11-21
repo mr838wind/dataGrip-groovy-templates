@@ -104,6 +104,18 @@ INPUT.ITEMS.ControllerTest = [
     subPackageName : "mvc",
     subPath: 'test_controller',
 ]
+
+//== angular: backoffice templates
+INPUT.ITEMS.UiModel = [
+    filePrefix : '',
+    fileSuffix : '.model.ts',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-70-UiModel.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
 //=============== [e] inputs ===============
 
 
@@ -121,6 +133,18 @@ typeMapping = [
         (~/(?i)date/)                     : "java.util.Date", //"java.sql.Date",
         (~/(?i)time/)                     : "java.util.Date", //"java.sql.Time",
         (~/(?i)/)                         : "String"
+]
+
+// ui project type: angular
+uiTypeMapping = [
+        (~/(?i)int/)                      : "number",
+        (~/(?i)long/)                     : "number",
+        (~/(?i)number/)                   : "number",
+        (~/(?i)float|double|decimal|real/): "number",
+        (~/(?i)datetime|timestamp/)       : "string", //"java.sql.Timestamp",
+        (~/(?i)date/)                     : "string", //"java.sql.Date",
+        (~/(?i)time/)                     : "string", //"java.sql.Time",
+        (~/(?i)/)                         : "string"
 ]
 
 INSERT_FIELD_LIST = ["IPT_ID", "IPT_DTM", "IPT_IP"]
@@ -206,7 +230,16 @@ FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store g
                 if(!newDir.exists()) {
                     newDir.mkdirs();
                 }
-                new File(newDir, "${item.filePrefix}" + className + "${item.fileSuffix}").withPrintWriter { out ->
+
+                //== file name 처리
+                def classNameLower = javaName(table.getName(), false)
+                def fileClassName = className
+                if(item.fileUseClassNameLower) {
+                    fileClassName = classNameLower
+                }
+                def fileName = "${item.filePrefix}" + fileClassName + "${item.fileSuffix}"
+
+                new File(newDir, "${fileName}").withPrintWriter { out ->
                     def fields = allFields[className];
                     _generateItem(out, className, fields, table, "${item.template}" )
                 }
@@ -264,6 +297,7 @@ def calcFields(table, javaName) {
     DasUtil.getColumns(table).reduce([]) { fields, col ->
         def spec = Case.LOWER.apply(col.getDataType().getSpecification())
         def typeStr = typeMapping.find { p, t -> p.matcher(spec).find() }.value
+        def uiTypeStr = uiTypeMapping.find { p, t -> p.matcher(spec).find() }.value  // ui type: angular
         def dtoTypeStr = getDtoTypeStr(typeStr)     //dto 에 사용할 타입
         def isDateType = (typeStr == "java.util.Date" ? true : false)   //날짜 타입 yn
         def isInsertField = INSERT_FIELD_LIST.contains(col.getName())   // insert column
@@ -274,6 +308,7 @@ def calcFields(table, javaName) {
                 dbName : col.getName(),
                 name : columnName(col.getName()),
                 type : typeStr,
+                uiTypeStr : uiTypeStr,
                 dtoTypeStr : dtoTypeStr,
                 isDateType : isDateType,
                 isInsertField : isInsertField,

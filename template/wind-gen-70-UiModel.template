@@ -1,0 +1,21 @@
+/**
+ * <%= tableComment %> 관련 모델
+ */
+export class ${className}Model {
+
+
+    //=========== [s] custom added ===========
+
+
+    //=========== [e] custom added ===========
+
+    <%fields.each() {%>
+    /**
+     * ${it.comment}
+     */
+    ${it.name} : ${it.uiTypeStr};
+    <%}%>
+
+
+}
+
