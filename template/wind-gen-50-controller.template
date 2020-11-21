@@ -52,16 +52,16 @@ public class ${className}Controller {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public APIResult list(
             HttpServletRequest request
-            ,@ModelAttribute ${className}SearchCriteria searchCriteria
+            ,@ModelAttribute ${className}SearchCriteria search
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        List<${className}DTO> list = ${classNameLower}Service.select${className}List(searchCriteria);
-        int totalCount = ${classNameLower}Service.select${className}ListCount(searchCriteria);
-        searchCriteria.setTotalCount(totalCount);
+        List<${className}DTO> list = ${classNameLower}Service.select${className}List(search);
+        int totalCount = ${classNameLower}Service.select${className}ListCount(search);
+        search.setTotalCount(totalCount);
 
         result.setResultCodeSucess();
-        result.put("search", searchCriteria);
+        result.put("search", search);
         result.setData( list);
         return result;
     }
@@ -82,14 +82,18 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${className}DTO criteria = new ${className}DTO();
-        criteria.setBzCd(bzCd);
-
-        ${className}DTO info = ${classNameLower}Service.select${className}(criteria);
+        ${className}DTO info = select${className}(bzCd);
 
         result.setResultCodeSucess();
         result.setData( info);
         return result;
+    }
+
+    private ${className}DTO select${className}(String bzCd) {
+        ${className}DTO search = new ${className}DTO();
+        search.setBzCd(bzCd);
+
+        return ${classNameLower}Service.select${className}(search);
     }
 
 
@@ -112,8 +116,11 @@ public class ${className}Controller {
 
         ${classNameLower}Service.insert${className}(dto);
 
+        //== select after insert / update
+        ${className}DTO selectedInfo = select${className}(dto.getBzCd());
+
         result.setResultCodeSucess();
-        result.setData( dto);
+        result.setData( selectedInfo);
         return result;
     }
 
@@ -137,8 +144,11 @@ public class ${className}Controller {
 
         ${classNameLower}Service.update${className}(dto);
 
+        //== select after insert / update
+        ${className}DTO selectedInfo = select${className}(dto.getBzCd());
+
         result.setResultCodeSucess();
-        result.setData(dto);
+        result.setData(selectedInfo);
         return result;
     }
 
