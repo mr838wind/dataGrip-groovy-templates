@@ -1,0 +1,235 @@
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {BasePage} from "../../base-page";
+import {VServiceUtils} from "../../../v-core/utils/v-service-utils";
+import {CommonService} from "../../../v-core/service/common/common.service";
+import {VUtils} from "../../../v-core/utils/v-utils";
+import * as _ from 'lodash';
+import {VmGridComponent} from "../../../v-core/components/vm-grid/vm-grid.component";
+import {VmFilterComponent} from "../../../v-core/components/vm-filter/vm-filter.component";
+import {${className}Model} from "./model/${classNameLower}.model";
+import {${className}Service} from "../../../v-core/service/system/${classNameLower}.service";
+
+@Component({
+    selector: '${classNameLower}',
+    templateUrl: './${classNameLower}.page.html',
+    styleUrls: ['./${classNameLower}.page.scss']
+})
+export class ${className}Page extends BasePage implements OnInit {
+
+    constructor(private ${classNameLower}Service: ${className}Service,
+                private backmenuService: BackmenuService,
+                private svcUtil: VServiceUtils,
+                private commonSvc: CommonService) {
+        super();
+
+    }
+
+    // TODO//common error handling
+
+    ////////======= [s] options ================
+    /*
+     * options :
+    */
+    _options = {
+        // anncCls : [
+        //     {value:'NT', name:'공지'},
+        //     {value:'SY', name:'시스템'},
+        //     {value:'NM', name:'일반'},
+        // ],
+    };
+
+    /**
+     * 상세 정보에서 radio,select 등에 binding할  options items
+     */
+    INFO_OPTIONS = {
+        // sendDiv : [],
+    };
+
+    /**
+     * INFO_OPTIONS 초기화
+     */
+    initInfoOptions() {
+        _.each(this._options, (value, key) => {
+            console.log('value=%o, key=%o', value, key);
+            this.INFO_OPTIONS[key] = VUtils.convertToTitleValue(value);
+        });
+        //console.log('>>== this.INFO_OPTIONS=', this.INFO_OPTIONS);
+    }
+
+    ////////======= [e] options ================
+
+    /**
+     * 검색조건 default 세팅
+     */
+    _filters = [
+        {id: 'selectDates', title: '기간', type: 'dates', value: ''},
+        {
+            id: 'searchText', title: '검색어', type: 'search', placeholder: '검색어를 입력해주세요.',
+            srchOptions: [
+               //{name: '권한명', value: 'roleNm'},
+               //{name: '작성자', value: 'iptId'},
+            ],
+            searchType: '',
+            //searchType: 'roleNm',
+            searchWord: '',
+        },
+    ];
+
+    /**
+     * 그리드 컬럼 셋팅:
+     */
+    columns = [
+        <%
+          fields.eachWithIndex { it,index ->
+                def s = String.format( "        {dataField: '%s', caption: '%s', alignment: 'center',} ", it.name, it.comment )
+                out.println(s)
+          }
+        %>
+    ];
+    //== 참고:
+    //{dataField: 'anncCls', caption: '분류', alignment: 'center', width: 80 , options: {option: this._options.anncCls} },
+    //{caption: '✔', cellTemplate: 'checkboxTemplate', type: 'checkbox', width: 80},  //_checked 속성으로 값판단
+
+
+    ngOnInit(): void {
+        console.log('>> ngOnInit');
+    }
+
+
+    /**
+     * rowData Define
+     */
+    defineRowData() {
+        const rowData = new ${className}Model();
+        return rowData;
+    }
+
+
+    /**
+     * 리스트 조회
+     * @param param
+     */
+    async getList(param: any): Promise<any> {
+        console.log('>>== async getList ');
+        const resp = await this.${classNameLower}Service.list(param);
+
+        if (VUtils.isEmpty(resp.result)) {
+            this.setDataList([]);
+        } else {
+            const dataList = resp.result['data'];
+            this.setDataList(dataList);
+        }
+        //console.log('dataList= ', this.getDataList().length);
+    }
+
+
+    /**
+     * 공통검색 이벤트 처리
+     * @param param
+     */
+    onSearch(param): Promise<any> {
+        return this.getList(param);
+    }
+
+    /**
+     * 검증: TODO
+     */
+    validate(param: ${className}Model): boolean {
+        <%
+          fields.eachWithIndex { it,index ->
+                def s = String.format( "//      if (VUtils.isEmpty(param.%s)) { ", it.name )
+                out.println(s)
+                s = String.format( "//          VUtils.alert({msg: ' %s 를 선택해주세요.'}); ", it.name )
+                out.println(s)
+                out.println("//         return false; ")
+                out.println("//     } ")
+          }
+        %>
+
+        return true;
+    }
+
+
+    /**
+     * 공통적용 이벤트 처리
+     * @param params
+     */
+    async onApply(params): Promise<any> {
+
+        console.log('>>== async onApply: ', params);
+
+        if (VUtils.isEmpty(this.rowIndex)) {
+            return alert('적용하고 싶은 행을 클릭해주세요.');
+        }
+        const param: ${className}Model = params.grids[0]['source'][this.rowIndex];
+
+        if (!this.validate(param)) {
+            return;
+        }
+
+        if (!VUtils.confirm({msg: '저장하시겠습니까?'})) {
+            return;
+        }
+
+        //// do some custom actions
+
+        if (param['isNew']) {
+            const resp = await this.${classNameLower}Service.insert(param as any);
+            const updated: ${className}Model = resp.result['data'];
+            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});  // TODO//change
+
+        } else {
+            const resp = await this.${classNameLower}Service.update(param as any);
+            const updated: ${className}Model = resp.result['data'];
+            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});    // TODO//change
+
+        }
+
+    }
+
+    /**
+     * 공통 삭제 이벤트 처리
+     * @param params
+     */
+    async onDelete(params): Promise<any> {
+
+        console.log('>>== async onDelete: ', params);
+
+        if (VUtils.isEmpty(this.rowIndex)) {
+            return alert('적용하고 싶은 행을 클릭해주세요.');
+        }
+
+        if (!confirm('정말 삭제하시겠습니까?')) {
+            return;
+        }
+
+        const param: ${className}Model = params.grids[0]['source'][this.rowIndex];
+        console.log('Delete ', param);
+
+        const resp = await this.${classNameLower}Service.delete(param as any);
+        console.log('>>==  delete result : true');
+        this.refresh({reset: true});
+
+    }
+
+
+    /**
+     * 행 선택
+     * @param grid
+     * @param row
+     */
+    async onRowClick(grid: VmGridComponent, row: any): Promise<any> {
+        super.onRowClick(grid, row);
+        console.log('>>== onRowClick: row=%o', row);
+        this.refreshSubGridView();
+
+    }
+
+    // refresh sub grid view
+    private refreshSubGridView() {
+        // 참고:
+        //this.gridMenu.data = this.dataListMenu;
+    }
+
+
+}

@@ -1,0 +1,98 @@
+<!--
+  <%= tableComment %> 페이지
+-->
+<vm-app>
+
+    <!-- 헤더영역 -->
+    <vm-header [filter]="vmFilter"
+               [grids]="[grid]"
+               (search)="onSearch(\$event)"
+               (apply)="onApply(\$event)"
+               (delete)="onDelete(\$event)"
+    ></vm-header>
+
+    <div class="body-wrapper">
+
+        <vm-filters #vmFilter [filters]="_filters"></vm-filters>
+
+        <vm-body>
+            <nb-card>
+
+                <nb-card-body>
+                    <vm-grid
+                        #grid
+                        [columns]="columns"
+                        title="${tableComment}"
+                    >
+                    </vm-grid>
+
+                    <!-- [s]view 디테일-->
+                    <nb-card class="view-detail"   >
+
+                        <nb-card-header>
+                            | ${tableComment}
+                        </nb-card-header>
+
+                        <nb-card-body>
+
+                                <div class="view-table">
+
+
+                                    <!-- TODO//detail component by type -->
+                                    <%
+                                      fields.eachWithIndex { it,index ->
+                                        if( it.isInsertField || it.isUpdateField ) {
+                                            return true; // continue
+                                        }
+                                    %>
+                                        <!-- ${it.comment} -->
+                                        <vm-input class="view-wrap"
+                                                  title="${it.comment}"
+                                                  fullWidth="true"
+                                                  id="${it.name}"
+                                                  [(inputVal)]="rowData.${it.name}"
+                                        >
+                                        </vm-input>
+                                    <%
+                                      }
+                                    %>
+
+
+                                        <!-- 공통  -->
+                                        <!-- 작성일시 / 작성자 -->
+                                        <div>
+                                            <vm-info class="view-wrap" title="작성일시"
+                                                     [inputVal]="rowData.iptDtm" format="datetime">
+                                            </vm-info>
+                                            <vm-info class="view-wrap" title="작성자"
+                                                     [inputVal]="rowData.iptId">
+                                            </vm-info>
+                                        </div>
+
+                                        <!-- 수정일시 / 수정자 -->
+                                        <div>
+                                            <vm-info class="view-wrap" title="수정일시"
+                                                     [inputVal]="rowData.updDtm" format="datetime">
+                                            </vm-info>
+                                            <vm-info class="view-wrap" title="수정자"
+                                                     [inputVal]="rowData.updId">
+                                            </vm-info>
+                                        </div>
+
+                                </div>
+
+                        </nb-card-body>
+
+                    </nb-card>
+                    <!-- [e]view 디테일-->
+
+                </nb-card-body>
+            </nb-card>
+        </vm-body>
+
+
+    </div>
+</vm-app>
+
+
+

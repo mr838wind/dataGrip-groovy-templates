@@ -1,0 +1,10 @@
+## Info
+
+#### java project
+- mybatis:  add sequence if needed
+
+#### ui project
+
+- change *.module.ts, *-routing.module.ts
+- change db menu value
+

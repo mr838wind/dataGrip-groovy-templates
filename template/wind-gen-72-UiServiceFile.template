@@ -1,0 +1,67 @@
+import { Injectable } from '@angular/core';
+import {HttpClient} from "@angular/common/http";
+import {ServiceAbstract} from "../ServiceAbstract";
+import {Action} from "../../@decorators/ActionDecorator";
+import {ServiceModel} from "../ServiceModel";
+import {${className}Enum} from "../../enums/service/${classNameLower}.enum";
+
+/**
+ * <%= tableComment %> 서비스
+ */
+@Injectable({
+  providedIn: 'root',
+})
+export class ${className}Service extends ServiceAbstract {
+
+  constructor(http: HttpClient) {
+    super(http);
+  }
+
+
+  /**
+   * <%= tableComment %> 리스트
+   * @param proms
+   */
+  @Action({'action': ${className}Enum.ACTIONS.LIST, 'method': 'GET'})
+  list(proms: Promise<ServiceModel>): Promise<ServiceModel> {
+    return proms;
+  }
+
+  /**
+   * <%= tableComment %> 상세
+   * @param proms
+   */
+  @Action({'action': ${className}Enum.ACTIONS.DETAIL, 'method': 'GET'})
+  detail(proms: Promise<ServiceModel>): Promise<ServiceModel> {
+    return proms;
+  }
+
+  /**
+   * <%= tableComment %> 등록
+   * @param proms
+   */
+  @Action({'action': ${className}Enum.ACTIONS.INSERT, 'method': 'POST'})
+  insert(proms: Promise<ServiceModel>): Promise<ServiceModel> {
+    return proms;
+  }
+
+  /**
+   * <%= tableComment %> 업데이트
+   * @param proms
+   */
+  @Action({'action': ${className}Enum.ACTIONS.UPDATE, 'method': 'POST'})
+  update(proms: Promise<ServiceModel>): Promise<ServiceModel> {
+    return proms;
+  }
+
+  /**
+   * <%= tableComment %> 삭제
+   * @param proms
+   */
+  @Action({'action': ${className}Enum.ACTIONS.DELETE, 'method': 'POST'})
+  delete(proms: Promise<ServiceModel>): Promise<ServiceModel> {
+    return proms;
+  }
+
+
+}

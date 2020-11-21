@@ -39,6 +39,14 @@ INPUT.packageNameBase = prop.packageNameBase
 
 //==
 INPUT.ITEMS = [:]
+INPUT.ITEMS.Info = [
+    filePrefix : '',
+    fileSuffix : '-info.md',
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-00-Info.template",
+    packageName : '', //calc by sub
+    subPackageName : "info",
+    subPath: '00-info',
+]
 INPUT.ITEMS.DTO = [
     filePrefix : '',
     fileSuffix : 'DTO.java',
@@ -111,6 +119,66 @@ INPUT.ITEMS.UiModel = [
     fileSuffix : '.model.ts',
     fileUseClassNameLower : true, // className 소문자 사용
     template : INPUT.TEMPLATE_BASE + "/wind-gen-70-UiModel.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
+INPUT.ITEMS.UiServiceEnum = [
+    filePrefix : '',
+    fileSuffix : '.enum.ts',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-71-UiServiceEnum.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
+INPUT.ITEMS.UiServiceFile = [
+    filePrefix : '',
+    fileSuffix : '.service.ts',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-72-UiServiceFile.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
+INPUT.ITEMS.UiServiceFile = [
+    filePrefix : '',
+    fileSuffix : '.service.ts',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-72-UiServiceFile.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
+INPUT.ITEMS.UiPageTs = [
+    filePrefix : '',
+    fileSuffix : '.page.ts',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-73-UiPageTs.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
+INPUT.ITEMS.UiPageHtml = [
+    filePrefix : '',
+    fileSuffix : '.page.html',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-74-UiPageHtml.template",
+    packageName : '', //calc by sub
+    subPackageName : "model",
+    subPath: 'ui',
+]
+
+INPUT.ITEMS.UiPageScss = [
+    filePrefix : '',
+    fileSuffix : '.page.scss',
+    fileUseClassNameLower : true, // className 소문자 사용
+    template : INPUT.TEMPLATE_BASE + "/wind-gen-75-UiPageScss.template",
     packageName : '', //calc by sub
     subPackageName : "model",
     subPath: 'ui',
