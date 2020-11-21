@@ -17,7 +17,6 @@ import {${className}Service} from "../../../v-core/service/system/${classNameLow
 export class ${className}Page extends BasePage implements OnInit {
 
     constructor(private ${classNameLower}Service: ${className}Service,
-                private backmenuService: BackmenuService,
                 private svcUtil: VServiceUtils,
                 private commonSvc: CommonService) {
         super();
@@ -81,7 +80,7 @@ export class ${className}Page extends BasePage implements OnInit {
     columns = [
         <%
           fields.eachWithIndex { it,index ->
-                def s = String.format( "        {dataField: '%s', caption: '%s', alignment: 'center',} ", it.name, it.comment )
+                def s = String.format( "        {dataField: '%s', caption: '%s', alignment: 'center',},  ", it.name, it.comment )
                 out.println(s)
           }
         %>
