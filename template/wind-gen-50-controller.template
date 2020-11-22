@@ -23,6 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.List;
 
+<%
+    def nonPkFields = fields.findAll { !it.isPk }
+    def pkFields = fields.findAll { it.isPk }
+    def nonPkNoInsertFields = nonPkFields.findAll { !it.isInsertField }
+%>
 
 /**
  * TODO//dev
@@ -78,20 +83,30 @@ public class ${className}Controller {
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     public APIResult detail(
             HttpServletRequest request
-            ,@RequestParam String bzCd
+            <%
+                def selectParamArray = []
+                def selectParamAndTypeArray = []
+                pkFields.eachWithIndex { it,index ->
+                    def s = String.format( "  ,@RequestParam %s %s ", it.dtoTypeStr, it.name )
+                    out.println(s);
+                    selectParamArray.add(it.name)
+                    selectParamAndTypeArray.add(" ${it.dtoTypeStr} ${it.name}")
+                }
+            %>
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${className}DTO info = select${className}(bzCd);
+        ${className}DTO info = select${className}( ${selectParamArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData( info);
         return result;
     }
 
-    private ${className}DTO select${className}(String bzCd) {
+    private ${className}DTO select${className}( ${selectParamAndTypeArray.join(',')} ) {
         ${className}DTO search = new ${className}DTO();
-        search.setBzCd(bzCd);
+        //search.setBzCd(bzCd);
+        // TODO//complete set param: ${selectParamArray.join(',')}
 
         return ${classNameLower}Service.select${className}(search);
     }
@@ -117,7 +132,7 @@ public class ${className}Controller {
         ${classNameLower}Service.insert${className}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = select${className}(dto.getBzCd());
+        ${className}DTO selectedInfo = select${className}(dto.getBzCd()); // TODO//complete
 
         result.setResultCodeSucess();
         result.setData( selectedInfo);
@@ -145,7 +160,7 @@ public class ${className}Controller {
         ${classNameLower}Service.update${className}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = select${className}(dto.getBzCd());
+        ${className}DTO selectedInfo = select${className}(dto.getBzCd()); // TODO//complete
 
         result.setResultCodeSucess();
         result.setData(selectedInfo);

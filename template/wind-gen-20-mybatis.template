@@ -130,6 +130,7 @@
 
 	<!-- insert -->
 	<!-- 참고:
+	    // TODO//complete : seq
 		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
 			SELECT SQ_${table.name}.NEXTVAL FROM DUAL
 		</selectKey>
