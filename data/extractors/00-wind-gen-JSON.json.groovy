@@ -14,9 +14,11 @@
 
 import com.intellij.database.util.Case
 import static com.intellij.openapi.util.text.StringUtil.escapeStringCharacters as escapeStr
+import java.text.SimpleDateFormat;
 
 NEWLINE = System.getProperty("line.separator")
 INDENT = "  "
+
 
 def printJSON(level, col, o) {
   switch (o) {
@@ -26,6 +28,10 @@ def printJSON(level, col, o) {
       else OUT.append("$o")
       break
     case Boolean: OUT.append("$o"); break
+    case Date:
+        def dateValue = o.format("yyyyMMddHHmmss")
+        OUT.append("\"$dateValue\"");
+        break
     case String: OUT.append("\"${escapeStr(o)}\""); break
     case Tuple: printJSON(level, o[0], o[1]); break
     case Map:
