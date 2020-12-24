@@ -73,6 +73,10 @@
 		  , (SELECT ORG_FILE_NM FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_ORG
 	-->
 
+	<sql id="tableJoin">
+		${table.name} T
+	</sql>
+
 
 	<!-- list -->
 	<select id="select${className}List"  parameterType="${fullSearchCriteria}" resultType="${fullDTO}">
@@ -81,7 +85,7 @@
             <include refid="columnsForMain" />
         	<include refid="columnsForOther" />
 
-		FROM ${table.name} T
+		FROM <include refid="tableJoin" />
 		WHERE 1=1
 		<include refid="criteria${className}" />
 	    <choose>
@@ -102,7 +106,7 @@
 	<select id="select${className}ListCount"  parameterType="${fullSearchCriteria}" resultType="int">
 		SELECT
 		COUNT(*)
-		FROM ${table.name} T
+		FROM <include refid="tableJoin" />
 		WHERE 1=1
 		<include refid="criteria${className}" />
 	</select>
@@ -113,7 +117,7 @@
             <include refid="columnsForMain" />
         	<include refid="columnsForOther" />
 
-		FROM ${table.name} T
+		FROM <include refid="tableJoin" />
 		WHERE
             <%
               pkFields.eachWithIndex { it,index ->

@@ -4,10 +4,10 @@
 export class ${className}Model {
 
 
-    //=========== [s] custom added ===========
+    // =========== [s] custom added ===========
 
 
-    //=========== [e] custom added ===========
+    // =========== [e] custom added ===========
 
     <%fields.each() {%>
     /**

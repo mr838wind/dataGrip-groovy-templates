@@ -12,7 +12,7 @@ import {${className}Service} from "../../../v-core/service/system/${classNameLow
 @Component({
     selector: '${classNameLower}',
     templateUrl: './${classNameLower}.page.html',
-    styleUrls: ['./${classNameLower}.page.scss']
+    styleUrls: ['./${classNameLower}.page.scss'],
 })
 export class ${className}Page extends BasePage implements OnInit {
 
@@ -25,7 +25,7 @@ export class ${className}Page extends BasePage implements OnInit {
 
     // TODO//common error handling
 
-    ////////======= [s] options ================
+    // ======= [s] options ================
     /*
      * options :
     */
@@ -52,10 +52,10 @@ export class ${className}Page extends BasePage implements OnInit {
             console.log('value=%o, key=%o', value, key);
             this.INFO_OPTIONS[key] = VUtils.convertToTitleValue(value);
         });
-        //console.log('>>== this.INFO_OPTIONS=', this.INFO_OPTIONS);
+        // console.log('>>== this.INFO_OPTIONS=', this.INFO_OPTIONS);
     }
 
-    ////////======= [e] options ================
+    // ======= [e] options ================
 
     /**
      * 검색조건 default 세팅
@@ -65,11 +65,11 @@ export class ${className}Page extends BasePage implements OnInit {
         {
             id: 'searchText', title: '검색어', type: 'search', placeholder: '검색어를 입력해주세요.',
             srchOptions: [
-               //{name: '권한명', value: 'roleNm'},
-               //{name: '작성자', value: 'iptId'},
+               // {name: '권한명', value: 'roleNm'},
+               // {name: '작성자', value: 'iptId'},
             ],
             searchType: '',
-            //searchType: 'roleNm',
+            // searchType: 'roleNm',
             searchWord: '',
         },
     ];
@@ -80,14 +80,15 @@ export class ${className}Page extends BasePage implements OnInit {
     columns = [
         <%
           fields.eachWithIndex { it,index ->
-                def s = String.format( "        {dataField: '%s', caption: '%s', alignment: 'center',},  ", it.name, it.comment )
+                def s = String.format( "        {dataField: '%s', caption: '%s', alignment: 'center' },  ", it.name, it.comment )
                 out.println(s)
           }
         %>
     ];
-    //== 참고:
-    //{dataField: 'anncCls', caption: '분류', alignment: 'center', width: 80 , options: {option: this._options.anncCls} },
-    //{caption: '✔', cellTemplate: 'checkboxTemplate', type: 'checkbox', width: 80},  //_checked 속성으로 값판단
+    // == 참고:
+    // {dataField: 'anncCls', caption: '분류', alignment: 'center', width: 80
+    //  , options: {option: this._options.anncCls} },
+    // {caption: '✔', cellTemplate: 'checkboxTemplate', type: 'checkbox', width: 80},  // _checked 속성으로 값판단
 
 
     ngOnInit(): void {
@@ -118,7 +119,7 @@ export class ${className}Page extends BasePage implements OnInit {
             const dataList = resp.result['data'];
             this.setDataList(dataList);
         }
-        //console.log('dataList= ', this.getDataList().length);
+        // console.log('dataList= ', this.getDataList().length);
     }
 
 
@@ -170,17 +171,17 @@ export class ${className}Page extends BasePage implements OnInit {
             return;
         }
 
-        //// do some custom actions
+        // // do some custom actions
 
         if (param['isNew']) {
             const resp = await this.${classNameLower}Service.insert(param as any);
             const updated: ${className}Model = resp.result['data'];
-            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});  // TODO//change
+            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});  // TODO//complete
 
         } else {
             const resp = await this.${classNameLower}Service.update(param as any);
             const updated: ${className}Model = resp.result['data'];
-            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});    // TODO//change
+            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});    // TODO//complete
 
         }
 
@@ -227,7 +228,7 @@ export class ${className}Page extends BasePage implements OnInit {
     // refresh sub grid view
     private refreshSubGridView() {
         // 참고:
-        //this.gridMenu.data = this.dataListMenu;
+        // this.gridMenu.data = this.dataListMenu;
     }
 
 
