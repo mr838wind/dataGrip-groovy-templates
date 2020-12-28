@@ -23,6 +23,7 @@
                         #grid
                         [columns]="columns"
                         title="${tableComment}"
+                        [(data)]="gridData"
                     >
                     </vm-grid>
 
@@ -37,49 +38,45 @@
 
                                 <div class="view-table">
 
+                                    <div>
+                                        <!-- input -->
+                                        <!-- TODO//detail component by type -->
+                                        <%
+                                          fields.eachWithIndex { it,index ->
+                                            if( it.isInsertField || it.isUpdateField ) {
+                                                return true; // continue
+                                            }
+                                        %>
+                                            <!-- ${it.comment} -->
+                                            <vm-input class="view-wrap"
+                                                      title="${it.comment}"
+                                                      id="${it.name}"
+                                                      [(inputVal)]="rowData.${it.name}"
+                                            >
+                                            </vm-input>
+                                        <%
+                                          }
+                                        %>
 
-                                    <!-- TODO//detail component by type -->
-                                    <%
-                                      fields.eachWithIndex { it,index ->
-                                        if( it.isInsertField || it.isUpdateField ) {
-                                            return true; // continue
-                                        }
-                                    %>
-                                        <!-- ${it.comment} -->
-                                        <vm-input class="view-wrap"
-                                                  title="${it.comment}"
-                                                  fullWidth="true"
-                                                  id="${it.name}"
-                                                  [(inputVal)]="rowData.${it.name}"
-                                        >
-                                        </vm-input>
-                                    <%
-                                      }
-                                    %>
+                                        <!-- 조회용 -->
+                                        <%
+                                          fields.eachWithIndex { it,index ->
+                                        %>
+                                            <!-- ${it.comment} -->
+                                            <vm-cell>
+                                                <div slot="title" >${it.comment}</div>
+                                                <div slot="content"  >
+                                                    {{ rowData?.${it.name} }}
+                                                </div>
+                                            </vm-cell>
 
+                                        <%
+                                          }
+                                        %>
 
-                                        <!-- 공통  -->
-                                        <!-- 작성일시 / 작성자 -->
-                                        <div>
-                                            <vm-info class="view-wrap" title="작성일시"
-                                                     [inputVal]="rowData.iptDtm" format="datetime">
-                                            </vm-info>
-                                            <vm-info class="view-wrap" title="작성자"
-                                                     [inputVal]="rowData.iptId">
-                                            </vm-info>
-                                        </div>
+                                    </div>
 
-                                        <!-- 수정일시 / 수정자 -->
-                                        <div>
-                                            <vm-info class="view-wrap" title="수정일시"
-                                                     [inputVal]="rowData.updDtm" format="datetime">
-                                            </vm-info>
-                                            <vm-info class="view-wrap" title="수정자"
-                                                     [inputVal]="rowData.updId">
-                                            </vm-info>
-                                        </div>
-
-                                </div>
+                                </div> <!-- end of div.view-table -->
 
                         </nb-card-body>
 

@@ -90,6 +90,11 @@ export class ${className}Page extends BasePage implements OnInit {
     //  , options: {option: this._options.anncCls} },
     // {caption: '✔', cellTemplate: 'checkboxTemplate', type: 'checkbox', width: 80},  // _checked 속성으로 값판단
 
+    /**
+     * grid data
+     */
+    gridData: Array<${className}Model>  = [];
+
 
     ngOnInit(): void {
         console.log('>> ngOnInit');
@@ -106,29 +111,13 @@ export class ${className}Page extends BasePage implements OnInit {
 
 
     /**
-     * 리스트 조회
-     * @param param
-     */
-    async getList(param: any): Promise<any> {
-        console.log('>>== async getList ');
-        const resp = await this.${classNameLower}Service.list(param);
-
-        if (VUtils.isEmpty(resp.result)) {
-            this.setDataList([]);
-        } else {
-            const dataList = resp.result['data'];
-            this.setDataList(dataList);
-        }
-        // console.log('dataList= ', this.getDataList().length);
-    }
-
-
-    /**
      * 공통검색 이벤트 처리
      * @param param
      */
-    onSearch(param): Promise<any> {
-        return this.getList(param);
+    async onSearch(param): Promise<any> {
+        console.log('>>== async onSearch ');
+        const resp = await this.${classNameLower}Service.list(param);
+        this.gridData = resp.result['data'];
     }
 
     /**
