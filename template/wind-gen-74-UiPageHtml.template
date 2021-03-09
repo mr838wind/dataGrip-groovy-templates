@@ -63,12 +63,14 @@
                                           fields.eachWithIndex { it,index ->
                                         %>
                                             <!-- ${it.comment} -->
+                                            <!--
                                             <vm-cell>
                                                 <div slot="title" >${it.comment}</div>
                                                 <div slot="content"  >
                                                     {{ rowData?.${it.name} }}
                                                 </div>
                                             </vm-cell>
+                                            -->
 
                                         <%
                                           }

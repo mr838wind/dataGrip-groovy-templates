@@ -1,13 +1,15 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {BasePage} from "../../base-page";
 import {VServiceUtils} from "../../../v-core/utils/v-service-utils";
-import {CommonService} from "../../../v-core/service/common/common.service";
 import {VUtils} from "../../../v-core/utils/v-utils";
 import * as _ from 'lodash';
 import {VmGridComponent} from "../../../v-core/components/vm-grid/vm-grid.component";
 import {VmFilterComponent} from "../../../v-core/components/vm-filter/vm-filter.component";
-import {${className}Model} from "./model/${classNameLower}.model";
-import {${className}Service} from "../../../v-core/service/system/${classNameLower}.service";
+//
+import {CommonService} from "../../../v-service/common/common.service";
+import {${className}Model} from "../../../v-service/${classNameLower}/model/${classNameLower}.model";
+import {SampleService} from "../../../v-service/${classNameLower}/${classNameLower}.service";
+
 
 @Component({
     selector: '${classNameLower}',

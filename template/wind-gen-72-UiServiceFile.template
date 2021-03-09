@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {ServiceAbstract} from "../ServiceAbstract";
-import {Action} from "../../@decorators/ActionDecorator";
 import {ServiceModel} from "../ServiceModel";
-import {${className}Enum} from "../../enums/service/${classNameLower}.enum";
+import {Action} from "../../v-core/@decorators/ActionDecorator";
+import {${className}Enum} from "./enums/${classNameLower}.enum";
 
 /**
  * <%= tableComment %> 서비스

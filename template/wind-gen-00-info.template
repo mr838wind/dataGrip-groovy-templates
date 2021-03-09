@@ -2,11 +2,13 @@
 
 ** search TODO//complete to handle those.
 
-#### java project
-- mybatis:  add sequence if needed
+#### step
+- [api] ==== mybatis, dto,dao,service, controller, test-controller ====
+- [api] mybatis: insert seq
+- [api] controller: getBzCd()
+- [api] run controller-test
 
-#### ui project
+- [ui] ==== model,enum,service, page ====
+- [ui] change *.module.ts, *-routing.module.ts
 
-- change *.module.ts, *-routing.module.ts
-- change db menu value
 
