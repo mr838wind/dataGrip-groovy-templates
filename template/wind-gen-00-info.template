@@ -12,3 +12,5 @@
 - [ui] change *.module.ts, *-routing.module.ts
 
 
+#### groovy test
+groovy version: <%= GroovySystem.version %>
