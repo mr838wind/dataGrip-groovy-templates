@@ -18,8 +18,8 @@ import com.intellij.database.util.DasUtil
 INPUT = [:]  //empty map
 
 //= 사용자별 template 위치
-INPUT.TEMPLATE_BASE = "C:/Users/mr838/AppData/Roaming/JetBrains/DataGrip2020.3/extensions/com.intellij.database/schema/template"
-//INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
+//INPUT.TEMPLATE_BASE = "C:/Users/mr838/AppData/Roaming/JetBrains/DataGrip2020.3/extensions/com.intellij.database/schema/template"
+INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 INPUT.CONFIG = INPUT.TEMPLATE_BASE + '/../00-wind-gen.config'
 
 //== read from prop
