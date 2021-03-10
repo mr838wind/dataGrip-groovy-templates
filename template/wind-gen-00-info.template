@@ -5,7 +5,6 @@
 #### step
 - [api] ==== mybatis, dto,dao,service, controller, test-controller ====
 - [api] mybatis: insert seq
-- [api] controller: getBzCd()
 - [api] run controller-test
 
 - [ui] ==== model,enum,service, page ====

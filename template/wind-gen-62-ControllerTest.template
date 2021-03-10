@@ -51,7 +51,7 @@ public class Test${className}Controller extends Test0BaseMvc {
 
 //    @Before
 //    public void setUp() {
-//        latestId = (Integer) jdbcTemplate.queryForObject(" select max(BNER_ID) as id from ${table.name} ", Integer.class);
+//        latestId = (Integer) jdbcTemplate.queryForObject(" select max( ${pkFieldsFirst.dbName} ) as id from ${table.name} ", Integer.class);
 //    }
 
     @Test
@@ -76,6 +76,13 @@ public class Test${className}Controller extends Test0BaseMvc {
         ${className}DTO dto = new ${className}DTO();
         //dto.setBzCd(BZ_CD);
 
+        <%
+            //dto.setBzCd(BZ_CD);
+            pkFields.eachWithIndex { it,index ->
+                out.println( String.format( " dto.set%s(%s); ", it.name.capitalize(), "latestId" ) );
+            }
+        %>
+
         this.templateCall(EnumCall.GET, API_PREFIX + "/detail", dto);
     }
 
@@ -85,6 +92,12 @@ public class Test${className}Controller extends Test0BaseMvc {
     public void insert() throws Exception {
         ${className}DTO dto = ${className}DTO.builder()
                   //.bzCd(BZ_CD)
+                <%
+                    //.bzCd(BZ_CD)
+                    nonPkFields.eachWithIndex { it,index ->
+                        out.println( String.format( " // .%s(%s) ", it.name, " \"test\" " ) );
+                    }
+                %>
                   .build();
 
         this.templateCall(EnumCall.POST, API_PREFIX + "/insert", dto);
@@ -97,6 +110,12 @@ public class Test${className}Controller extends Test0BaseMvc {
 //          ${className}DTO search = new ${className}DTO();
 //          ${className}DTO dto = service.select${className}WithSub(search);
 
+        <%
+            //dto.setBzCd(BZ_CD);
+            nonPkFields.eachWithIndex { it,index ->
+                out.println( String.format( " // dto.set%s(%s); ", it.name.capitalize(), " \"test\" " ) );
+            }
+        %>
 
         this.templateCall(EnumCall.POST, API_PREFIX + "/update", dto);
     }
@@ -107,6 +126,13 @@ public class Test${className}Controller extends Test0BaseMvc {
     public void delete() throws Exception {
         ${className}DTO dto = new ${className}DTO();
         //dto.setBzCd(BZ_CD);
+
+        <%
+            //dto.setBzCd(BZ_CD);
+            pkFields.eachWithIndex { it,index ->
+                out.println( String.format( " dto.set%s(%s); ", it.name.capitalize(), "latestId" ) );
+            }
+        %>
 
         this.templateCall(EnumCall.POST, API_PREFIX + "/delete", dto);
     }

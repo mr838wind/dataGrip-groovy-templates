@@ -70,6 +70,22 @@ public class ${className}Controller {
     }
 
 
+    <%
+        /////// common  ///////
+        //== a,b,c...
+        def selectParamArray = []
+        //== String a, Integer b...
+        def selectParamAndTypeArray = []
+        //== dto.getBzCd(), dto.getSamId() ...
+        def selectParamDtoArray = []
+
+        pkFields.eachWithIndex { it,index ->
+            selectParamArray.add(it.name)
+            selectParamAndTypeArray.add(" ${it.dtoTypeStr} ${it.name}")
+            selectParamDtoArray.add( String.format( "  dto.get%s() ", it.name.capitalize() ) )
+        }
+    %>
+
 
     /**
      * <%= tableComment %> 상세 조회
@@ -82,13 +98,9 @@ public class ${className}Controller {
     public APIResult detail(
             HttpServletRequest request
             <%
-                def selectParamArray = []
-                def selectParamAndTypeArray = []
                 pkFields.eachWithIndex { it,index ->
                     def s = String.format( "  ,@RequestParam %s %s ", it.dtoTypeStr, it.name )
                     out.println(s);
-                    selectParamArray.add(it.name)
-                    selectParamAndTypeArray.add(" ${it.dtoTypeStr} ${it.name}")
                 }
             %>
     ) throws Exception {
@@ -101,10 +113,16 @@ public class ${className}Controller {
         return result;
     }
 
+    // TODO//complete 확인해봄
     private ${className}DTO select${className}( ${selectParamAndTypeArray.join(',')} ) {
         ${className}DTO search = new ${className}DTO();
-        //search.setBzCd(bzCd);
-        // TODO//complete set param: ${selectParamArray.join(',')}
+        <%
+            //search.setBzCd(bzCd);
+            pkFields.eachWithIndex { it,index ->
+                def s = String.format( "  search.set%s(%s); ", it.name.capitalize(), it.name )
+                out.println(s);
+            }
+        %>
 
         return ${classNameLower}Service.select${className}(search);
     }
@@ -130,7 +148,7 @@ public class ${className}Controller {
         ${classNameLower}Service.insert${className}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = select${className}(dto.getBzCd()); // TODO//complete
+        ${className}DTO selectedInfo = select${className}( ${selectParamDtoArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData( selectedInfo);
@@ -158,7 +176,7 @@ public class ${className}Controller {
         ${classNameLower}Service.update${className}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = select${className}(dto.getBzCd()); // TODO//complete
+        ${className}DTO selectedInfo = select${className}( ${selectParamDtoArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData(selectedInfo);

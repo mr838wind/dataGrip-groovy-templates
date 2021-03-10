@@ -432,21 +432,6 @@ def toLowerCaseFirstOne(s){
         return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
 }
 
-static String genSerialID()
-{
-    return "    private static final long serialVersionUID =  " + Math.abs(new Random().nextLong())+"L;"
-}
 
 
-//== not used : do not know how to bind method in template
-class WindUtils {
-    static toCamelCase( String text, boolean capitalized = false ) {
-        text = text.replaceAll( "(_)([A-Za-z0-9])", { Object[] it -> it[2].toUpperCase() } )
-        return capitalized ? capitalize(text) : text
-    }
 
-    static toSnakeCase( String text ) {
-        return text.replaceAll( /([A-Z])/, /_$1/ ).toLowerCase().replaceAll( /^_/, '' )
-    }
-
-}
