@@ -9,6 +9,20 @@ import lombok.Data;
 @Data
 public class ${className}SearchCriteria extends SearchCriteria {
 
+    <%
+        // private String id;
+        pkFields.eachWithIndex { it,index ->
+    %>
+        /**
+         * ${it.comment}
+         * ${it.dbName}
+         */
+         private ${it.dtoTypeStr} ${it.name};
+    <%
+        }
+    %>
+
+
 
 
 }

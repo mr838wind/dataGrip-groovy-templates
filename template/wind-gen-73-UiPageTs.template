@@ -167,12 +167,12 @@ export class ${className}Page extends BasePage implements OnInit {
         if (param['isNew']) {
             const resp = await this.${classNameLower}Service.insert(param as any);
             const updated: ${className}Model = resp.result['data'];
-            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});  // TODO//complete
+            this.refresh({keyFields: ['${pkFieldsFirst.name}'], values: [updated.${pkFieldsFirst.name} ]});  // TODO//complete
 
         } else {
             const resp = await this.${classNameLower}Service.update(param as any);
             const updated: ${className}Model = resp.result['data'];
-            this.refresh({keyFields: ['roleId'], values: [updated.roleId]});    // TODO//complete
+            this.refresh({keyFields: ['${pkFieldsFirst.name}'], values: [updated.${pkFieldsFirst.name} ]});    // TODO//complete
 
         }
 
