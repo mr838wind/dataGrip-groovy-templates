@@ -190,7 +190,6 @@ INPUT.ITEMS.UiPageScss = [
 //=============== [s] main ===============
 allTables = new HashMap<>()
 allFields = new HashMap<>()
-allPkInfos = new HashMap<>()
 
 typeMapping = [
         (~/(?i)int/)                      : "Integer",
@@ -226,15 +225,26 @@ def getDefaultBinding(className, fields, table) {
     //== template binding:
     def binding = INPUT.clone()
 
+
+    def nonPkFields = fields.findAll { !it.isPk }
+    def pkFields = fields.findAll { it.isPk }
+    def nonPkNoInsertFields = nonPkFields.findAll { !it.isInsertField }
+
     binding.className = className
     binding.classNameLower = javaName(table.getName(), false)
+    //
     binding.fields = fields
+    binding.pkFields = pkFields
+    binding.nonPkFields = nonPkFields
+    binding.nonPkNoInsertFields = nonPkNoInsertFields
+    binding.pkFieldsFirst = pkFields.size() > 0 ? pkFields[0] : [:]
+    //
     binding.table = table
     binding.tableComment = table.getComment()
     binding.sqlNs = "sql-${className}"
     binding.fullDTO = "${INPUT.ITEMS.DTO.packageName}.${className}DTO"
     binding.fullSearchCriteria = "${INPUT.ITEMS.DTO.packageName}.${className}SearchCriteria"
-    binding.pkInfo = allPkInfos[className]
+
     return binding
 }
 
@@ -322,21 +332,8 @@ def fetchAllDbInfo(table, dir) {
     def fields = calcFields(table, className)
     allTables.put(className, table)
     allFields.put(className, fields)
-    allPkInfos.put(className, getPkInfo(fields) )
 }
 
-// [not used]
-def getPkInfo(fields) {
-    def pkDbName = ''
-    def pkName = ''
-    fields.each { it ->
-        if(it.isPk) {
-            pkDbName = it.dbName
-            pkName = it.name
-        }
-    }
-    return [name:pkName, dbName:pkDbName]
-}
 
 def _generateItem(out, className, fields, table, templatePath) {
 

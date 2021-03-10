@@ -26,11 +26,6 @@ import java.io.File;
 import java.util.List;
 
 
-<%
-    def nonPkFields = fields.findAll { !it.isPk }
-    def pkFields = fields.findAll { it.isPk }
-    def nonPkNoInsertFields = nonPkFields.findAll { !it.isInsertField }
-%>
 
 /**
  * TODO//dev

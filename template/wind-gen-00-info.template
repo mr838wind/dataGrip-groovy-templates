@@ -14,3 +14,5 @@
 
 #### groovy test
 groovy version: <%= GroovySystem.version %>
+
+pk: <%= pkFields.size %>  --

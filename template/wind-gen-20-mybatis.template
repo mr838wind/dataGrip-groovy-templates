@@ -8,11 +8,6 @@
 
 <mapper namespace="${ITEMS.MAPPER.packageName}.${className}Mapper">
 
-<%
-    def nonPkFields = fields.findAll { !it.isPk }
-    def pkFields = fields.findAll { it.isPk }
-    def nonPkNoInsertFields = nonPkFields.findAll { !it.isInsertField }
-%>
 
 <!--
     <![CDATA[ sample ]]>
@@ -135,7 +130,7 @@
 	<!-- insert -->
 	<!-- 참고:
 	    // TODO//complete : seq
-		<selectKey keyProperty="seq" resultType="int" order="BEFORE">
+		<selectKey keyProperty="${pkFieldsFirst.name}" resultType="int" order="BEFORE">
 			SELECT SQ_${table.name}.NEXTVAL FROM DUAL
 		</selectKey>
 	-->
