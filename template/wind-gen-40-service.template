@@ -61,6 +61,34 @@ public class ${className}Service {
     */
 
 
+    <%
+        /////// common  ///////
+        //== a,b,c...
+        def selectParamArray = []
+        //== String a, Integer b...
+        def selectParamAndTypeArray = []
+        //== dto.getBzCd(), dto.getSamId() ...
+        def selectParamDtoArray = []
+
+        pkFields.eachWithIndex { it,index ->
+            selectParamArray.add(it.name)
+            selectParamAndTypeArray.add(" ${it.dtoTypeStr} ${it.name}")
+            selectParamDtoArray.add( String.format( "  dto.get%s() ", it.name.capitalize() ) )
+        }
+    %>
+
+    // TODO//complete 확인해봄
+    public ${className}DTO select${className}ByPk( ${selectParamAndTypeArray.join(',')} ) {
+        ${className}DTO search = new ${className}DTO();
+        <%
+            //search.setBzCd(bzCd);
+            pkFields.eachWithIndex { it,index ->
+                def s = String.format( "  search.set%s(%s); ", it.name.capitalize(), it.name )
+                out.println(s);
+            }
+        %>
+        return mapper.select${className}(search);
+    }
 
 
     /** ====================================  insert   ==================================== */

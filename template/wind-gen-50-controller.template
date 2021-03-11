@@ -30,6 +30,17 @@ import java.util.List;
 /**
  * TODO//dev
  * <%= tableComment %> 관리
+
+ * --------- 설명: ------------------------------
+ *      @AnnoSetCommon      // dto 밑 필드내 자식 dto 에 공통값(iptId,iptIp,updId, updIp) 세팅해줌
+ *      @AnnoSetFileUploadV2    // file upload 처리
+ *      @AnnoSearchFileEncV2(name = CmnConst.KEY_DATA)  // file base64 encoding 값 조회해줌
+ *      @AnnoSearchCode(name = CmnConst.KEY_DATA)   // 공통코드 조회
+ *      @AnnoUser UserInfo userInfo     //사용자 정보(자동으로 값 세팅됨)
+ * --------- 참고: ------------------------------
+ *      자식dto 같이 처리하려면 service에서 WithSub 있는 메서드 사용
+ *      e.g: service.selectSampleWithSub()
+ * ---------------------------------------
  */
 @RestController
 @RequestMapping(value = "/api/back/${classNameLower}")
@@ -107,27 +118,12 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${className}DTO info = select${className}( ${selectParamArray.join(',')} );
+        ${className}DTO info = ${classNameLower}Service.select${className}ByPk( ${selectParamArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData( info);
         return result;
     }
-
-    // TODO//complete 확인해봄
-    private ${className}DTO select${className}( ${selectParamAndTypeArray.join(',')} ) {
-        ${className}DTO search = new ${className}DTO();
-        <%
-            //search.setBzCd(bzCd);
-            pkFields.eachWithIndex { it,index ->
-                def s = String.format( "  search.set%s(%s); ", it.name.capitalize(), it.name )
-                out.println(s);
-            }
-        %>
-
-        return ${classNameLower}Service.select${className}(search);
-    }
-
 
     /**
      * <%= tableComment %> 추가
@@ -149,7 +145,7 @@ public class ${className}Controller {
         ${classNameLower}Service.insert${className}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = select${className}( ${selectParamDtoArray.join(',')} );
+        ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk( ${selectParamDtoArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData( selectedInfo);
@@ -177,7 +173,7 @@ public class ${className}Controller {
         ${classNameLower}Service.update${className}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = select${className}( ${selectParamDtoArray.join(',')} );
+        ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk( ${selectParamDtoArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData(selectedInfo);
@@ -206,11 +202,5 @@ public class ${className}Controller {
         return result;
     }
 
-
-    /**
-     * 참고:
-     * 자식dto 같이 처리하려면 service에서 WithSub 있는 메서드 사용
-     * e.g: service.selectSampleWithSub()
-     */
 
 }
