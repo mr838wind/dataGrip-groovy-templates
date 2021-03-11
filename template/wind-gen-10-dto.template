@@ -54,16 +54,26 @@ public class ${className}DTO {
     // pk에 : @EqualsAndHashCode.Include
 
     //== 참고: 공통코드명
+    //      1. annotation
     //    @AnnoCode(codeEnum = CodeEnums.SSG_GRPC_CAT_CD)
     //     private String catCd;
+    //
+    //      2. 관련 필드 (+Name)
+    //     private String catCdName;
 
     //== 참고: 파일 관련 :
+    //      1. annotation
     //     @AnnoFileUploadV2(pathEnum = UploadPathEnum.SSG_GRPC)
     //     private Integer pcLogoFileId;
     //
+    //      2. 관련 필드 (+Path, +Org, +Obj)
     //    private String pcLogoFileIdPath;
     //    private String pcLogoFileIdOrg;
     //    private UploadInfoDTO pcLogoFileIdObj = new UploadInfoDTO(); //obj 방식
+    //
+    //      3. sql에서 관련 조회 추가 (sql에 참고 문구 있음)
+    //    , (SELECT FILE_PATH FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_PATH
+    //    , (SELECT ORG_FILE_NM FROM TLSM_FILE_MST WHERE FILE_ID = T.PC_LOGO_FILE_ID ) AS PC_LOGO_FILE_ID_ORG
     //================= [e] 참고:
 
 
