@@ -100,6 +100,10 @@ public class Test${className}Controller extends Test0BaseMvc {
                 %>
                   .build();
 
+          // == test file obj:
+          // .atchFileIdObj( getUploadInfoDTO(imageOrange) )
+
+
         this.templateCall(EnumCall.POST, API_PREFIX + "/insert", dto);
     }
 

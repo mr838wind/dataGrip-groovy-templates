@@ -34,6 +34,7 @@ public class ${className}DTO {
     //     * BZ_NM
     //     */
     //    private String bzNm;
+    //    List<SampleAttachDTO> attachList;
 
 
     //=========== [e] custom added ===========

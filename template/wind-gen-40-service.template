@@ -111,9 +111,9 @@ public class ${className}Service {
             mapper.delete${className}(dto);
         }
 
-        public void delete${className}ByUpdate(${className}DTO dto) {
-            mapper.delete${className}ByUpdate(dto);
-        }
+        // public void delete${className}ByUpdate(${className}DTO dto) {
+        //     mapper.delete${className}ByUpdate(dto);
+        // }
     */
 
 
@@ -121,14 +121,25 @@ public class ${className}Service {
 
     /*
         private void selectSubList(${className}DTO dto) {
+            // SampleAttachSearchCriteria aSearch = new SampleAttachSearchCriteria();
+            // aSearch.setSampleId(dto.getSampleId());
+            // dto.setAttachList(sampleAttachMapper.selectSampleAttachList(aSearch));
+
 
         }
 
         private void insertSubList(${className}DTO dto) {
+            // if(CollectionUtils.isNotEmpty(dto.getAttachList())) {
+            //     for (SampleAttachDTO aItem : dto.getAttachList()) {
+            //         aItem.setSampleId(dto.getSampleId());
+            //         sampleAttachMapper.insertSampleAttach(aItem);
+            //     }
+            // }
 
         }
 
         private void deleteSubList(${className}DTO dto) {
+            // sampleAttachMapper.deleteSampleAttachBySampleId(dto.getSampleId());
 
         }
     */
