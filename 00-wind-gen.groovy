@@ -7,11 +7,28 @@ import com.intellij.database.util.Case
 import com.intellij.database.util.DasUtil
 import groovy.json.JsonSlurper
 
-/*
+/**
+ * 00-wind-gen-config.json 설명: (json에 설명 넣을수 없어 여기에 둠)
+ *  {
+ *        "bizName": "sample",  //업무이름
+ *        "bizNameDynamicYn": false,    업무이름 동적 생성(table명에서 두번째 필드)
+ *        "packageNameBase": "com.shinsegae.villiv",    //기본 패키지 명
+ *        "removeTablePrefix": true,    //table명에서 첫번째 필드 제거
+ *
+ *        "relationship": {     //table 관계
+ *            "oneToMany": [    //1대다
+ *               {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
+ *            ]
+ *        }
+ *    }
+ */
+
+
+/**
  *
  * --------------------------------------
  * 1. datagrip에서 table로부터 소스코드 생성
- * 2. 부모자식 관계 관련 소스를 생성하려면 00-wind-gen-table-config.json에 세팅해주고
+ * 2. 부모자식 관계 관련 소스를 생성하려면 00-wind-gen-config.json에 세팅해주고
  *  부모,자식 table을 같이 선택해서 코드 생성해주어야 함
  * --------------------------------------
  *
@@ -21,36 +38,27 @@ import groovy.json.JsonSlurper
  *   FILES       files helper
  */
 
+
 //=============== [s] inputs ===============
 INPUT = [:]  //empty map
 
 //= 사용자별 template 위치
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/AppData/Roaming/JetBrains/DataGrip2020.3/extensions/com.intellij.database/schema/template"
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
-INPUT.CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen.config'
 INPUT.JSON_CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen-config.json'
 
 //== table 관계 설정
 def jsonSlurper = new JsonSlurper()
 def jsonConfig = jsonSlurper.parse(new File(INPUT.JSON_CONFIG_PATH))
-INPUT.jsonConfig = jsonConfig
+INPUT.putAll(jsonConfig)
 
-assert INPUT.jsonConfig.relationship != null
-assert INPUT.jsonConfig.relationship.oneToMany != null
-
-
-//== read from prop
-Properties prop = loadProp(INPUT.CONFIG_PATH)
-
-//= table 이름 t_ 제거
-INPUT.REMOVE_TABLE_PREFIX = "true".equals(prop.REMOVE_TABLE_PREFIX_STRING)
-
-//= 업무 이름 *******: (bizNameDynamicYn: table명 두번째 필드로 task 이름 계산)
-INPUT.bizNameDynamicYn = "true".equals(prop.bizNameDynamicYnString)
-INPUT.bizName = prop.bizName
-
-//= package base name:
-INPUT.packageNameBase = prop.packageNameBase
+//== config assert
+assert INPUT.containsKey("bizName")
+assert INPUT.containsKey("bizNameDynamicYn")
+assert INPUT.containsKey("packageNameBase")
+assert INPUT.containsKey("removeTablePrefix")
+assert INPUT.relationship != null
+assert INPUT.relationship.oneToMany != null
 
 
 
@@ -290,11 +298,11 @@ def getSubTableObjectList(className, table) {
     def resultList = []
     def tableName = table.getName()
 
-    if( INPUT.jsonConfig != null
-            && INPUT.jsonConfig.relationship != null
-            && INPUT.jsonConfig.relationship.oneToMany != null
+    if( INPUT != null
+            && INPUT.relationship != null
+            && INPUT.relationship.oneToMany != null
     ) {
-        INPUT.jsonConfig.relationship.oneToMany.eachWithIndex { it, index ->
+        INPUT.relationship.oneToMany.eachWithIndex { it, index ->
             if( tableName.equals(it.tableOne) ) {
                 def subTableName = it.tableMany
                 assert subTableName != null
@@ -460,7 +468,7 @@ def javaName(str, capitalize) {
 
     def tmp = com.intellij.psi.codeStyle.NameUtil.splitNameIntoWords(str)
         .collect { Case.LOWER.apply(it).capitalize() }
-    if(INPUT.REMOVE_TABLE_PREFIX) {
+    if(INPUT.removeTablePrefix) {
         //remove first prefix like t_
         tmp = tmp.subList(1,tmp.size())
     }

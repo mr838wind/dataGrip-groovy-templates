@@ -1,4 +1,9 @@
 {
+  "bizName": "sample",
+  "bizNameDynamicYn": false,
+  "packageNameBase": "com.shinsegae.villiv",
+  "removeTablePrefix": true,
+
   "relationship": {
     "oneToMany": [
       {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
