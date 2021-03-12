@@ -1,0 +1,5 @@
+{
+  "oneToMany": [
+    {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
+  ]
+}

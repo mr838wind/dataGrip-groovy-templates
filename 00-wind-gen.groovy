@@ -5,9 +5,16 @@ import com.intellij.database.model.DasColumn
 import com.intellij.database.model.ObjectKind
 import com.intellij.database.util.Case
 import com.intellij.database.util.DasUtil
-
+import groovy.json.JsonSlurper
 
 /*
+ *
+ * --------------------------------------
+ * 1. datagrip에서 table로부터 소스코드 생성
+ * 2. 부모자식 관계 관련 소스를 생성하려면 00-wind-gen-table-config.json에 세팅해주고
+ *  부모,자식 table을 같이 선택해서 코드 생성해주어야 함
+ * --------------------------------------
+ *
  * Available context bindings:
  *   SELECTION   Iterable<DasObject>
  *   PROJECT     project
@@ -20,10 +27,16 @@ INPUT = [:]  //empty map
 //= 사용자별 template 위치
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/AppData/Roaming/JetBrains/DataGrip2020.3/extensions/com.intellij.database/schema/template"
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
-INPUT.CONFIG = INPUT.TEMPLATE_BASE + '/../00-wind-gen.config'
+INPUT.CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen.config'
+INPUT.TABLE_CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen-table-config.json'
+
+//== table 관계 설정
+def jsonSlurper = new JsonSlurper()
+def tableConfig = jsonSlurper.parse(new File(INPUT.TABLE_CONFIG_PATH))
+INPUT.tableConfig = tableConfig
 
 //== read from prop
-Properties prop = loadProp(INPUT.CONFIG)
+Properties prop = loadProp(INPUT.CONFIG_PATH)
 
 //= table 이름 t_ 제거
 INPUT.REMOVE_TABLE_PREFIX = "true".equals(prop.REMOVE_TABLE_PREFIX_STRING)
@@ -223,7 +236,27 @@ def getDefaultBinding(className, fields, table) {
     calcPackageName()
 
     //== template binding:
+    def binding = getSimpleValueForBinding(className)
+
+    // sub table object list : 자식 table 정보
+    def subTableObjectList = getSubTableObjectList(className, table)
+    binding.subTableObjectList = subTableObjectList
+
+    return binding
+}
+
+// className에 대한 binding 정보
+def getSimpleValueForBinding(className) {
+
     def binding = INPUT.clone()
+
+    def table = allTables[className]
+    def fields = allFields[className]
+
+    // table 선택되지 않아서 값이 없으면 아래 계산하지 않음
+    if(table == null || fields == null) {
+        return binding
+    }
 
 
     def nonPkFields = fields.findAll { !it.isPk }
@@ -247,6 +280,29 @@ def getDefaultBinding(className, fields, table) {
 
     return binding
 }
+
+// 자식 table 정보
+def getSubTableObjectList(className, table) {
+    def resultList = []
+    def tableName = table.getName()
+
+    if(INPUT.tableConfig != null && INPUT.tableConfig.oneToMany != null) {
+        INPUT.tableConfig.oneToMany.eachWithIndex { it, index ->
+            if( tableName.equals(it.tableOne) ) {
+                def subTableName = it.tableMany
+                assert subTableName != null
+                def subClassName = javaName(subTableName, true)
+
+                def subBinding = getSimpleValueForBinding(subClassName)
+                resultList.add(subBinding)
+            }
+        }
+    }
+
+    return resultList
+}
+
+
 
 //== bizName calculate: second word
 def calcBizName(table) {

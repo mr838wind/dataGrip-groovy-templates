@@ -15,3 +15,11 @@
 groovy version: <%= GroovySystem.version %>
 
 pkFieldsFirst: <%= pkFieldsFirst.name %>
+
+부모 자식 관계 test:
+<% if(subTableObjectList != null && subTableObjectList.size() > 0) { %>
+    <%= subTableObjectList[0]?.className %>
+    <%= subTableObjectList[0]?.pkFieldsFirst?.name %>
+<% } %>
+
+
