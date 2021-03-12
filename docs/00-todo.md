@@ -1,7 +1,16 @@
 
-## todo
+## 개선사항:
+v0.1
 
-* 1:N sub obj property setting
+#### next step
+* 부모,자식 관계 세팅: 되면 좋음: 03.17~2주 
+* vue sample project 되있으면 template 생성 
 
 
+#### later
+* 관계에 대한 제약정책: cascade, restrict, none
+* 명령행 으로 실행
+
+
+#### final
 
