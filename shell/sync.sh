@@ -12,12 +12,12 @@ _IN_DIR=$(pwd)/../
 echo ">>== sync start"
 echo ">>== from ${_IN_DIR} "
 echo ">>== to ${_OUT_DIR} "
-echo ">>== copy files and dirs: 00-wind-gen.groovy, 00-wind-gen.config, 00-wind-gen-table-config.json, template/* "
+echo ">>== copy files and dirs: 00-wind-gen.groovy, 00-wind-gen.config, 00-wind-gen-config.json, template/* "
 
 cp ${_IN_DIR}/00-wind-gen.groovy ${_OUT_DIR}
 
 cp ${_IN_DIR}/00-wind-gen.config ${_OUT_DIR}
-cp ${_IN_DIR}/00-wind-gen-table-config.json ${_OUT_DIR}
+cp ${_IN_DIR}/00-wind-gen-config.json ${_OUT_DIR}
 
 cp -r ${_IN_DIR}/template ${_OUT_DIR}
 

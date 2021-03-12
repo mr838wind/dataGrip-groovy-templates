@@ -28,12 +28,16 @@ INPUT = [:]  //empty map
 //INPUT.TEMPLATE_BASE = "C:/Users/mr838/AppData/Roaming/JetBrains/DataGrip2020.3/extensions/com.intellij.database/schema/template"
 INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions/com.intellij.database/schema/template"
 INPUT.CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen.config'
-INPUT.TABLE_CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen-table-config.json'
+INPUT.JSON_CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen-config.json'
 
 //== table 관계 설정
 def jsonSlurper = new JsonSlurper()
-def tableConfig = jsonSlurper.parse(new File(INPUT.TABLE_CONFIG_PATH))
-INPUT.tableConfig = tableConfig
+def jsonConfig = jsonSlurper.parse(new File(INPUT.JSON_CONFIG_PATH))
+INPUT.jsonConfig = jsonConfig
+
+assert INPUT.jsonConfig.relationship != null
+assert INPUT.jsonConfig.relationship.oneToMany != null
+
 
 //== read from prop
 Properties prop = loadProp(INPUT.CONFIG_PATH)
@@ -286,8 +290,11 @@ def getSubTableObjectList(className, table) {
     def resultList = []
     def tableName = table.getName()
 
-    if(INPUT.tableConfig != null && INPUT.tableConfig.oneToMany != null) {
-        INPUT.tableConfig.oneToMany.eachWithIndex { it, index ->
+    if( INPUT.jsonConfig != null
+            && INPUT.jsonConfig.relationship != null
+            && INPUT.jsonConfig.relationship.oneToMany != null
+    ) {
+        INPUT.jsonConfig.relationship.oneToMany.eachWithIndex { it, index ->
             if( tableName.equals(it.tableOne) ) {
                 def subTableName = it.tableMany
                 assert subTableName != null
