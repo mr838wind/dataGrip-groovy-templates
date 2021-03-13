@@ -28,7 +28,6 @@ import java.util.List;
 
 
 /**
- * TODO//dev
  * <%= tableComment %> 관리
 
  * --------- 설명: ------------------------------
@@ -56,6 +55,14 @@ public class ${className}Controller {
     @Autowired
     FileUploadHandler fileUploadHandler;
 
+    <%
+        // 부모,자식 관계에서 부모 controller이면 method에 WithSub 붙여줌
+        def suffixForMethod = ""
+        if(subTableObjectListExist) {
+            suffixForMethod = "WithSub"
+        }
+    %>
+
 
     /**
      * <%= tableComment %> 목록 조회
@@ -71,7 +78,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        List<${className}DTO> list = ${classNameLower}Service.select${className}List(search);
+        List<${className}DTO> list = ${classNameLower}Service.select${className}List${suffixForMethod}(search);
         int totalCount = ${classNameLower}Service.select${className}ListCount(search);
         search.setTotalCount(totalCount);
 
@@ -142,7 +149,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.insert${className}(dto);
+        ${classNameLower}Service.insert${className}${suffixForMethod}(dto);
 
         //== select after insert / update
         ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk( ${selectParamDtoArray.join(',')} );
@@ -170,7 +177,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.update${className}(dto);
+        ${classNameLower}Service.update${className}${suffixForMethod}(dto);
 
         //== select after insert / update
         ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk( ${selectParamDtoArray.join(',')} );
@@ -196,7 +203,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${classNameLower}Service.delete${className}(dto);
+        ${classNameLower}Service.delete${className}${suffixForMethod}(dto);
 
         result.setResultCodeSucess();
         return result;
