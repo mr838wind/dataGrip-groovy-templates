@@ -255,6 +255,7 @@ def getDefaultBinding(className, fields, table) {
     // sub table object list : 자식 table 정보
     def subTableObjectList = getSubTableObjectList(className, table)
     binding.subTableObjectList = subTableObjectList
+    binding.subTableObjectListExist = subTableObjectList != null && subTableObjectList.size() > 0
 
     return binding
 }

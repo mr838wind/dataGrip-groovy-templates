@@ -17,6 +17,15 @@ public class ${className}Service {
     @Autowired
     ${className}Mapper mapper;
 
+    <%
+        if(subTableObjectListExist) {
+            subTableObjectList.eachWithIndex { it,index ->
+                out.println("@Autowired ")
+                out.println(String.format("  %sMapper mapper; ", it.className, it.classNameLower))
+            }
+        }
+    %>
+
     /** ====================================  list   ==================================== */
 
     public int select${className}ListCount(${className}SearchCriteria criteria) {
@@ -28,7 +37,7 @@ public class ${className}Service {
     }
 
 
-    /*
+    <% if(subTableObjectListExist) { %>
         //== sub
         public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
             List<${className}DTO> list = select${className}List(criteria);
@@ -39,7 +48,7 @@ public class ${className}Service {
             }
             return list;
         }
-    */
+    <% } %>
 
 
 
@@ -49,7 +58,7 @@ public class ${className}Service {
         return mapper.select${className}(dto);
     }
 
-    /*
+    <% if(subTableObjectListExist) { %>
         //== sub
         public ${className}DTO select${className}WithSub(${className}DTO dto) {
             ${className}DTO info = select${className}(dto);
@@ -58,7 +67,7 @@ public class ${className}Service {
             }
             return info;
         }
-    */
+    <% } %>
 
 
     <%
@@ -97,13 +106,13 @@ public class ${className}Service {
         mapper.insert${className}(dto);
     }
 
-    /*
+    <% if(subTableObjectListExist) { %>
         //==
         public void insert${className}WithSub(${className}DTO dto) {
             mapper.insert${className}(dto);
             insertSubList(dto);
         }
-    */
+    <% } %>
 
 
 
@@ -113,14 +122,14 @@ public class ${className}Service {
         mapper.update${className}(dto);
     }
 
-    /*
+    <% if(subTableObjectListExist) { %>
         //== sub
         public void update${className}WithSub(${className}DTO dto) {
             mapper.update${className}(dto);
             deleteSubList(dto);
             insertSubList(dto);
         }
-    */
+    <% } %>
 
 
 
@@ -132,44 +141,87 @@ public class ${className}Service {
         mapper.delete${className}(dto);
     }
 
-    /*
+    <% if(subTableObjectListExist) { %>
         //== sub
         public void delete${className}WithSub(${className}DTO dto) {
             deleteSubList(dto);
             mapper.delete${className}(dto);
         }
+    <% } %>
 
         // public void delete${className}ByUpdate(${className}DTO dto) {
         //     mapper.delete${className}ByUpdate(dto);
         // }
-    */
+
 
 
     /** ====================================  subList   ==================================== */
 
-    /*
+
+    <% if(subTableObjectListExist) { %>
+        //== TODO//complete 확인
+
         private void selectSubList(${className}DTO dto) {
-            // SampleAttachSearchCriteria aSearch = new SampleAttachSearchCriteria();
-            // aSearch.setSampleId(dto.getSampleId());
-            // dto.setAttachList(sampleAttachMapper.selectSampleAttachList(aSearch));
+            <%
+                subTableObjectList.eachWithIndex { it,index ->
+                    def varName = "search" + it.className
+                    out.println(String.format("  %sSearchCriteria %s = new %sSearchCriteria(); "
+                        , it.className, varName, it.className ))
+                    out.println(String.format("  %s.set%s(dto.get%s()); "
+                        , varName, pkFieldsFirst.name.capitalize(), pkFieldsFirst.name.capitalize() ))
+                    out.println(String.format("  dto.set%sList(%sMapper.select%sList(%s)); "
+                        , it.className, it.classNameLower, it.className, varName ))
+                }
 
-
+                //== sample code: selectSubList
+                // SampleAttachSearchCriteria searchSampleAttach = new SampleAttachSearchCriteria();
+                // searchSampleAttach.setSampleId(dto.getSampleId());
+                // dto.setSampleAttachList(sampleAttachMapper.selectSampleAttachList(searchSampleAttach));
+            %>
         }
 
+
+        //== TODO//complete 확인
         private void insertSubList(${className}DTO dto) {
-            // if(CollectionUtils.isNotEmpty(dto.getAttachList())) {
-            //     for (SampleAttachDTO aItem : dto.getAttachList()) {
-            //         aItem.setSampleId(dto.getSampleId());
-            //         sampleAttachMapper.insertSampleAttach(aItem);
-            //     }
-            // }
+            <%
+                subTableObjectList.eachWithIndex { it,index ->
+                    out.println(String.format("  if(CollectionUtils.isNotEmpty(dto.get%sList())) { "
+                        , it.className ))
+                    out.println(String.format("      for (%sDTO aItem : dto.get%sList()) { "
+                        , it.className, it.className ))
+                    out.println(String.format("          aItem.set%s(dto.get%s()); "
+                        , pkFieldsFirst.name.capitalize(), pkFieldsFirst.name.capitalize() ))
+                    out.println(String.format("          %sMapper.insert%s(aItem); "
+                        , it.classNameLower, it.className ))
+                    out.println(String.format("      } " ))
+                    out.println(String.format("   } " ))
 
+                }
+
+                //== sample code: insertSubList
+                // if(CollectionUtils.isNotEmpty(dto.getSampleAttachList())) {
+                //     for (SampleAttachDTO aItem : dto.getSampleAttachList()) {
+                //         aItem.setSampleId(dto.getSampleId());
+                //         sampleAttachMapper.insertSampleAttach(aItem);
+                //     }
+                // }
+            %>
         }
 
+
+        //== TODO//complete 확인
         private void deleteSubList(${className}DTO dto) {
-            // sampleAttachMapper.deleteSampleAttachBySampleId(dto.getSampleId());
+            <%
+                subTableObjectList.eachWithIndex { it,index ->
+                    out.println(String.format("  // %sMapper.delete%sBy%s(dto.get%s()); "
+                        , it.classNameLower, it.className, pkFieldsFirst.name.capitalize(), pkFieldsFirst.name.capitalize() ))
+                }
 
+                //== sample code: deleteSubList
+                // sampleAttachMapper.deleteSampleAttachBySampleId(dto.getSampleId());
+            %>
         }
-    */
+
+    <% } %>
 
 }

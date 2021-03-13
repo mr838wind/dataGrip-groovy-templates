@@ -37,7 +37,7 @@ public class ${className}DTO {
 
     //== 자식 table 관련
     <%
-        if(subTableObjectList != null && subTableObjectList.size() > 0) {
+        if(subTableObjectListExist) {
             subTableObjectList.each() {
                 out.println(String.format("  /** %s list */ ", it.tableComment ))
                 out.println(String.format("  private List<%sDTO> %sList; ", it.className, it.classNameLower))
