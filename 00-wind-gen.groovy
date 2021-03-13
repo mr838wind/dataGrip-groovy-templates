@@ -16,6 +16,7 @@ import groovy.json.JsonSlurper
  *        "removeTablePrefix": true,    //table명에서 첫번째 필드 제거
  *
  *        "relationship": {     //table 관계
+ *            "showErrorWhenNotSelectSubTable": true, // 자식 table 같이 선택안해주면 에러
  *            "oneToMany": [    //1대다
  *               {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
  *            ]
@@ -59,6 +60,7 @@ assert INPUT.containsKey("packageNameBase")
 assert INPUT.containsKey("removeTablePrefix")
 assert INPUT.relationship != null
 assert INPUT.relationship.oneToMany != null
+assert INPUT.relationship.containsKey("showErrorWhenNotSelectSubTable")
 
 
 
@@ -265,9 +267,9 @@ def getSimpleValueForBinding(className) {
     def table = allTables[className]
     def fields = allFields[className]
 
-    // table 선택되지 않아서 값이 없으면 아래 계산하지 않음
+    // table 선택되지 않아서 값이 없으면 처리 안함
     if(table == null || fields == null) {
-        return binding
+        return null
     }
 
 
@@ -309,7 +311,12 @@ def getSubTableObjectList(className, table) {
                 def subClassName = javaName(subTableName, true)
 
                 def subBinding = getSimpleValueForBinding(subClassName)
-                resultList.add(subBinding)
+                if(INPUT.relationship.showErrorWhenNotSelectSubTable) {
+                    assert subBinding != null
+                }
+                if(subBinding != null) {
+                    resultList.add(subBinding)
+                }
             }
         }
     }
@@ -339,19 +346,19 @@ def calcPackageName() {
     }
 }
 
-//== properties
-def loadProp(filePath) {
-    Properties prop = new Properties()
-    File propertiesFile = new File(filePath)
-    propertiesFile.withInputStream {
-        prop.load(it)
-    }
-
-    // test
-    assert prop.a == '1'
-
-    return prop;
-}
+////== properties
+//def loadProp(filePath) {
+//    Properties prop = new Properties()
+//    File propertiesFile = new File(filePath)
+//    propertiesFile.withInputStream {
+//        prop.load(it)
+//    }
+//
+//    // test
+//    assert prop.a == '1'
+//
+//    return prop;
+//}
 
 
 FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store generated files") { dir ->
@@ -488,20 +495,20 @@ def columnName(str) {
 }
 
 
-def generateComment(out, comment = null) {
-    out.println "/**"
-    out.println " * " + comment
-    out.println " *"
-    out.println " * <p>Date: " + new java.util.Date().toString() + "</p>"
-    out.println " */"
-}
-
-def toLowerCaseFirstOne(s){
-    if(Character.isLowerCase(s.charAt(0)))
-        return s;
-    else
-        return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
-}
+//def generateComment(out, comment = null) {
+//    out.println "/**"
+//    out.println " * " + comment
+//    out.println " *"
+//    out.println " * <p>Date: " + new java.util.Date().toString() + "</p>"
+//    out.println " */"
+//}
+//
+//def toLowerCaseFirstOne(s){
+//    if(Character.isLowerCase(s.charAt(0)))
+//        return s;
+//    else
+//        return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+//}
 
 
 
