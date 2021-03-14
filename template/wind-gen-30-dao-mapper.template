@@ -17,7 +17,7 @@ public interface ${className}Mapper extends BaseMapper {
         //== String a, Integer b...
         def selectParamAndTypeMybatisArray = []
         pkFields.eachWithIndex { it,index ->
-            selectParamAndTypeMybatisArray.add(" @Param(\"${it.name}\") ${it.dtoTypeStr} ${it.name}")
+            selectParamAndTypeMybatisArray.add(" @Param(\"${it.name}\") ${it.dtoTypeStr} ${it.name} ")
         }
     %>
 
@@ -38,6 +38,17 @@ public interface ${className}Mapper extends BaseMapper {
     void delete${className}(${className}DTO dto);
 
     void delete${className}ByPk( ${selectParamAndTypeMybatisArray.join(",")} );
+
+    <%
+        if( parentTableObjectExist ) {
+            def parentPkTypeAndParamArray = []
+            parentTableObject.pkFields.eachWithIndex { it,index ->
+                parentPkTypeAndParamArray.add(" @Param(\"${it.name}\") ${it.dtoTypeStr} ${it.name} ")
+            }
+
+            out.println( " void delete${className}ByParentPk( ${parentPkTypeAndParamArray.join(",")} ); " )
+        }
+    %>
 
     //void delete${className}ByUpdate(${className}DTO dto);
 

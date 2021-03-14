@@ -235,7 +235,7 @@ public class ${className}Service {
         private void deleteSubList(${className}DTO dto) {
             <%
                 subTableObjectList.eachWithIndex { it,index ->
-                    out.println(String.format("  // %sMapper.delete%sByParentPk(%s); "
+                    out.println(String.format("  %sMapper.delete%sByParentPk(%s); "
                         , it.classNameLower, it.className, selectParamDtoArray.join(",") ))
 
                 }

@@ -256,6 +256,30 @@
             %>
     </delete>
 
+    <%
+        if( parentTableObjectExist ) {
+    %>
+    <!-- delete by parent pk -->
+    <delete id="delete${className}ByParentPk" >
+        DELETE FROM ${table.name}
+        WHERE
+            <%
+              parentTableObject.pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  AND ")
+                    }
+
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
+                    out.println()
+              }
+            %>
+    </delete>
+    <%
+        }
+    %>
+
+
 	<!-- delete by update -->
 	<!--
         <delete id="delete${className}ByUpdate" parameterType="${fullDTO}">
