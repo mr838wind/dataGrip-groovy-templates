@@ -18,7 +18,7 @@ pkFieldsFirst: <%= pkFieldsFirst.name %>
 
 부모 자식 관계 test:(부모 자식 같이 선택해야 함)
 자식 정보:
-<% if(subTableObjectList != null && subTableObjectList.size() > 0) { %>
+<% if( subTableObjectListExist ) { %>
     <%= subTableObjectList[0]?.className %>
     <%= subTableObjectList[0]?.pkFieldsFirst?.name %>
 <% } %>

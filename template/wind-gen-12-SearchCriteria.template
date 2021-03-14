@@ -23,6 +23,22 @@ public class ${className}SearchCriteria extends SearchCriteria {
     %>
 
 
+    <%
+        if( parentTableObjectExist ) {
+            out.println("//== 부모 table 정보: (fk 이름이 부모 pk와 같을 경우)")
+            parentTableObject.pkFields.eachWithIndex { it,index ->
+    %>
+        /**
+         * ${it.comment}
+         * ${it.dbName}
+         */
+         private ${it.dtoTypeStr} ${it.name};
+    <%
+            }
+        }
+    %>
+
+
 
 
 }
