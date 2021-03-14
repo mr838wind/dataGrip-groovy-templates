@@ -5,31 +5,15 @@ import com.intellij.database.model.DasColumn
 import com.intellij.database.model.ObjectKind
 import com.intellij.database.util.Case
 import com.intellij.database.util.DasUtil
+import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
-
-/**
- * 00-wind-gen-config.json 설명: (json에 설명 넣을수 없어 여기에 둠)
- *  {
- *        "bizName": "sample",  //업무이름
- *        "bizNameDynamicYn": false,    업무이름 동적 생성(table명에서 두번째 필드)
- *        "packageNameBase": "com.shinsegae.villiv",    //기본 패키지 명
- *        "removeTablePrefix": true,    //table명에서 첫번째 필드 제거
- *
- *        "relationship": {     //table 관계
- *            "showErrorWhenNotSelectSubTable": true, // 자식 table 같이 선택안해주면 에러
- *            "oneToMany": [    //1대다
- *               {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
- *            ]
- *        }
- *    }
- */
-
 
 /**
  *
  * --------------------------------------
  * 1. datagrip에서 table로부터 소스코드 생성
- * 2. 부모자식 관계 관련 소스를 생성하려면 00-wind-gen-config.json에 세팅해주고
+ * 2. (*) 부모자식 관계 관련 소스를 생성하려면
+ *  00-wind-gen-config.json에 세팅해주고
  *  부모,자식 table을 같이 선택해서 코드 생성해주어야 함
  * --------------------------------------
  *
@@ -49,7 +33,7 @@ INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions
 INPUT.JSON_CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen-config.json'
 
 //== table 관계 설정
-def jsonSlurper = new JsonSlurper()
+def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX)  // type lax: support comments
 def jsonConfig = jsonSlurper.parse(new File(INPUT.JSON_CONFIG_PATH))
 INPUT.putAll(jsonConfig)
 
@@ -347,19 +331,6 @@ def calcPackageName() {
     }
 }
 
-////== properties
-//def loadProp(filePath) {
-//    Properties prop = new Properties()
-//    File propertiesFile = new File(filePath)
-//    propertiesFile.withInputStream {
-//        prop.load(it)
-//    }
-//
-//    // test
-//    assert prop.a == '1'
-//
-//    return prop;
-//}
 
 
 FILES.chooseDirectoryAndSave("Choose entity directory", "Choose where to store generated files") { dir ->
@@ -495,21 +466,6 @@ def columnName(str) {
     s.length() == 1? s : Case.LOWER.apply(s[0]) + s[1..-1]
 }
 
-
-//def generateComment(out, comment = null) {
-//    out.println "/**"
-//    out.println " * " + comment
-//    out.println " *"
-//    out.println " * <p>Date: " + new java.util.Date().toString() + "</p>"
-//    out.println " */"
-//}
-//
-//def toLowerCaseFirstOne(s){
-//    if(Character.isLowerCase(s.charAt(0)))
-//        return s;
-//    else
-//        return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
-//}
 
 
 

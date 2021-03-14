@@ -1,12 +1,12 @@
 {
-  "bizName": "sample",
-  "bizNameDynamicYn": false,
-  "packageNameBase": "com.shinsegae.villiv",
-  "removeTablePrefix": true,
+  "bizName": "sample",    // (*)업무이름, 업무별로 폴더 만듬
+  "bizNameDynamicYn": false,    // 업무이름 동적 생성 여부 (table명에서 두번째 필드)
+  "packageNameBase": "com.shinsegae.villiv",    // (*)기본 패키지 명
+  "removeTablePrefix": true,  // table명에서 첫번째 필드 제거 여부
 
-  "relationship": {
-    "showErrorWhenNotSelectSubTable": true,
-    "oneToMany": [
+  "relationship": {   // table 관계 (현재 1:N만 지원)
+    "showErrorWhenNotSelectSubTable": true,   // 코드 생성시 자식 table 같이 선택 안해주면 에러 여부 (자식 table 관계 세팅 되였을 때)
+    "oneToMany": [    // 1:N관계 : e.g. [{"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}]
       {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
     ]
   }
