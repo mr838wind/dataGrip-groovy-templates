@@ -125,7 +125,7 @@ public class ${className}Controller {
     ) throws Exception {
         APIResult result = APIResult.fail();
 
-        ${className}DTO info = ${classNameLower}Service.select${className}ByPk( ${selectParamArray.join(',')} );
+        ${className}DTO info = ${classNameLower}Service.select${className}ByPk${suffixForMethod}( ${selectParamArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData( info);
@@ -152,7 +152,7 @@ public class ${className}Controller {
         ${classNameLower}Service.insert${className}${suffixForMethod}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk( ${selectParamDtoArray.join(',')} );
+        ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk${suffixForMethod}( ${selectParamDtoArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData( selectedInfo);
@@ -180,7 +180,7 @@ public class ${className}Controller {
         ${classNameLower}Service.update${className}${suffixForMethod}(dto);
 
         //== select after insert / update
-        ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk( ${selectParamDtoArray.join(',')} );
+        ${className}DTO selectedInfo = ${classNameLower}Service.select${className}ByPk${suffixForMethod}( ${selectParamDtoArray.join(',')} );
 
         result.setResultCodeSucess();
         result.setData(selectedInfo);

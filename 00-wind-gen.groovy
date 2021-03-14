@@ -151,6 +151,11 @@ def getSubTableObjectList(className, table) {
             && INPUT.relationship.oneToMany != null
     ) {
         INPUT.relationship.oneToMany.eachWithIndex { it, index ->
+            def isValidObj = (it instanceof Map && it.containsKey("tableOne")
+                    && it.containsKey("tableMany"))
+            if( ! isValidObj ) {
+                return
+            }
             if( tableName.equals(it.tableOne) ) {
                 def subTableName = it.tableMany
                 assert subTableName != null

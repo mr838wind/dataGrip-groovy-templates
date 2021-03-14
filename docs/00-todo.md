@@ -4,11 +4,11 @@ v0.1
 
 #### next step
 * 부모,자식 관계 세팅: 되면 좋음: ~03.26
-  * code refactoring
   * searchCriteria에서 부모 pk 필드 추가
   * test 부모자식 관계
   * ====================
   * todo: N:M, 1:1, ...
+  * code refactoring
 * vue sample project 되있으면 template 생성
 
 #### later
