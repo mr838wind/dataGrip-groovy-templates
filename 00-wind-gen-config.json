@@ -4,10 +4,160 @@
   "packageNameBase": "com.shinsegae.villiv",    // (*)기본 패키지 명
   "removeTablePrefix": true,  // table명에서 첫번째 필드 제거 여부
 
-  "relationship": {   // table 관계 (현재 1:N만 지원)
+  //== table 관계 (현재 1:N만 지원)
+  "relationship": {
     "showErrorWhenNotSelectSubTable": true,   // 코드 생성시 자식 table 같이 선택 안해주면 에러 여부 (자식 table 관계 세팅 되였을 때)
     "oneToMany": [    // 1:N관계 : e.g. [{"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}]
       {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
     ]
+  },
+
+  //== template file setting
+  "ITEMS": {
+    "Info": {  // template item <<설명>>:
+      "template" : "wind-gen-00-Info.template", // input template file path,
+      "subPath" : "00-info",  // out file dir,
+      "filePrefix" : "",  // out file prefix
+      "fileSuffix" : "-info.md",  // out file suffix
+      "fileUseClassNameLower": false, // file 이름 소문자 사용여부(default false) : default like AbcDef
+      "packageName" : "", // calc by sub
+      "subPackageName" : "info", // sub package name
+    },
+    "DTO": {
+      "template" : "wind-gen-10-dto.template",
+      "subPath" : "dto",
+      "filePrefix" : "",
+      "fileSuffix" : "DTO.java",
+      "packageName" : "",
+      "subPackageName" : "dto"
+    },
+    "SEARCH_CRITERIA": {
+      "template" : "wind-gen-12-SearchCriteria.template",
+      "subPath" : "dto",
+      "filePrefix" : "",
+      "fileSuffix" : "SearchCriteria.java",
+      "packageName" : "",
+      "subPackageName" : "dto"
+    },
+    "MYBATIS": {
+      "template" : "wind-gen-20-mybatis.template",
+      "subPath" : "mybatis",
+      "filePrefix" : "sql-",
+      "fileSuffix" : "Mapper.xml",
+      "packageName" : "",
+      "subPackageName" : ""
+    },
+
+    "MAPPER": {
+      "template" : "wind-gen-30-dao-mapper.template",
+      "subPath" : "dao",
+      "filePrefix" : "",
+      "fileSuffix" : "Mapper.java",
+      "packageName" : "",
+      "subPackageName" : "dao"
+    },
+    "SERVICE": {
+      "template" : "wind-gen-40-service.template",
+      "subPath" : "service",
+      "filePrefix" : "",
+      "fileSuffix" : "Service.java",
+      "packageName" : "",
+      "subPackageName" : "service"
+    },
+    "CONTROLLER": {
+      "template" : "wind-gen-50-controller.template",
+      "subPath" : "controller",
+      "filePrefix" : "",
+      "fileSuffix" : "Controller.java",
+      "packageName" : "",
+      "subPackageName" : "controller"
+    },
+    "ServiceTest": {
+      "template" : "wind-gen-60-ServiceTest.template",
+      "subPath" : "test_service",
+      "filePrefix" : "",
+      "fileSuffix" : "ServiceTest.java",
+      "packageName" : "",
+      "subPackageName" : "service"
+    },
+    "ControllerTest": {
+      "template" : "wind-gen-62-ControllerTest.template",
+      "subPath" : "test_controller",
+      "filePrefix" : "Test",
+      "fileSuffix" : "Controller.java",
+      "packageName" : "",
+      "subPackageName" : "mvc"
+    },
+
+    "UiModel": {
+      "template" : "wind-gen-70-UiModel.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".model.ts",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    },
+
+    "UiServiceEnum": {
+      "template" : "wind-gen-71-UiServiceEnum.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".enum.ts",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    },
+
+    "UiServiceFile": {
+      "template" : "wind-gen-72-UiServiceFile.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".service.ts",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    },
+
+    "UiServiceFile": {
+      "template" : "wind-gen-72-UiServiceFile.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".service.ts",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    },
+
+    "UiPageTs": {
+      "template" : "wind-gen-73-UiPageTs.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".page.ts",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    },
+
+    "UiPageHtml": {
+      "template" : "wind-gen-74-UiPageHtml.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".page.html",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    },
+
+    "UiPageScss": {
+      "template" : "wind-gen-75-UiPageScss.template",
+      "subPath" : "ui",
+      "filePrefix" : "",
+      "fileSuffix" : ".page.scss",
+      "fileUseClassNameLower" : true,
+      "packageName" : "",
+      "subPackageName" : "model"
+    }
   }
+
 }

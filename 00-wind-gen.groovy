@@ -5,8 +5,10 @@ import com.intellij.database.model.DasColumn
 import com.intellij.database.model.ObjectKind
 import com.intellij.database.util.Case
 import com.intellij.database.util.DasUtil
+import groovy.json.JsonBuilder
 import groovy.json.JsonParserType
 import groovy.json.JsonSlurper
+import groovy.json.JsonSlurperClassic
 
 /**
  *
@@ -33,8 +35,7 @@ INPUT.TEMPLATE_BASE = "/Users/wind/Library/Preferences/DataGrip2019.3/extensions
 INPUT.JSON_CONFIG_PATH = INPUT.TEMPLATE_BASE + '/../00-wind-gen-config.json'
 
 //== table 관계 설정
-def jsonSlurper = new JsonSlurper().setType(JsonParserType.LAX)  // type lax: support comments
-def jsonConfig = jsonSlurper.parse(new File(INPUT.JSON_CONFIG_PATH))
+def jsonConfig = jsonSlurperModified(new File(INPUT.JSON_CONFIG_PATH))
 INPUT.putAll(jsonConfig)
 
 //== config assert
@@ -45,155 +46,15 @@ assert INPUT.containsKey("removeTablePrefix")
 assert INPUT.relationship != null
 assert INPUT.relationship.oneToMany != null
 assert INPUT.relationship.containsKey("showErrorWhenNotSelectSubTable")
+assert INPUT.containsKey("ITEMS")
+assert INPUT.ITEMS.containsKey("Info")
 
 
+//== template: add base path
+INPUT.ITEMS.eachWithIndex{ entry, index ->
+    entry.value.template = INPUT.TEMPLATE_BASE + '/' + entry.value.template
+}
 
-//==
-INPUT.ITEMS = [:]
-INPUT.ITEMS.Info = [
-    filePrefix : '',
-    fileSuffix : '-info.md',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-00-Info.template",
-    packageName : '', //calc by sub
-    subPackageName : "info",
-    subPath: '00-info',
-]
-INPUT.ITEMS.DTO = [
-    filePrefix : '',
-    fileSuffix : 'DTO.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-10-dto.template",
-    packageName : '', //calc by sub
-    subPackageName : "dto",
-    subPath: 'dto',
-]
-INPUT.ITEMS.SEARCH_CRITERIA = [
-    filePrefix : '',
-    fileSuffix : 'SearchCriteria.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-12-SearchCriteria.template",
-    packageName : '', //calc by sub
-    subPackageName : "dto",
-    subPath: 'dto',
-]
-INPUT.ITEMS.MYBATIS = [
-    filePrefix : 'sql-',
-    fileSuffix : 'Mapper.xml',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-20-mybatis.template",
-    packageName : '', //calc by sub
-    subPackageName : "",
-    subPath: 'mybatis',
-]
-
-INPUT.ITEMS.MAPPER = [
-    filePrefix : '',
-    fileSuffix : 'Mapper.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-30-dao-mapper.template",
-    packageName : '', //calc by sub
-    subPackageName : "dao",
-    subPath: 'dao',
-]
-INPUT.ITEMS.SERVICE = [
-    filePrefix : '',
-    fileSuffix : 'Service.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-40-service.template",
-    packageName : '', //calc by sub
-    subPackageName : "service",
-    subPath: 'service',
-]
-INPUT.ITEMS.CONTROLLER = [
-    filePrefix : '',
-    fileSuffix : 'Controller.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-50-controller.template",
-    packageName : '', //calc by sub
-    subPackageName : "controller",
-    subPath: 'controller',
-]
-INPUT.ITEMS.ServiceTest = [
-    filePrefix : '',
-    fileSuffix : 'ServiceTest.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-60-ServiceTest.template",
-    packageName : '', //calc by sub
-    subPackageName : "service",
-    subPath: 'test_service',
-]
-INPUT.ITEMS.ControllerTest = [
-    filePrefix : 'Test',
-    fileSuffix : 'Controller.java',
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-62-ControllerTest.template",
-    packageName : '', //calc by sub
-    subPackageName : "mvc",
-    subPath: 'test_controller',
-]
-
-//== angular: backoffice templates
-INPUT.ITEMS.UiModel = [
-    filePrefix : '',
-    fileSuffix : '.model.ts',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-70-UiModel.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
-
-INPUT.ITEMS.UiServiceEnum = [
-    filePrefix : '',
-    fileSuffix : '.enum.ts',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-71-UiServiceEnum.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
-
-INPUT.ITEMS.UiServiceFile = [
-    filePrefix : '',
-    fileSuffix : '.service.ts',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-72-UiServiceFile.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
-
-INPUT.ITEMS.UiServiceFile = [
-    filePrefix : '',
-    fileSuffix : '.service.ts',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-72-UiServiceFile.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
-
-INPUT.ITEMS.UiPageTs = [
-    filePrefix : '',
-    fileSuffix : '.page.ts',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-73-UiPageTs.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
-
-INPUT.ITEMS.UiPageHtml = [
-    filePrefix : '',
-    fileSuffix : '.page.html',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-74-UiPageHtml.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
-
-INPUT.ITEMS.UiPageScss = [
-    filePrefix : '',
-    fileSuffix : '.page.scss',
-    fileUseClassNameLower : true, // className 소문자 사용
-    template : INPUT.TEMPLATE_BASE + "/wind-gen-75-UiPageScss.template",
-    packageName : '', //calc by sub
-    subPackageName : "model",
-    subPath: 'ui',
-]
 
 //=============== [e] inputs ===============
 
@@ -464,6 +325,22 @@ def columnName(str) {
             .join("")
             .replaceAll(/[^\p{javaJavaIdentifierPart}[_]]/, "_")
     s.length() == 1? s : Case.LOWER.apply(s[0]) + s[1..-1]
+}
+
+
+//== jsonSlurper: modified
+//==    type lax: support json comments
+//==    JsonSlurperClassic handle LazyValueMap to normal Map
+def jsonSlurperModified(File file)
+{
+    return new JsonSlurperClassic().parseText(
+            new JsonBuilder(
+                    new JsonSlurper()
+                            .setType(JsonParserType.LAX)
+                            .parse(file)
+            )
+                    .toString()
+    )
 }
 
 
