@@ -1,11 +1,22 @@
 /**
  * <%= tableComment %> 관련 모델
  */
+
 export class ${className}Model {
 
 
     // =========== [s] custom added ===========
 
+    // TODO//complete import
+    //== 자식 table 관련
+    <%
+        if(subTableObjectListExist) {
+            subTableObjectList.each() {
+                out.println(String.format("  /** %s list */ ", it.tableComment ))
+                out.println(String.format("  %sList: Array<%sModel>; ", it.classNameLower, it.className ))
+            }
+        }
+    %>
 
     // =========== [e] custom added ===========
 

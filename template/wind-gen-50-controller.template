@@ -36,9 +36,6 @@ import java.util.List;
  *      @AnnoSearchFileEncV2(name = CmnConst.KEY_DATA)  // file base64 encoding 값 조회해줌
  *      @AnnoSearchCode(name = CmnConst.KEY_DATA)   // 공통코드 조회
  *      @AnnoUser UserInfo userInfo     //사용자 정보(자동으로 값 세팅됨)
- * --------- 참고: ------------------------------
- *      자식dto 같이 처리하려면 service에서 WithSub 있는 메서드 사용
- *      e.g: service.selectSampleWithSub()
  * ---------------------------------------
  */
 @RestController

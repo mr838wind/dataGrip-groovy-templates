@@ -20,7 +20,7 @@ public class ${className}Service {
         if(subTableObjectListExist) {
             subTableObjectList.eachWithIndex { it,index ->
                 out.println("@Autowired ")
-                out.println(String.format("  %sMapper mapper; ", it.className, it.classNameLower))
+                out.println(String.format("  %sMapper %sMapper; ", it.className, it.classNameLower))
             }
         }
     %>
@@ -85,7 +85,7 @@ public class ${className}Service {
         }
     %>
 
-    // TODO//complete 확인해봄
+    // TODO//complete 확인
     public ${className}DTO select${className}ByPk( ${selectParamAndTypeArray.join(',')} ) {
         return mapper.select${className}ByPk( ${selectParamArray.join(",")} );
     }
@@ -231,7 +231,7 @@ public class ${className}Service {
         }
 
 
-        //== TODO//complete 확인
+        //== TODO//complete 처리
         private void deleteSubList(${className}DTO dto) {
             <%
                 subTableObjectList.eachWithIndex { it,index ->
@@ -246,8 +246,8 @@ public class ${className}Service {
         }
 
 
-        private void deleteSubListByParentPk( ${selectParamAndTypeArray.join(",")} ); {
-            ${className}DTO dto = new ${className}DTO;
+        private void deleteSubListByParentPk( ${selectParamAndTypeArray.join(",")} ) {
+            ${className}DTO dto = new ${className}DTO();
             <%
                 pkFields.eachWithIndex {it, index ->
                     out.println(String.format("  dto.set%s(%s); "

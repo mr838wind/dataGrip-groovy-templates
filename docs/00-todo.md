@@ -4,12 +4,12 @@ v0.1
 
 #### next step
 * 부모,자식 관계 세팅: 되면 좋음: ~03.26
-  * searchCriteria에서 부모 pk 필드 추가
-  * test 부모자식 관계
-  * ====================
-  * todo: N:M, 1:1, ...
+  * searchCriteria에서 부모 pk 필드 추가 
   * code refactoring
   * refactor generated file setting
+  * 공백 indent 처리
+  * ====================
+  * todo: N:M, 1:1, ...
 * vue sample project 되있으면 template 생성
 
 #### later
@@ -19,6 +19,7 @@ v0.1
   * datagrip command 실행 방법 찾음
   
 #### question and others
+* ? DTO, Model 이름 맞추면 좋을것 같음
 * ? 주석 어떻게 달면 좋을까
 * ? 공통 에러 처리
 * @valid
