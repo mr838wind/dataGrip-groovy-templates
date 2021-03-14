@@ -87,16 +87,18 @@ public class ${className}Service {
 
     // TODO//complete 확인해봄
     public ${className}DTO select${className}ByPk( ${selectParamAndTypeArray.join(',')} ) {
-        ${className}DTO search = new ${className}DTO();
-        <%
-            //search.setBzCd(bzCd);
-            pkFields.eachWithIndex { it,index ->
-                def s = String.format( "  search.set%s(%s); ", it.name.capitalize(), it.name )
-                out.println(s);
-            }
-        %>
-        return mapper.select${className}(search);
+        return mapper.select${className}ByPk( ${selectParamArray.join(",")} );
     }
+
+    <% if(subTableObjectListExist) { %>
+        public ${className}DTO select${className}ByPkWithSub( ${selectParamAndTypeArray.join(',')} ) {
+            ${className}DTO info = select${className}ByPk( ${selectParamArray.join(",")} );
+            if(info != null) {
+                selectSubList(info);
+            }
+            return info;
+        }
+    <% } %>
 
 
     /** ====================================  insert   ==================================== */
@@ -147,6 +149,19 @@ public class ${className}Service {
             mapper.delete${className}(dto);
         }
     <% } %>
+
+    public void delete${className}ByPk( ${selectParamAndTypeArray.join(',')} ) {
+        mapper.delete${className}ByPk( ${selectParamArray.join(",")} );
+    }
+
+    <% if(subTableObjectListExist) { %>
+        //== sub
+        public void delete${className}ByPkWithSub( ${selectParamAndTypeArray.join(',')} ) {
+            deleteSubListByParentPk( ${selectParamArray.join(",")} );
+            mapper.delete${className}ByPk( ${selectParamArray.join(",")} );
+        }
+    <% } %>
+
 
         // public void delete${className}ByUpdate(${className}DTO dto) {
         //     mapper.delete${className}ByUpdate(dto);
@@ -219,6 +234,18 @@ public class ${className}Service {
                 //== sample code: deleteSubList
                 // sampleAttachMapper.deleteSampleAttachBySampleId(dto.getSampleId());
             %>
+        }
+
+
+        private void deleteSubListByParentPk( ${selectParamAndTypeArray.join(",")} ); {
+            ${className}DTO dto = new ${className}DTO;
+            <%
+                pkFields.eachWithIndex {it, index ->
+                    out.println(String.format("  dto.set%s(%s); "
+                        , it.name.capitalize(), it.name ))
+                }
+            %>
+            deleteSubList(dto);
         }
 
     <% } %>

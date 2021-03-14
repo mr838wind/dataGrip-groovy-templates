@@ -4,13 +4,14 @@ v0.1
 
 #### next step
 * 부모,자식 관계 세팅: 되면 좋음: 03.17~2주
-    * dao: selectByPk, deleteByPk
-    * service: selectByPkWithSub, deleteByPkWithSub
-    * json comment test
+    * debug: subTableObjectList: multi pk
+    * searchCriteria에서 부모 pk 필드 추가 
+    * json comment test 
     * refactoring property setting(INPUT template)
-    * code refactoring
-    * test 부모자식 관계
+    * code refactoring 
+    * test 부모자식 관계 
 * vue sample project 되있으면 template 생성
+
 
 
 #### later
