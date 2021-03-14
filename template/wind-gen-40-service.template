@@ -158,7 +158,7 @@ public class ${className}Service {
         //== sub
         public void delete${className}ByPkWithSub( ${selectParamAndTypeArray.join(',')} ) {
             deleteSubListByParentPk( ${selectParamArray.join(",")} );
-            mapper.delete${className}ByPk( ${selectParamArray.join(",")} );
+            delete${className}ByPk( ${selectParamArray.join(",")} );
         }
     <% } %>
 
@@ -181,8 +181,12 @@ public class ${className}Service {
                     def varName = "search" + it.className
                     out.println(String.format("  %sSearchCriteria %s = new %sSearchCriteria(); "
                         , it.className, varName, it.className ))
-                    out.println(String.format("  %s.set%s(dto.get%s()); "
-                        , varName, pkFieldsFirst.name.capitalize(), pkFieldsFirst.name.capitalize() ))
+
+                    pkFields.eachWithIndex { itPk,indexPk ->
+                        out.println(String.format("  %s.set%s(dto.get%s()); "
+                                                , varName, itPk.name.capitalize(), itPk.name.capitalize() ))
+                    }
+
                     out.println(String.format("  dto.set%sList(%sMapper.select%sList(%s)); "
                         , it.className, it.classNameLower, it.className, varName ))
                 }
@@ -203,8 +207,12 @@ public class ${className}Service {
                         , it.className ))
                     out.println(String.format("      for (%sDTO aItem : dto.get%sList()) { "
                         , it.className, it.className ))
-                    out.println(String.format("          aItem.set%s(dto.get%s()); "
-                        , pkFieldsFirst.name.capitalize(), pkFieldsFirst.name.capitalize() ))
+
+                    pkFields.eachWithIndex { itPk,indexPk ->
+                        out.println(String.format("          aItem.set%s(dto.get%s()); "
+                                                , itPk.name.capitalize(), itPk.name.capitalize() ))
+                    }
+
                     out.println(String.format("          %sMapper.insert%s(aItem); "
                         , it.classNameLower, it.className ))
                     out.println(String.format("      } " ))
@@ -227,12 +235,13 @@ public class ${className}Service {
         private void deleteSubList(${className}DTO dto) {
             <%
                 subTableObjectList.eachWithIndex { it,index ->
-                    out.println(String.format("  // %sMapper.delete%sBy%s(dto.get%s()); "
-                        , it.classNameLower, it.className, pkFieldsFirst.name.capitalize(), pkFieldsFirst.name.capitalize() ))
+                    out.println(String.format("  // %sMapper.delete%sByParentPk(%s); "
+                        , it.classNameLower, it.className, selectParamDtoArray.join(",") ))
+
                 }
 
                 //== sample code: deleteSubList
-                // sampleAttachMapper.deleteSampleAttachBySampleId(dto.getSampleId());
+                // sampleAttachMapper.deleteSampleAttachByParentPk(dto.getSampleId());
             %>
         }
 
