@@ -9,6 +9,7 @@ v0.1
   * ====================
   * todo: N:M, 1:1, ...
   * code refactoring
+  * refactor generated file setting
 * vue sample project 되있으면 template 생성
 
 #### later
