@@ -102,6 +102,11 @@ def getDefaultBinding(className, fields, table) {
     binding.subTableObjectList = subTableObjectList
     binding.subTableObjectListExist = subTableObjectList != null && subTableObjectList.size() > 0
 
+    // parent table object : 부모 table 정보
+    def parentTableObject = getParentTableObject(className, table)
+    binding.parentTableObject = parentTableObject
+    binding.parentTableObjectExist = parentTableObject != null
+
     return binding
 }
 
@@ -154,7 +159,7 @@ def getSubTableObjectList(className, table) {
             def isValidObj = (it instanceof Map && it.containsKey("tableOne")
                     && it.containsKey("tableMany"))
             if( ! isValidObj ) {
-                return
+                return resultList
             }
             if( tableName.equals(it.tableOne) ) {
                 def subTableName = it.tableMany
@@ -173,6 +178,41 @@ def getSubTableObjectList(className, table) {
     }
 
     return resultList
+}
+
+
+// 부모 table 정보
+def getParentTableObject(className, table) {
+    def result = null
+    def tableName = table.getName()
+
+    if( INPUT != null
+            && INPUT.relationship != null
+            && INPUT.relationship.oneToMany != null
+    ) {
+        INPUT.relationship.oneToMany.eachWithIndex { it, index ->
+            def isValidObj = (it instanceof Map && it.containsKey("tableOne")
+                    && it.containsKey("tableMany"))
+            if( ! isValidObj ) {
+                return result
+            }
+            if( tableName.equals(it.tableMany) ) {
+                def parentTableName = it.tableOne
+                assert parentTableName != null
+                def parentClassName = javaName(parentTableName, true)
+
+                def parentBinding = getSimpleValueForBinding(parentClassName)
+                if(INPUT.relationship.showErrorWhenNotSelectParentTable) {
+                    assert parentBinding != null
+                }
+                if(parentBinding != null) {
+                    result = parentBinding
+                }
+            }
+        }
+    }
+
+    return result
 }
 
 

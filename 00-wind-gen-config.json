@@ -7,6 +7,7 @@
   //== table 관계 (현재 1:N만 지원)
   "relationship": {
     "showErrorWhenNotSelectSubTable": true,   // 코드 생성시 자식 table 같이 선택 안해주면 에러 여부 (자식 table 관계 세팅 되였을 때)
+    "showErrorWhenNotSelectParentTable": true,   // 코드 생성시 부모 table 같이 선택 안해주면 에러 여부 (자식 table 관계 세팅 되였을 때)
     "oneToMany": [    // 1:N관계 : e.g. [{"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}]
       {"tableOne": "TLSS_SAMPLE", "tableMany": "TLSS_SAMPLE_ATTACH"}
     ]
