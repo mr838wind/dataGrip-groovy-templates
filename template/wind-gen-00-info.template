@@ -13,6 +13,7 @@
 
 #### groovy test
 groovy version: <%= GroovySystem.version %>
+groovy current path : <%= new File(".").canonicalPath %>
 
 pkFieldsFirst: <%= pkFieldsFirst.name %>
 
