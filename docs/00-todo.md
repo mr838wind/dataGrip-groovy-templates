@@ -4,12 +4,10 @@ v0.1
 
 #### next step
 * 부모,자식 관계 세팅: 되면 좋음: ~03.26
-  * searchCriteria에서 부모 pk 필드 추가 
   * code refactoring
-  * refactor generated file setting
-  * 공백 indent 처리
   * ====================
   * todo: N:M, 1:1, ...
+  * 공백 indent 처리
 * vue sample project 되있으면 template 생성
 
 #### later
@@ -22,8 +20,8 @@ v0.1
 * ? DTO, Model 이름 맞추면 좋을것 같음
 * ? 주석 어떻게 달면 좋을까
 * ? 공통 에러 처리
-* @valid
-* swagger
+* @valid,swagger 넣어줘도 좋을것 같음 
+* refactor generated file name setting 
 
 #### final
 

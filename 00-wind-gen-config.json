@@ -26,7 +26,7 @@
     },
     "DTO": {
       "template" : "wind-gen-10-dto.template",
-      "subPath" : "dto",
+      "subPath" : "01-api/02-common/dto",
       "filePrefix" : "",
       "fileSuffix" : "DTO.java",
       "packageName" : "",
@@ -34,7 +34,7 @@
     },
     "SEARCH_CRITERIA": {
       "template" : "wind-gen-12-SearchCriteria.template",
-      "subPath" : "dto",
+      "subPath" : "01-api/02-common/dto",
       "filePrefix" : "",
       "fileSuffix" : "SearchCriteria.java",
       "packageName" : "",
@@ -42,7 +42,7 @@
     },
     "MYBATIS": {
       "template" : "wind-gen-20-mybatis.template",
-      "subPath" : "mybatis",
+      "subPath" : "01-api/01-mybatis",
       "filePrefix" : "sql-",
       "fileSuffix" : "Mapper.xml",
       "packageName" : "",
@@ -51,7 +51,7 @@
 
     "MAPPER": {
       "template" : "wind-gen-30-dao-mapper.template",
-      "subPath" : "dao",
+      "subPath" : "01-api/02-common/dao",
       "filePrefix" : "",
       "fileSuffix" : "Mapper.java",
       "packageName" : "",
@@ -59,7 +59,7 @@
     },
     "SERVICE": {
       "template" : "wind-gen-40-service.template",
-      "subPath" : "service",
+      "subPath" : "01-api/02-common/service",
       "filePrefix" : "",
       "fileSuffix" : "Service.java",
       "packageName" : "",
@@ -67,7 +67,7 @@
     },
     "CONTROLLER": {
       "template" : "wind-gen-50-controller.template",
-      "subPath" : "controller",
+      "subPath" : "01-api/03-controller",
       "filePrefix" : "",
       "fileSuffix" : "Controller.java",
       "packageName" : "",
@@ -75,7 +75,7 @@
     },
     "ServiceTest": {
       "template" : "wind-gen-60-ServiceTest.template",
-      "subPath" : "test_service",
+      "subPath" : "01-api/04-test/test_service",
       "filePrefix" : "",
       "fileSuffix" : "ServiceTest.java",
       "packageName" : "",
@@ -83,7 +83,7 @@
     },
     "ControllerTest": {
       "template" : "wind-gen-62-ControllerTest.template",
-      "subPath" : "test_controller",
+      "subPath" : "01-api/04-test/test_controller",
       "filePrefix" : "Test",
       "fileSuffix" : "Controller.java",
       "packageName" : "",
@@ -92,7 +92,7 @@
 
     "UiModel": {
       "template" : "wind-gen-70-UiModel.template",
-      "subPath" : "ui",
+      "subPath" : "02-ui/01-service/model",
       "filePrefix" : "",
       "fileSuffix" : ".model.ts",
       "fileUseClassNameLower" : true,
@@ -102,7 +102,7 @@
 
     "UiServiceEnum": {
       "template" : "wind-gen-71-UiServiceEnum.template",
-      "subPath" : "ui",
+      "subPath" : "02-ui/01-service/enums",
       "filePrefix" : "",
       "fileSuffix" : ".enum.ts",
       "fileUseClassNameLower" : true,
@@ -112,17 +112,7 @@
 
     "UiServiceFile": {
       "template" : "wind-gen-72-UiServiceFile.template",
-      "subPath" : "ui",
-      "filePrefix" : "",
-      "fileSuffix" : ".service.ts",
-      "fileUseClassNameLower" : true,
-      "packageName" : "",
-      "subPackageName" : "model"
-    },
-
-    "UiServiceFile": {
-      "template" : "wind-gen-72-UiServiceFile.template",
-      "subPath" : "ui",
+      "subPath" : "02-ui/01-service",
       "filePrefix" : "",
       "fileSuffix" : ".service.ts",
       "fileUseClassNameLower" : true,
@@ -132,7 +122,7 @@
 
     "UiPageTs": {
       "template" : "wind-gen-73-UiPageTs.template",
-      "subPath" : "ui",
+      "subPath" : "02-ui/02-page",
       "filePrefix" : "",
       "fileSuffix" : ".page.ts",
       "fileUseClassNameLower" : true,
@@ -142,7 +132,7 @@
 
     "UiPageHtml": {
       "template" : "wind-gen-74-UiPageHtml.template",
-      "subPath" : "ui",
+      "subPath" : "02-ui/02-page",
       "filePrefix" : "",
       "fileSuffix" : ".page.html",
       "fileUseClassNameLower" : true,
@@ -152,7 +142,7 @@
 
     "UiPageScss": {
       "template" : "wind-gen-75-UiPageScss.template",
-      "subPath" : "ui",
+      "subPath" : "02-ui/02-page",
       "filePrefix" : "",
       "fileSuffix" : ".page.scss",
       "fileUseClassNameLower" : true,
