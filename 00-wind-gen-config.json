@@ -1,4 +1,11 @@
 {
+  /*
+   *  << 코드 생성 프로그램 config >>
+   *  (json parser에서 주석 있어도 parsing 되는 모드이기에 json 파일 빨간줄 무시해도 됨)
+   *  1. bizName 수정하고 코드 생성
+   *  2. 부모 자식 관계 생성하려면 relationship 설정하고 부모,자식 table 모두 선택후 생성해야 함.
+   */
+
   "bizName": "sample",    // (*)업무이름, 업무별로 폴더 만듬
   "bizNameDynamicYn": false,    // 업무이름 동적 생성 여부 (table명에서 두번째 필드)
   "packageNameBase": "com.shinsegae.villiv",    // (*)기본 패키지 명

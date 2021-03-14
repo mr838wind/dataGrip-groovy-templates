@@ -13,10 +13,8 @@ import groovy.json.JsonSlurperClassic
 /**
  *
  * --------------------------------------
- * 1. datagrip에서 table로부터 소스코드 생성
- * 2. (*) 부모자식 관계 관련 소스를 생성하려면
- *  00-wind-gen-config.json에 세팅해주고
- *  부모,자식 table을 같이 선택해서 코드 생성해주어야 함
+ * 코드 생성 프로그램
+ * 설정 파일: 00-wind-gen-config.json
  * --------------------------------------
  *
  * Available context bindings:
