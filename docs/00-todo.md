@@ -6,6 +6,7 @@ v0.1
 * 부모,자식 관계 세팅: 되면 좋음: 03.17~2주
     * dao: selectByPk, deleteByPk
     * service: selectByPkWithSub, deleteByPkWithSub
+    * json comment test
     * refactoring property setting(INPUT template)
     * code refactoring
     * test 부모자식 관계

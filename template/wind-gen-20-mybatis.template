@@ -126,6 +126,26 @@
             %>
 	</select>
 
+	<!-- single by pk -->
+    <select id="select${className}ByPk" resultType="${fullDTO}" >
+        SELECT
+            <include refid="columnsForMain" />
+            <include refid="columnsForOther" />
+
+        FROM <include refid="tableJoin" />
+        WHERE
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  AND ")
+                    }
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
+                    out.println()
+              }
+            %>
+    </select>
+
 
 	<!-- insert -->
 	<!-- 참고:
@@ -218,6 +238,23 @@
               }
             %>
 	</delete>
+
+    <!-- delete by pk -->
+    <delete id="delete${className}ByPk" >
+        DELETE FROM ${table.name}
+        WHERE
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                        out.print("		  AND ")
+                    }
+
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
+                    out.println()
+              }
+            %>
+    </delete>
 
 	<!-- delete by update -->
 	<!--

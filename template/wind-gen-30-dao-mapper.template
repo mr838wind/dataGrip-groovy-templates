@@ -12,6 +12,15 @@ import java.util.List;
 @Mapper
 public interface ${className}Mapper extends BaseMapper {
 
+    <%
+        /////// common  ///////
+        //== String a, Integer b...
+        def selectParamAndTypeMybatisArray = []
+        pkFields.eachWithIndex { it,index ->
+            selectParamAndTypeMybatisArray.add(" @Param(\"${it.name}\") ${it.dtoTypeStr} ${it.name}")
+        }
+    %>
+
     /** ====================================     ==================================== */
 
     List<${className}DTO> select${className}List(${className}SearchCriteria searchCriteria);
@@ -20,11 +29,15 @@ public interface ${className}Mapper extends BaseMapper {
 
     ${className}DTO select${className}(${className}DTO dto);
 
+    ${className}DTO select${className}ByPk( ${selectParamAndTypeMybatisArray.join(",")} );
+
     void insert${className}(${className}DTO dto);
 
     void update${className}(${className}DTO dto);
 
     void delete${className}(${className}DTO dto);
+
+    void delete${className}ByPk( ${selectParamAndTypeMybatisArray.join(",")} );
 
     //void delete${className}ByUpdate(${className}DTO dto);
 
