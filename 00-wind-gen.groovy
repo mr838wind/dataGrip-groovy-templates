@@ -142,6 +142,7 @@ def getSimpleValueForBinding(className) {
     binding.sqlNs = "sql-${className}"
     binding.fullDTO = "${INPUT.ITEMS.DTO.packageName}.${className}DTO"
     binding.fullSearchCriteria = "${INPUT.ITEMS.DTO.packageName}.${className}SearchCriteria"
+    binding.DEFAULT_BLANK_INDENT = "           "  //행 앞 공백
 
     return binding
 }

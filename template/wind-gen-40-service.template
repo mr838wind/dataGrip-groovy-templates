@@ -40,7 +40,7 @@ public class ${className}Service {
         //== sub
         public List<${className}DTO> select${className}ListWithSub(${className}SearchCriteria criteria) {
             List<${className}DTO> list = select${className}List(criteria);
-            if(! CollectionUtils.isEmpty(list) ) {
+            if( CollectionUtils.isNotEmpty(list) ) {
                 for(${className}DTO dto : list) {
                     selectSubList(dto);
                 }
@@ -178,16 +178,17 @@ public class ${className}Service {
         private void selectSubList(${className}DTO dto) {
             <%
                 subTableObjectList.eachWithIndex { it,index ->
+                    out.println("")
                     def varName = "search" + it.className
-                    out.println(String.format("  %sSearchCriteria %s = new %sSearchCriteria(); "
+                    out.println(String.format(DEFAULT_BLANK_INDENT + " %sSearchCriteria %s = new %sSearchCriteria(); "
                         , it.className, varName, it.className ))
 
                     pkFields.eachWithIndex { itPk,indexPk ->
-                        out.println(String.format("  %s.set%s(dto.get%s()); "
+                        out.println(String.format(DEFAULT_BLANK_INDENT + " %s.set%s(dto.get%s()); "
                                                 , varName, itPk.name.capitalize(), itPk.name.capitalize() ))
                     }
 
-                    out.println(String.format("  dto.set%sList(%sMapper.select%sList(%s)); "
+                    out.println(String.format(DEFAULT_BLANK_INDENT + " dto.set%sList(%sMapper.select%sList(%s)); "
                         , it.className, it.classNameLower, it.className, varName ))
                 }
 
@@ -203,20 +204,21 @@ public class ${className}Service {
         private void insertSubList(${className}DTO dto) {
             <%
                 subTableObjectList.eachWithIndex { it,index ->
-                    out.println(String.format("  if(CollectionUtils.isNotEmpty(dto.get%sList())) { "
+                    out.println("")
+                    out.println(String.format(DEFAULT_BLANK_INDENT + " if(CollectionUtils.isNotEmpty(dto.get%sList())) { "
                         , it.className ))
-                    out.println(String.format("      for (%sDTO aItem : dto.get%sList()) { "
+                    out.println(String.format(DEFAULT_BLANK_INDENT + "   for (%sDTO aItem : dto.get%sList()) { "
                         , it.className, it.className ))
 
                     pkFields.eachWithIndex { itPk,indexPk ->
-                        out.println(String.format("          aItem.set%s(dto.get%s()); "
+                        out.println(String.format(DEFAULT_BLANK_INDENT + "     aItem.set%s(dto.get%s()); "
                                                 , itPk.name.capitalize(), itPk.name.capitalize() ))
                     }
 
-                    out.println(String.format("          %sMapper.insert%s(aItem); "
+                    out.println(String.format(DEFAULT_BLANK_INDENT + "     %sMapper.insert%s(aItem); "
                         , it.classNameLower, it.className ))
-                    out.println(String.format("      } " ))
-                    out.println(String.format("   } " ))
+                    out.println(String.format(DEFAULT_BLANK_INDENT + "   } " ))
+                    out.println(String.format(DEFAULT_BLANK_INDENT + " } " ))
 
                 }
 
