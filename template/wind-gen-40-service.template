@@ -14,13 +14,13 @@ import java.util.Map;
 public class ${className}Service {
 
     @Autowired
-    ${className}Mapper mapper;
+    ${className}Mapper mapper;  // <%= tableComment %>
 
     <%
         if(subTableObjectListExist) {
             subTableObjectList.eachWithIndex { it,index ->
                 out.println("@Autowired ")
-                out.println(String.format("  %sMapper %sMapper; ", it.className, it.classNameLower))
+                out.println(String.format("  %sMapper %sMapper;    // %s ", it.className, it.classNameLower, it.tableComment))
             }
         }
     %>
