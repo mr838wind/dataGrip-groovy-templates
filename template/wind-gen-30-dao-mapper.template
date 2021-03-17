@@ -35,6 +35,8 @@ public interface ${className}Mapper extends BaseMapper {
 
     void update${className}(${className}DTO dto);
 
+    void merge${className}(${className}DTO dto);
+
     void delete${className}(${className}DTO dto);
 
     void delete${className}ByPk( ${selectParamAndTypeMybatisArray.join(",")} );

@@ -222,6 +222,80 @@
             %>
 	</update>
 
+
+    <!-- TODO//complete check pk -->
+	<!-- merge -->
+	<update id="merge${className}" parameterType="${fullDTO}">
+        MERGE INTO ${table.name}
+        USING DUAL
+        ON (
+            <%
+              pkFields.eachWithIndex { it,index ->
+                    if(index != 0) {
+                       out.print("		  ,")
+                    }
+                    def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                    out.print( s )
+                    out.println()
+              }
+            %>
+        )
+        WHEN MATCHED THEN
+            UPDATE
+            SET
+                <%
+                  nonPkNoInsertFields.eachWithIndex { it,index ->
+                        if(index != 0) {
+                            out.print("		  ,")
+                        }
+
+                        def s = String.format( " %s = #{ %s } ", it.dbName, it.name )
+                        if( it.isDateType ) {
+                            if( it.isUpdateField ) {
+                                s = String.format( " %s = SYSDATE ", it.dbName)
+                            } else {
+                                s = String.format( " %s = TO_DATE( #{ %s } ,'YYYYMMDDHH24MISS' )", it.dbName, it.name  )
+                            }
+                        }
+                        out.print( s )
+                        out.println()
+                  }
+                %>
+        WHEN NOT MATCHED THEN
+            INSERT (
+                <%
+                  fields.eachWithIndex { it,index ->
+                        if(index != 0) {
+                            out.print("		  ,")
+                        }
+                        out.print(it.dbName)
+                        out.println()
+                  }
+                %>
+            )
+            VALUES (
+                <%
+                  fields.eachWithIndex { it,index ->
+                        if(index != 0) {
+                            out.print("		  ,")
+                        }
+                        def s = String.format( " #{ %s } ", it.name )
+                        if( it.isPk ) {
+                            s = "SQ_${table.name}.NEXTVAL"
+                        } else if( it.isDateType ) {
+                            if( it.isInsertField || it.isUpdateField ) {
+                                s = "SYSDATE"
+                            } else {
+                                s = String.format( " TO_DATE( #{ %s } ,'YYYYMMDDHH24MISS' )", it.name )
+                            }
+                        }
+                        out.print( s )
+                        out.println()
+                  }
+                %>
+            )
+	</update>
+
 	<!-- delete -->
 	<delete id="delete${className}" parameterType="${fullDTO}">
 		DELETE FROM ${table.name}

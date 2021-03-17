@@ -1,7 +1,5 @@
 package com.shinsegae.villiv.service;
 
-import com.shinsegae.villiv.dto.${className}DTO;
-import com.shinsegae.villiv.dto.${className}SearchCriteria;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,19 @@ public class ${className}ServiceTest {
     public void test() {
         List<${className}DTO> list = service.select${className}List(new ${className}SearchCriteria());
         assertTrue(list != null);
+    }
+
+    @Test
+    public void merge() {
+        ${className}DTO dto = ${className}DTO.builder()
+                <%
+                    //.bzCd(BZ_CD)
+                    nonPkFields.eachWithIndex { it,index ->
+                        out.println( String.format( " // .%s(%s) ", it.name, " \"test\" " ) );
+                    }
+                %>
+                  .build();
+        service.merge${className}(dto);
     }
 
 
