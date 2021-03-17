@@ -140,18 +140,44 @@ public class ${className}Service {
     }
 
     <% if(subTableObjectListExist) { %>
+        // TODO//complete 확인: todo sub obj naming, or move to util
         //== sub
         public void merge${className}WithSub(${className}DTO dto) {
-            // TODO//complete todo coding
+            // 1. select origin dto
+            ${className}DTO originDto = select${className}ByPkWithSub( ${selectParamDtoArray.join(',')} );
+            // 2. merge master
+            mapper.merge${className}(dto);
+            // 3. for each sub obj
             <%
-                // 1. select master with sub dto
-                // ${className}DTO originDto = select${className}ByPkWithSub( ${selectParamDtoArray.join(',')} );
-                // 2. merge master
-                // mapper.merge${className}(dto);
-                // 3. for each sub obj
-                // 3.1  calculate to del obj
-                // 3.2  delete calculated del obj
-                // 3.3  merge sub
+                subTableObjectList.eachWithIndex { it,index ->
+            %>
+                    // naming
+                    // 3.1  calculate to del obj
+                    List<${it.className}DTO> origin${it.className}SubList = originDto.get${it.className}List();
+                    if(originDto != null) {
+                        origin${it.className}SubList = originDto.get${it.className}List();
+                    }
+                    List<${it.className}DTO> new${it.className}SubList = dto.get${it.className}List();
+                    if(new${it.className}SubList == null) {
+                        new${it.className}SubList = new ArrayList<>();
+                    }
+                    List<${it.className}DTO> toDel${it.className}SubList = (List<${it.className}DTO>)CollectionUtils.subtract(origin${it.className}SubList, new${it.className}SubList); // be careful with hashcode, equals
+
+                    // 3.2  delete calculated del obj
+                    if( ! CollectionUtils.isEmpty(toDel${it.className}SubList) ) {
+                        for( ${it.className}DTO subItem : toDel${it.className}SubList ) {
+                            ${it.classNameLower}Mapper.delete${it.className}(subItem);
+                        }
+                    }
+
+                    // 3.3  merge sub
+                    if( ! CollectionUtils.isEmpty(newSub${it.className}List) ) {
+                        for( ${it.className}DTO subItem : newSub${it.className}List ) {
+                            ${it.classNameLower}Mapper.merge${it.className}(subItem);
+                        }
+                    }
+            <%
+                }
             %>
         }
     <% } %>

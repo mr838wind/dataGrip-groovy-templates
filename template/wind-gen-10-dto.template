@@ -23,6 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ${className}DTO {
 
 
@@ -53,6 +54,7 @@ public class ${className}DTO {
      * ${it.comment}
      * ${it.dbName}
      */
+     ${it.isPk ? '@EqualsAndHashCode.Include' : ''}
      private ${it.dtoTypeStr} ${it.name};
     <%}%>
 

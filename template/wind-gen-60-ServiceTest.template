@@ -43,7 +43,8 @@ public class ${className}ServiceTest {
                     }
                 %>
                   .build();
-        service.merge${className}(dto);
+
+        service.merge${className}${subTableObjectListExist? 'WithSub' : ''}(dto);
     }
 
 
